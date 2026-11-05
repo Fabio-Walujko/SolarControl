@@ -1,3 +1,5 @@
+use SOLARCONTROL;
+
 -- seed.sql
 
 
@@ -64,7 +66,7 @@ VALUES
 -- =========================================
 
 INSERT INTO manutencao_e_instalacao
-(ID_fotovoltaicos, data_agendada, tempo_estimado,
+(ID_SISTEMAS, data_agendada, tempo_estimado,
  qualidade_sistema, previsao_da_proxima_manutencao)
 VALUES
 (1, '2026-11-10', '3 horas', 'Excelente', '2027-05-10'),
