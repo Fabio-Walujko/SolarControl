@@ -16,7 +16,7 @@ try {
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Projeto Integrador</title>
+    <title>SolarControl</title>
     <style>
         body { font-family: system-ui, sans-serif; max-width: 720px; margin: 4rem auto; padding: 0 1rem; line-height: 1.5; }
         .status { padding: 1rem; border-radius: .5rem; background: #eef6ee; }
