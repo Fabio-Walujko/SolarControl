@@ -1,8 +1,11 @@
 <?php
 
+
 declare(strict_types=1);
 
+
 $databaseStatus = 'Conectado';
+
 
 try {
     require_once __DIR__ . '/init.php';
@@ -16,12 +19,9 @@ try {
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>SolarControl</title>
-    <style>
-        body { font-family: system-ui, sans-serif; max-width: 720px; margin: 4rem auto; padding: 0 1rem; line-height: 1.5; }
-        .status { padding: 1rem; border-radius: .5rem; background: #eef6ee; }
-        code { background: #eee; padding: .15rem .3rem; border-radius: .25rem; }
-    </style>
+    <title>Projeto Integrador</title>
+    <link rel="stylesheet" href="CSS/index.css">
+   
 </head>
 <body>
     <h1>Projeto Integrador: SolarControl</h1>
