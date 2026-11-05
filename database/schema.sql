@@ -26,6 +26,17 @@ REFERENCES enderecos (id_endereco)
 );
 
 
+INSERT INTO usuarios
+(nome, email, senha, id_endereco, TIPO)
+VALUES
+('Joao Silva', 'joao@email.com', '123456', 1, 'cliente'),
+('Maria Oliveira', 'maria@email.com', '123456', 2, 'cliente'),
+('Carlos Souza', 'carlos@email.com', '123456', 3, 'funcionario'),
+('Ana Santos', 'ana@email.com', '123456', 4, 'adm'),
+('Pedro Costa', 'pedro@email.com', '123456', 5, 'cliente');
+
+
+
 ## TABELA DE ENDEREÇOS
 
 CREATE TABLE enderecos(
