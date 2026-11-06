@@ -1,0 +1,105 @@
+* {
+  box-sizing: border-box;
+}
+
+/* FUNDO */
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: grid;          /* NOVO */
+  place-items: center;    /* NOVO: centraliza na horizontal e na vertical */
+  padding: 20px;          /* NOVO: espaço nas bordas em telas pequenas */
+  font-family: "Segoe UI", system-ui, sans-serif;
+  color: #efecff;
+  background-color: #06041a;
+  background-image: url("../imagens/fundo.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+.conteudo {
+  position: relative;
+  z-index: 1;
+  min-height: 100svh;
+  width: 100%;
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 40px 32px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 400px;
+  align-items: center;
+  gap: 80px;
+}
+
+/*  FORMULÁRIO  */
+
+
+.posicaoforms{width:100%;max-width:400px;padding:32px;color:#efecff;background:rgba(22,15,60,.55);border:1px solid rgba(167,139,250,.18);border-radius:18px}
+.logo{font-weight:700;font-size:18px}
+.logo span,.posicaoforms a{color:#ffb547;text-decoration:none}
+.posicaoforms h2{margin:22px 0 4px;font-size:28px;font-weight:400}
+.sub{margin:0 0 20px;font-size:14px;color:#a6a0cc}
+.centro{margin:20px 0 0;text-align:center;font-size:12px}
+.formulario{display:flex;flex-direction:column;gap:6px;margin:0}
+.formulario label{font-size:13px;color:#a6a0cc}
+.formulario input:not([type=checkbox]){margin-bottom:12px;padding:12px;font-size:15px;color:#efecff;background:rgba(30,21,78,.7);border:1px solid rgba(167,139,250,.32);border-radius:10px;outline:none}
+.formulario input:focus{border-color:#ffb547;box-shadow:0 0 0 3px rgba(255,181,71,.35)}
+.formulario input[type=checkbox]{accent-color:#ffb547}
+.linha{display:flex;justify-content:space-between;font-size:13px}
+.formulario button{margin-top:14px;padding:12px;font-size:15px;font-weight:600;color:#1c0f00;background:linear-gradient(135deg,#ffb547,#ff8a3d);border:none;border-radius:10px;cursor:pointer}
+.formulario button:hover{filter:brightness(1.07)}
+
+
+.posicaoform {
+    display: flex;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+
+}
+
+.mensagem{margin:16px 0 0;font-size:13px;text-align:center;color:#ffb547}
+
+
+
+.paivoltar {
+  margin-top: 24px;
+}
+
+.posicaoforms .botao-voltar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+
+  width: 100%;
+  padding: 12px 18px;
+  border: 1px solid rgba(167, 139, 250, 0.35);
+  border-radius: 12px;
+
+  background: rgba(167, 139, 250, 0.06);
+  color: #efecff;
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.posicaoforms .botao-voltar:hover {
+  background: rgba(255, 181, 71, 0.1);
+  border-color: #ffb547;
+  color: #ffb547;
+  text-decoration: none;
+}
+
+.posicaoforms .botao-voltar:focus-visible {
+  outline: 2px solid #ffb547;
+  outline-offset: 4px;
+}
+

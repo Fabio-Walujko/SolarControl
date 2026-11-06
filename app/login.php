@@ -70,7 +70,7 @@ $pdo = database();
 
         <div class="linha">
           <label><input type="checkbox" name="lembrar" checked> Lembrar-me</label>
-          <a href="esqueci-senha.php">Esqueci a senha</a>
+          
         </div>
 
         <button type="submit">Entrar</button>
