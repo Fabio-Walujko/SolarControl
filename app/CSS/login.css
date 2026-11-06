@@ -169,3 +169,10 @@ body {
 
 
 
+.erro-login {
+  color: #ff4d4d;
+  text-align: center;
+  margin-top: 15px;
+  font-size: 0.9rem;
+  font-weight: bold;
+}
