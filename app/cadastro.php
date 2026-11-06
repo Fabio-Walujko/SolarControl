@@ -1,3 +1,33 @@
+<?php
+
+require_once __DIR__ . '/banco/database.php';   
+require_once __DIR__ . '/banco/crud.php';   
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
+$email = $_POST['email'];
+$senha = $_POST['senha'];
+$nome = $_POST['nome'];
+
+$pdo = database(); 
+
+    if (!empty($email) && !empty($senha) && !empty($nome)) {
+        try {
+            $sql = "INSERT INTO usuarios (nome, email, senha) VALUES ('$nome', '$email', '$senha')";
+            $stmt = $pdo->prepare($sql);
+            header('Location: login.php');
+            exit;
+
+            
+        } catch (PDOException $e) {
+            $mensagem_erro = "Erro no banco de dados: " . $e->getMessage();
+        }
+    }
+}
+
+?>
+
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -14,6 +44,9 @@
         <p class="sub">Preencha o formulário para criar sua conta.</p>
 
         <form action="" method="POST" class="formulario">
+            <label for="nome">Nome</label>
+            <input type="text" id="nome" name="nome" placeholder="nome completo" required>
+
             <label for="email">E-mail</label>
             <input type="email" id="email" name="email" placeholder="nome@empresa.com" required>
 
@@ -22,12 +55,6 @@
 
             <button type="submit">Criar</button>
         </form>
-
-        <?php if ($_SERVER["REQUEST_METHOD"] === "POST"): ?>
-            <p class="mensagem">
-                <?= ($usuario ?? false) ? "Pode entrar" : "Senha ou login não atende aos requisitos" ?>
-            </p>
-        <?php endif; ?>
 
 
         <div class="paivoltar">
