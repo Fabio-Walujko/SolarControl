@@ -18,7 +18,7 @@
         <a href="paineis.php">☀️ Painéis</a>
         <a href="relatorios.php">📈 Relatórios</a>
         <a href="alertas.php">🔔 Alertas</a>
-        <a href="configuracoes.php">⚙️ Configurações</a>
+        <a href="config.php">⚙️ Configurações</a>
         <a href="login.php" class="sair">🚪 Sair</a>
     </nav>
 

@@ -1,0 +1,93 @@
+* {
+  box-sizing: border-box;
+}
+
+/* FUNDO */
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: "Segoe UI", system-ui, sans-serif;
+  color: #efecff;
+  background-color: #06041a;                     /* cor enquanto a imagem carrega */
+  background-image: url("../imagens/fundo.png"); /* sai da pasta CSS e entra em imagens */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+/* MENU */
+.menu{position:fixed;top:0;left:0;bottom:0;width:220px;padding:24px 14px;display:flex;flex-direction:column;gap:6px;background:rgba(8,5,30,.55);border-right:1px solid rgba(167,139,250,.18)}
+.logo{padding:0 10px 20px;font-size:18px;font-weight:700}
+.logo b{color:#ffb547}
+.menu a{padding:10px 12px;border-radius:10px;color:#a6a0cc;font-size:14px;text-decoration:none}
+.menu a:hover{color:#efecff;background:rgba(139,108,255,.16)}
+.menu a.ativo{color:#ffb547;background:rgba(30,21,78,.7)}
+.menu .sair{margin-top:auto}
+
+/* CONTEÚDO */
+.pagina{margin-left:220px;padding:24px 32px}
+
+
+
+/* ===== TOPO ===== */
+.topo{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:26px}
+.crumb{font:12px ui-monospace,Consolas,monospace;letter-spacing:.08em;text-transform:uppercase;color:#6f68a0}
+.topo h1{margin:0;font-size:28px;font-weight:400}
+.topo-acoes{display:flex;align-items:center;gap:14px}
+.sino{position:relative;width:40px;height:40px;display:grid;place-items:center;border-radius:50%;background:rgba(22,15,60,.55);border:1px solid rgba(167,139,250,.18);font-size:16px;text-decoration:none}
+.sino b{position:absolute;top:-4px;right:-4px;min-width:18px;height:18px;padding:0 5px;border-radius:999px;background:#f87171;color:#06041a;font-size:10px;line-height:18px;text-align:center}
+.avatar{width:40px;height:40px;display:grid;place-items:center;border-radius:50%;font-size:13px;font-weight:700;color:#06041a;background:linear-gradient(135deg,#8b6cff,#5ad1ff)}
+
+/* ===== CARTÕES ===== */
+.card{background:rgba(22,15,60,.55);border:1px solid rgba(167,139,250,.18);border-radius:16px}
+
+/* ===== LAYOUT: abas à esquerda, conteúdo à direita ===== */
+.cfg{display:grid;grid-template-columns:200px minmax(0,1fr);gap:20px;align-items:start}
+
+/* Abas */
+.cfg-nav{padding:10px;display:flex;flex-direction:column;gap:4px}
+.cfg-nav a{padding:10px 12px;border-radius:10px;border:1px solid transparent;color:#a6a0cc;font-size:14px;text-decoration:none}
+.cfg-nav a:hover{color:#efecff;background:rgba(139,108,255,.16)}
+
+/* Aba ativa (Perfil quando nada foi clicado) */
+.cfg:not(:has(.cfg-sec:target)) .aba-perfil,
+.cfg:has(#perfil:target) .aba-perfil,
+.cfg:has(#usina:target) .aba-usina,
+.cfg:has(#notificacoes:target) .aba-notif{color:#ffb547;border-color:rgba(167,139,250,.32);background:rgba(30,21,78,.7)}
+
+/* Mostra só a seção clicada (Perfil quando nada foi clicado) */
+.cfg-sec{display:none;padding:22px;scroll-margin-top:120px}
+.cfg-sec:target,
+.cfg-conteudo:not(:has(.cfg-sec:target)) #perfil{display:block}
+
+.cfg-sec h3{margin:0 0 4px;font-size:16px}
+.desc{margin:0 0 18px;font-size:13px;color:#a6a0cc}
+
+/* ===== CAMPOS ===== */
+.duas{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.cfg-sec label:not(.opcao){display:block;margin-bottom:6px;font-size:13px;color:#a6a0cc}
+.cfg-sec input:not([type=checkbox]){width:100%;padding:12px;font:inherit;font-size:15px;color:#efecff;background:rgba(30,21,78,.7);border:1px solid rgba(167,139,250,.32);border-radius:10px;outline:none}
+.cfg-sec input:focus{border-color:#ffb547;box-shadow:0 0 0 3px rgba(255,181,71,.35)}
+
+/* ===== NOTIFICAÇÕES (botão liga/desliga) ===== */
+.opcao{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid rgba(167,139,250,.18);font-size:14px;cursor:pointer}
+.opcao:last-child{border-bottom:0}
+.opcao small{display:block;font-size:12px;color:#6f68a0}
+.switch{appearance:none;position:relative;flex:none;width:44px;height:24px;margin:0;border-radius:999px;border:1px solid rgba(167,139,250,.32);background:rgba(30,21,78,.7);cursor:pointer;transition:background .2s}
+.switch::after{content:"";position:absolute;top:3px;left:3px;width:16px;height:16px;border-radius:50%;background:#a6a0cc;transition:left .2s,background .2s}
+.switch:checked{background:#ffb547;border-color:#ffb547}
+.switch:checked::after{left:23px;background:#1c0f00}
+
+/* ===== BOTÕES ===== */
+.acoes{display:flex;justify-content:flex-end;gap:10px;margin-top:16px}
+.acoes button{padding:11px 18px;font:inherit;font-size:15px;font-weight:600;border-radius:10px;cursor:pointer}
+.btn-ghost{color:#efecff;background:transparent;border:1px solid rgba(167,139,250,.32)}
+.btn-ghost:hover{background:rgba(139,108,255,.16)}
+.btn-sol{color:#1c0f00;background:linear-gradient(135deg,#ffb547,#ff8a3d);border:none}
+.btn-sol:hover{filter:brightness(1.07)}
+
+/* ===== TELAS PEQUENAS ===== */
+@media (max-width:860px){
+  .cfg,.duas{grid-template-columns:1fr}
+}
