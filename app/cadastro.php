@@ -13,8 +13,10 @@ $pdo = database();
 
     if (!empty($email) && !empty($senha) && !empty($nome)) {
         try {
-            $sql = "INSERT INTO usuarios (nome, email, senha) VALUES ('$nome', '$email', '$senha')";
+       
+            $sql = "INSERT INTO usuarios (nome, email, senha) VALUES (:nome, :email, :senha)";
             $stmt = $pdo->prepare($sql);
+            $stmt->execute([':nome' => $nome, ':email' => $email, ':senha' => $senha]);
             header('Location: login.php');
             exit;
 
@@ -62,6 +64,7 @@ $pdo = database();
         <span aria-hidden="true">←</span>
         Voltar para o login
     </a>
+    <p><?php  echo $mensagem_erro; ?></php></p>
 </div>
 
 
