@@ -13,13 +13,13 @@
 </head>
 <body>
     <nav class="menu">
-        <div class="logo">🪐 Solar<b>Control</b></div>
-        <a href="dashboard.php" class="ativo">📊 Dashboard</a>
-        <a href="paineis.php">☀️ Painéis</a>
-        <a href="relatorios.php">📈 Relatórios</a>
-        <a href="alertas.php">🔔 Alertas</a>
-        <a href="config.php">⚙️ Configurações</a>
-        <a href="login.php" class="sair">🚪 Sair</a>
+        <div class="logo"> Solar<b>Control</b></div>
+        <a href="dashboard.php" class="ativo"> Dashboard</a>
+        <a href="paineis.php"> Painéis</a>
+        <a href="relatorios.php"> Relatórios</a>
+        <a href="alertas.php"> Alertas</a>
+        <a href="config.php"> Configurações</a>
+        <a href="login.php" class="sair"> Sair</a>
     </nav>
 
     <main class="pagina">
