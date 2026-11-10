@@ -28,62 +28,137 @@ $pdo = database();
     }
 }
 ?>
+
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SolarControl</title>
-  <link rel="stylesheet" href="CSS/login.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SolarControl</title>
+<link rel="stylesheet" href="CSS/login.css">
 </head>
 
 <body>
+<header>
+<nav class="navegacao">
+<div class="barra-navegacao">
 
-  <main class="conteudo">
 
-    <!-- Sol com os planetas -->
-    <div class="sistema-solar" aria-hidden="true">
-      <div class="anel"></div>
-      <div class="anel media"></div>
-      <div class="anel interna"></div>
+<div class="links-navegacao">
+<button class="botao-navegacao">
+<a href="#Login">Login</a>
+</button>
 
-      <div class="trajeto externo"><span></span></div>
-      <div class="trajeto media"><span></span></div>
-      <div class="trajeto interna"><span></span></div>
+<button class="botao-navegacao">
+<a href="#Sobre">Sobre</a>
+</button>
 
-      <div class="sol"></div>
-    </div>
+<button class="botao-navegacao">
+<a href="#Porque">Preferencia</a>
+</button>
 
-    <!-- Formulário -->
-    <div class="posicaoforms">
-      <div class="logo">🪐 Solar<span>Control</span></div>
-      <h2>Entrar</h2>
-      <p class="sub">Bem-vindo de volta. Acesse o painel da sua usina.</p>
+<button class="botao-navegacao">
+<a href="#Preferencia">Equipe</a>
+</button>
 
-      <!-- O action fica vazio "" para enviar os dados para este próprio arquivo PHP -->
-      <form action="" method="post" class="formulario">
-        <label for="email">E-mail</label>
-        <input type="email" id="email" name="email" placeholder="nome@empresa.com" required>
+<button class="botao-navegacao">
+<a href="#Objetivos">Objetivos</a>
+</button>
+</div>
 
-        <label for="senha">Senha</label>
-        <input type="password" id="senha" name="senha" placeholder="••••••••" minlength="6" required>
+</div>
+</nav>
+</header>
 
-        <div class="linha">
-          <label><input type="checkbox" name="lembrar" checked> Lembrar-me</label>
-          
-        </div>
+<main class="conteudo-principal">
 
-        <button type="submit">Entrar</button>
+<section class="secao-inicial" id="#Login">
 
-        <?php if (!empty($mensagem_erro)): ?>
-            <p class="erro-login"><?php echo $mensagem_erro; ?></p>
-        <?php endif; ?>
-      </form>
+<div class="texto-introducao">
+<h1 class="titulo-secao">Sua Energia Solar,<br><span class="destaque-laranja">em orbita</span></h1>
+<h2>A SolarControl une tecnologia e sustentabilidade<br>em uma solução inteligente e eficiente.</h2>
+</div>
 
-      <p class="sub centro">Não tem conta? <a href="cadastro.php">Criar conta</a></p>
-    </div>
 
-  </main>
+
+
+
+
+<div class="painel-login">
+<div class="logo">Solar<span class="destaque-laranja">Control</span></div>
+
+<h2>Entrar</h2>
+
+<p class="texto-auxiliar">
+Bem-vindo de volta. Acesse o painel da sua usina.
+</p>
+
+
+<form method="post" class="formulario-login">
+<label for="email">E-mail</label>
+
+<input type="email" id="email" name="email" placeholder="nome@empresa.com" required>
+
+<label for="senha">Senha</label>
+<input type="password" id="senha" name="senha" placeholder="••••••••" minlength="6" required>
+
+<div class="linha-opcoes">
+
+<label>
+<input type="checkbox" name="lembrar" checked>
+Lembrar-me
+</label>
+
+<a href="esqueci-senha.php">Esqueci a senha</a>
+
+</div>
+
+<button type="submit">Entrar</button>
+
+</form>
+
+<p class="texto-auxiliar texto-centralizado">
+Não tem conta?
+<a href="cadastro.php">Criar conta</a>
+</p>
+
+</div>
+
+</section>
+
+<section class="secao-sobre" id="Sobre">
+<h1 class="titulo-secao">Sobre<span class="destaque-laranja"> nós</span></h1>
+<h2>A SolarControl é uma plataforma desenvolvida para tornar o monitoramento<br> de sistemas
+fotovoltaicos mais simples, inteligente e eficiente. Nosso objetivo<br> é conectar tecnologia e
+sustentabilidade, oferecendo ferramentas que<br>permitem acompanhar a geração de energia, analisar o
+desempenho dos painéis<br> solares e otimizar o consumo energético. Acreditamos em um futuro mais
+sustentável,<br> onde a tecnologia transforma a maneira como utilizamos a energia solar.</h2>
+</section>
+
+
+<section class="secao-destaque" id="Porque">
+<div class="titulo-container">
+<h1 class="titulo-secao">Porque a<span class="destaque-laranja"> SolarControl?</span></h1>
+</div>
+</section>
+
+
+<section class="secao-destaque" id="Preferencia">
+<div class="titulo-container">
+<h1 class="titulo-secao">Nossa<span class="destaque-laranja"> Equipe</span></h1>
+</div>
+</section>
+
+
+<section class="secao-objetivos" id="Objetivos">
+
+<h1 class="titulo-secao">Nossos<span class="destaque-laranja"> Objetivos</span></h1>
+<h2></h2>
+</section>
+</main>
+
 
 </body>
+
 </html>
