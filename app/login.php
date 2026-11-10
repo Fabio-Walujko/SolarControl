@@ -116,6 +116,8 @@ Lembrar-me
 
 <button type="submit">Entrar</button>
 
+<?php  echo "Ocorreu o seguinte erro: ".$mensagem_erro; ?>
+
 </form>
 
 <p class="texto-auxiliar texto-centralizado">
