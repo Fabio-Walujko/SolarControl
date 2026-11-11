@@ -1,5 +1,10 @@
 <?php
+require_once __DIR__ . '/init.php';
 
+if (!isset($_SESSION['usuario_logado']) || $_SESSION['usuario_logado'] !== true) {
+    header('Location: login.php');
+    exit;
+}
 
 ?>
 <!doctype html>
@@ -19,7 +24,7 @@
         <a href="relatorios.php"> Relatórios</a>
         <a href="alertas.php"> Alertas</a>
         <a href="config.php"> Configurações</a>
-        <a href="login.php" class="sair"> Sair</a>
+        <a href="encerrarSessao.php" class="sair"> Sair</a>
     </nav>
 
     <main class="pagina">

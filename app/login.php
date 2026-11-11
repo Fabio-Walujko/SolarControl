@@ -1,5 +1,6 @@
 <?php
 
+require_once __DIR__ . '/init.php';
 require_once __DIR__ . '/banco/database.php';   
 require_once __DIR__ . '/banco/crud.php';   
 
@@ -17,8 +18,10 @@ $pdo = database();
             $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
 
             if ($usuario && $usuario['senha'] == $senha) {
+                $_SESSION['usuario_logado'] = true;
                 header('Location: index.php');
                 exit;
+
             } else {
                 $mensagem_erro = "E-mail ou senha inválidos.";
             }
