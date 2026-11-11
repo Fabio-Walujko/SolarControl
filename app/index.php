@@ -41,7 +41,7 @@
           <small>Conta pessoal</small>
         </div>
 
-        <a class="sair" href="auth/login.php">Sair</a>
+        <a class="sair" href="login.php">Sair</a>
       </div>
     </div>
   </aside>
