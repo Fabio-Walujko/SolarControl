@@ -1,3 +1,36 @@
+<?php
+
+require_once __DIR__ . '/banco/database.php';   
+require_once __DIR__ . '/banco/crud.php';   
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
+$email = $_POST['email'];
+$senha = $_POST['senha'];
+$nome = $_POST['nome'];
+
+$pdo = database(); 
+
+    if (!empty($email) && !empty($senha) && !empty($nome)) {
+        try {
+       
+            $sql = "UPDATE usuarios (email, senha) VALUES (:email, :senha)";
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute([':email' => $email, ':senha' => $senha]);
+            header('Location: login.php');
+            exit;
+
+            
+        } catch (PDOException $e) {
+            $mensagem_erro = "Erro no banco de dados: " . $e->getMessage();
+        }
+    }
+}
+
+?>
+
+
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
