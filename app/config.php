@@ -15,11 +15,13 @@
     </a>
 
     <nav class="menu-links" aria-label="Navegação do painel">
-      <p class="titulo-menu">NAVEGAÇÃO</p>
+      <p class="titulo-menu">NAVEGAÇÂO</p>
 
-      <a href="index.php">Visão geral</a>
+      <a href="index.php" aria-current="page">Visão geral</a>
       <a href="paineis.php">Painéis</a>
       <a href="monitoramento.php">Monitoramento</a>
+      <a href="perguntas.php">FAQ</a>
+      <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 
       <p class="titulo-menu">GESTÃO</p>
 
@@ -30,7 +32,7 @@
     <div class="menu-rodape">
       <nav class="menu-links" aria-label="Navegação da conta">
         <a href="profile.php">Meu perfil</a>
-        <a href="config.php" aria-current="page">Configurações</a>
+        <a href="config.php">Configurações</a>
       </nav>
 
       <div class="usuario">

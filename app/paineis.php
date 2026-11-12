@@ -18,6 +18,7 @@
 
       <a href="index.php" aria-current="page">Visão geral</a>
       <a href="paineis.php">Painéis</a>
+      <a href="perguntas.php">FAQ</a>
       <a href="monitoramento.php">Monitoramento</a>
       <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 
