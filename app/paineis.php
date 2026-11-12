@@ -18,9 +18,9 @@
 
       <a href="index.php" aria-current="page">Visão geral</a>
       <a href="paineis.php">Painéis</a>
-      <a href="perguntas.php">FAQ</a>
       <a href="monitoramento.php">Monitoramento</a>
-      <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+      <a href="perguntas.php">FAQ</a>
+      <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 
       <p class="titulo-menu">GESTÃO</p>
 
@@ -33,6 +33,7 @@
         <a href="profile.php">Meu perfil</a>
         <a href="config.php">Configurações</a>
       </nav>
+
 
       <div class="usuario">
         <span class="avatar">C</span>

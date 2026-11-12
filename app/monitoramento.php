@@ -20,7 +20,7 @@
       <a href="paineis.php">Painéis</a>
       <a href="monitoramento.php">Monitoramento</a>
       <a href="perguntas.php">FAQ</a>
-      <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+      <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 
       <p class="titulo-menu">GESTÃO</p>
 
@@ -33,6 +33,7 @@
         <a href="profile.php">Meu perfil</a>
         <a href="config.php">Configurações</a>
       </nav>
+
 
       <div class="usuario">
         <span class="avatar">C</span>
