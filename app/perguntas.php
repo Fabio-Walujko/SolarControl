@@ -1,148 +1,193 @@
 <!DOCTYPE html>
-<html lang="pt-br">
-
+<html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Formulário de Perguntas</title>
-    <link rel="stylesheet" href="css/perguntas.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Perguntas frequentes — Solar Control</title>
+  <link rel="stylesheet" href="css/perguntas.css">
 </head>
 
 <body>
-    <header>
-        <div class="container navbar">
-            <a href="#" class="nome-logo">
-                <div class="logo-icon">
-                    <img src="imagens/Code_Generated_Image.png" alt="Logo Solar Control" class="logo-cabecalho">
-                </div>
-                Solar<span class="nome-logo2">Control</span>
-            </a>
+  <aside class="menu-lateral">
+    <a class="marca" href="index.php">
+      solar<span>control</span>
+    </a>
 
-            <ul>
-                <li class="nav-links"><a href="#">Início</a></li>
-                <li class="nav-links"><a href="#">Configurações</a></li>   
-                <li class="nav-links"><a href="#">Alertas</a></li>
-                <li class="nav-links"><a href="#" class="active">FAQ</a></li>
-            </ul>
-        </div>
-    </header>
+    <nav class="menu-links" aria-label="Navegação do painel">
+      <p class="titulo-menu">MENU</p>
 
-    <!-- O CONTEÚDO PRINCIPAL COMEÇA AQUI -->
-    <div class="conteudo-principal">
-        
-        <!-- A DIV DA IMAGEM FOI MOVIDA PARA AQUI -->
-        <div class="topo">
-            <img src="imagens/topo.jpg" alt="Banner Solar Control">
-        </div>
+      <a href="index.php">Visão geral</a>
+      <a href="paineis.php">Painéis</a>
+      <a href="monitoramento.php">Monitoramento</a>
+      <a href="alerts.php">Alertas</a>
+      <a href="perguntas.php" aria-current="page">FAQ</a>
+    </nav>
 
-        <h1>Perguntas frequentes</h1>
-        <h2>Encontre Respostas para as suas duvidas!</h2>
-       <br>
+    <div class="menu-rodape">
+      <nav class="menu-links" aria-label="Navegação da conta">
+        <p class="titulo-menu">GESTÃO</p>
 
-        <div class="card-categoria">
-            <h3>Geral</h3>
-            <details>
-                <summary>O que é energia fotovoltaica?</summary>
-                <p>É a eletricidade gerada a partir da luz do sol através de células fotovoltaicas presentes nos painéis solares. Quando a luz incide sobre essas células, cria um fluxo de eletrões que produz energia limpa e renovável.</p>
-            </details>
-            <br><br>
-            <details>
-                <summary>Qual a diferença entre energia solar fotovoltaica e térmica?</summary>
-                <p>A energia fotovoltaica converte a luz solar diretamente em eletricidade para alimentar eletrodomésticos e lâmpadas. A energia térmica utiliza o calor do sol apenas para aquecer água (como nos banhos e piscinas).</p>
-            </details>
-            <br>
-            <details>
-                <summary>O sistema funciona em dias nublados ou de chuva?</summary>
-                <p>Sim. Embora a produção diminua devido à menor incidência direta de radiação, os painéis continuam a gerar energia através da radiação difusa presente na atmosfera.</p>
-            </details>
-            <br>
-            <details>
-                <summary>O que acontece à noite quando não há sol?</summary>
-                <p>À noite o sistema entra em repouso. O teu imóvel passa a consumir automaticamente a energia fornecida pela rede elétrica tradicional (ou de baterias, caso tenhas um sistema com armazenamento).</p>
-            </details>
-            <br>
-            <details>
-                <summary>Qual a diferença entre o sistema On-Grid e Off-Grid?</summary>
-                <p>O sistema On-Grid funciona ligado à rede elétrica pública (permitindo gerar créditos de energia). O sistema Off-Grid é totalmente isolado e armazena a energia excedente em baterias para uso posterior.</p>
-            </details>
+        <a href="reports.php">Relatórios</a>
+        <a href="profile.php">Meu perfil</a>
+        <a href="config.php">Configurações</a>
+      </nav>
+
+      <div class="usuario">
+        <span class="avatar">C</span>
+
+        <div class="dados-usuario">
+          <strong>Carlos Oliveira</strong>
+          <small>Conta pessoal</small>
         </div>
 
-        <div class="card-categoria">
-            <h3>Instalação e Requisitos</h3>
-            <details>
-                <summary>Qualquer telhado pode receber painéis solares?</summary>
-                <p>A grande maioria dos telhados pode receber a instalação, desde que a estrutura de suporte esteja em bom estado e o local não tenha sombreamento excessivo. Fazemos uma avaliação técnica prévia para garantir a viabilidade.</p>
-            </details>
-            <br>
-            <details>
-                <summary>Quanto tempo demora a instalação física do sistema?</summary>
-                <p>Para a maioria dos projetos residenciais, a instalação dos painéis e do inversor demora entre 1 e 3 dias úteis.</p>
-            </details>
-            <br>
-            <details>
-                <summary>Preciso de autorização da distribuidora para instalar?</summary>
-                <p>Sim. Todo o sistema ligado à rede precisa de ser homologado junto da distribuidora de energia local. A equipa da Solar Control trata de todo este processo burocrático por ti.</p>
-            </details>
-            <br>
-            <details>
-                <summary>O que acontece se houver um corte de energia na rede pública?</summary>
-                <p>Em sistemas On-Grid normais, o inversor desliga-se automaticamente por motivos de segurança (sistema anti-ilhamento), evitando eletrocutar os técnicos que trabalham na manutenção da rede pública.</p>
-            </details>
-        </div>
-
-        <div class="card-categoria">
-            <h3>Economia e Financeiro</h3>
-            <details>
-                <summary>Quanto posso poupar na minha fatura de eletricidade?</summary>
-                <p>É possível reduzir até 95% do valor da tua fatura de energia, ficando responsável apenas pelo pagamento das taxas mínimas de disponibilidade e impostos obrigatórios da rede.</p>
-            </details>
-            <br>
-            <details>
-                <summary>Qual é o tempo médio de retorno do investimento?</summary>
-                <p>O retorno financeiro ocorre geralmente entre 3 e 6 anos, dependendo do valor da tarifa local e do consumo do imóvel.</p>
-            </details>
-            <br>
-            <details>
-                <summary>O que são os créditos de energia solar?</summary>
-                <p>Quando o teu sistema produz mais energia do que aquela que consomes durante o dia, o excesso é injetado na rede elétrica e transformado em créditos que podes abater no consumo noturno ou em meses futuros.</p>
-            </details>
-            <br>
-            <details>
-                <summary>Posso transferir os meus créditos de energia para outro imóvel?</summary>
-                <p>Sim, desde que o outro imóvel esteja registado sob o mesmo titular (CPF/CNPJ) e dentro da área de cobertura da mesma distribuidora de energia.</p>
-            </details>
-            <br>
-            <details>
-                <summary>A instalação do sistema solar valoriza o imóvel?</summary>
-                <p>Sim. Estudos do setor imobiliário indicam que imóveis com produção própria de energia limpa valorizam em média entre 10% e 15% no mercado.</p>
-            </details>
-        </div>
-
-        <div class="card-categoria">
-            <h3>Manutenção e Garantia</h3>
-            <details>
-                <summary>Qual é a vida útil dos painéis solares?</summary>
-                <p>Os painéis solares têm uma vida útil superior a 25 a 30 anos, mantendo mais de 80% da sua eficiência de geração original ao fim desse período.</p>
-            </details>
-            <br>
-            <details>
-                <summary>Que tipo de manutenção o sistema exige?</summary>
-                <p>A manutenção é simples e reduzida. Consiste maioritariamente na limpeza periódica das placas com água (duas vezes por ano ou conforme a acumulação de poeiras/folhas) e numa inspeção elétrica anual.</p>
-            </details>
-            <br>
-            <details>
-                <summary>Qual é a garantia dos equipamentos?</summary>
-                <p>Os painéis solares contam com garantia de eficiência de 25 anos. Os inversores possuem garantia de fabrico que varia entre 5 e 10 anos (com possibilidade de extensão).</p>
-            </details>
-            <br>
-            <details>
-                <summary>O que acontece se houver tempestades fortes ou granizo?</summary>
-                <p>Os painéis solares são fabricados com vidro temperado de alta resistência, projetados e testados para suportar tempestades, ventos fortes e impactos de granizo severos.</p>
-            </details>
-        </div>
-
-        <br><br><br><br>
+        <a class="sair" href="login.php">Sair</a>
+      </div>
     </div>
-</body>
+  </aside>
 
+  <main class="conteudo-principal">
+    <div class="topo">
+      <img src="imagens/topo.jpg" alt="Banner Solar Control">
+    </div>
+
+    <h1>Perguntas frequentes</h1>
+    <h2>Encontre respostas para as suas dúvidas!</h2>
+
+    <br>
+
+    <div class="card-categoria">
+      <h3>Geral</h3>
+
+      <details>
+        <summary>O que é energia fotovoltaica?</summary>
+        <p>É a eletricidade gerada a partir da luz do sol através de células fotovoltaicas presentes nos painéis solares. Quando a luz incide sobre essas células, cria um fluxo de eletrões que produz energia limpa e renovável.</p>
+      </details>
+
+      <br><br>
+
+      <details>
+        <summary>Qual a diferença entre energia solar fotovoltaica e térmica?</summary>
+        <p>A energia fotovoltaica converte a luz solar diretamente em eletricidade para alimentar eletrodomésticos e lâmpadas. A energia térmica utiliza o calor do sol apenas para aquecer água (como nos banhos e piscinas).</p>
+      </details>
+
+      <br>
+
+      <details>
+        <summary>O sistema funciona em dias nublados ou de chuva?</summary>
+        <p>Sim. Embora a produção diminua devido à menor incidência direta de radiação, os painéis continuam a gerar energia através da radiação difusa presente na atmosfera.</p>
+      </details>
+
+      <br>
+
+      <details>
+        <summary>O que acontece à noite quando não há sol?</summary>
+        <p>À noite o sistema entra em repouso. O teu imóvel passa a consumir automaticamente a energia fornecida pela rede elétrica tradicional (ou de baterias, caso tenhas um sistema com armazenamento).</p>
+      </details>
+
+      <br>
+
+      <details>
+        <summary>Qual a diferença entre o sistema On-Grid e Off-Grid?</summary>
+        <p>O sistema On-Grid funciona ligado à rede elétrica pública (permitindo gerar créditos de energia). O sistema Off-Grid é totalmente isolado e armazena a energia excedente em baterias para uso posterior.</p>
+      </details>
+    </div>
+
+    <div class="card-categoria">
+      <h3>Instalação e Requisitos</h3>
+
+      <details>
+        <summary>Qualquer telhado pode receber painéis solares?</summary>
+        <p>A grande maioria dos telhados pode receber a instalação, desde que a estrutura de suporte esteja em bom estado e o local não tenha sombreamento excessivo. Fazemos uma avaliação técnica prévia para garantir a viabilidade.</p>
+      </details>
+
+      <br>
+
+      <details>
+        <summary>Quanto tempo demora a instalação física do sistema?</summary>
+        <p>Para a maioria dos projetos residenciais, a instalação dos painéis e do inversor demora entre 1 e 3 dias úteis.</p>
+      </details>
+
+      <br>
+
+      <details>
+        <summary>Preciso de autorização da distribuidora para instalar?</summary>
+        <p>Sim. Todo o sistema ligado à rede precisa de ser homologado junto da distribuidora de energia local. A equipa da Solar Control trata de todo este processo burocrático por ti.</p>
+      </details>
+
+      <br>
+
+      <details>
+        <summary>O que acontece se houver um corte de energia na rede pública?</summary>
+        <p>Em sistemas On-Grid normais, o inversor desliga-se automaticamente por motivos de segurança (sistema anti-ilhamento), evitando eletrocutar os técnicos que trabalham na manutenção da rede pública.</p>
+      </details>
+    </div>
+
+    <div class="card-categoria">
+      <h3>Economia e Financeiro</h3>
+
+      <details>
+        <summary>Quanto posso poupar na minha fatura de eletricidade?</summary>
+        <p>É possível reduzir até 95% do valor da tua fatura de energia, ficando responsável apenas pelo pagamento das taxas mínimas de disponibilidade e impostos obrigatórios da rede.</p>
+      </details>
+
+      <br>
+
+      <details>
+        <summary>Qual é o tempo médio de retorno do investimento?</summary>
+        <p>O retorno financeiro ocorre geralmente entre 3 e 6 anos, dependendo do valor da tarifa local e do consumo do imóvel.</p>
+      </details>
+
+      <br>
+
+      <details>
+        <summary>O que são os créditos de energia solar?</summary>
+        <p>Quando o teu sistema produz mais energia do que aquela que consomes durante o dia, o excesso é injetado na rede elétrica e transformado em créditos que podes abater no consumo noturno ou em meses futuros.</p>
+      </details>
+
+      <br>
+
+      <details>
+        <summary>Posso transferir os meus créditos de energia para outro imóvel?</summary>
+        <p>Sim, desde que o outro imóvel esteja registado sob o mesmo titular (CPF/CNPJ) e dentro da área de cobertura da mesma distribuidora de energia.</p>
+      </details>
+
+      <br>
+
+      <details>
+        <summary>A instalação do sistema solar valoriza o imóvel?</summary>
+        <p>Sim. Estudos do setor imobiliário indicam que imóveis com produção própria de energia limpa valorizam em média entre 10% e 15% no mercado.</p>
+      </details>
+    </div>
+
+    <div class="card-categoria">
+      <h3>Manutenção e Garantia</h3>
+
+      <details>
+        <summary>Qual é a vida útil dos painéis solares?</summary>
+        <p>Os painéis solares têm uma vida útil superior a 25 a 30 anos, mantendo mais de 80% da sua eficiência de geração original ao fim desse período.</p>
+      </details>
+
+      <br>
+
+      <details>
+        <summary>Que tipo de manutenção o sistema exige?</summary>
+        <p>A manutenção é simples e reduzida. Consiste maioritariamente na limpeza periódica das placas com água (duas vezes por ano ou conforme a acumulação de poeiras/folhas) e numa inspeção elétrica anual.</p>
+      </details>
+
+      <br>
+
+      <details>
+        <summary>Qual é a garantia dos equipamentos?</summary>
+        <p>Os painéis solares contam com garantia de eficiência de 25 anos. Os inversores possuem garantia de fabrico que varia entre 5 e 10 anos (com possibilidade de extensão).</p>
+      </details>
+
+      <br>
+
+      <details>
+        <summary>O que acontece se houver tempestades fortes ou granizo?</summary>
+        <p>Os painéis solares são fabricados com vidro temperado de alta resistência, projetados e testados para suportar tempestades, ventos fortes e impactos de granizo severos.</p>
+      </details>
+    </div>
+  </main>
+</body>
 </html>

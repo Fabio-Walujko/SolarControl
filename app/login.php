@@ -116,8 +116,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             Lembrar-me
                         </label>
 
-                        <a href="esqueci-senha.php">Esqueci a senha</a>
-
                     </div>
 
                     <button class="entrar" type="submit">Entrar</button>
