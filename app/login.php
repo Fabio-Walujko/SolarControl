@@ -1,13 +1,15 @@
 <?php
 
-require_once __DIR__ . '/banco/database.php';   
-require_once __DIR__ . '/banco/crud.php';   
+require_once __DIR__ . '/banco/database.php';
+
+require_once __DIR__ . '/banco/crud.php';
+
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $_POST['email'];
     $senha = $_POST['senha'];
 
-$pdo = database(); 
+    $pdo = database();
 
     if (!empty($email) && !empty($senha)) {
         try {
@@ -30,137 +32,165 @@ $pdo = database();
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SolarControl</title>
-<link rel="stylesheet" href="CSS/login.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SolarControl</title>
+    <link rel="stylesheet" href="CSS/login.css">
 </head>
 
 <body>
-<header>
-<nav class="navegacao">
-<div class="barra-navegacao">
+    <main class="conteudo-principal">
+        <nav class="navegacao">
+            <div class="barra-navegacao">
+                <div class="links-navegacao">
 
+                    <button class="botao-navegacao">
+                        <a href="#Login">Login</a>
+                    </button>
 
-<div class="links-navegacao">
-<button class="botao-navegacao">
-<a href="#Login">Login</a>
-</button>
+                    <button class="botao-navegacao">
+                        <a href="#Sobre">Sobre</a>
+                    </button>
 
-<button class="botao-navegacao">
-<a href="#Sobre">Sobre</a>
-</button>
+                    <button class="botao-navegacao">
+                        <a href="#Porque">Preferencia</a>
+                    </button>
 
-<button class="botao-navegacao">
-<a href="#Porque">Preferencia</a>
-</button>
+                    <button class="botao-navegacao">
+                        <a href="#Preferencia">Equipe</a>
+                    </button>
 
-<button class="botao-navegacao">
-<a href="#Preferencia">Equipe</a>
-</button>
+                    <button class="botao-navegacao">
+                        <a href="#Objetivos">Objetivos</a>
+                    </button>
 
-<button class="botao-navegacao">
-<a href="#Objetivos">Objetivos</a>
-</button>
-</div>
+                </div>
+            </div>
+        </nav>
 
-</div>
-</nav>
-</header>
+        <section class="secao-inicial" id="Login">
 
-<main class="conteudo-principal">
+            <div class="texto-introducao">
 
-<section class="secao-inicial" id="#Login">
+                <h1 class="titulo-secao">
+                    Controle<br>
+                    <span class="destaque-verde">
+                        inteligente<br>Energia sustentável
+                    </span>
+                </h1>
 
-<div class="texto-introducao">
-<h1 class="titulo-secao">Sua Energia Solar,<br><span class="destaque-laranja">em orbita</span></h1>
-<h2>A SolarControl une tecnologia e sustentabilidade<br>em uma solução inteligente e eficiente.</h2>
-</div>
+                <h2>
+                    Monitore sua produção de energia solar,<br>
+                    acompanhe seu consumo e<br>
+                    tenha controle total do seu sistema em um só lugar.
+                </h2>
+            </div>
 
+            <div class="painel-login">
+                <div class="logo">SolarControl</div>
 
+                <h2>Entrar</h2>
 
+                <p class="texto-auxiliar">
+                    Bem-vindo de volta. Acesse o painel da sua usina.
+                </p>
 
+                <form method="POST" class="formulario-login">
 
+                    <label for="email">E-mail</label>
 
-<div class="painel-login">
-<div class="logo">Solar<span class="destaque-laranja">Control</span></div>
+                    <input class="campos" type="email" id="email" name="email" placeholder="nome@empresa.com" required>
 
-<h2>Entrar</h2>
+                    <label for="senha">Senha</label>
 
-<p class="texto-auxiliar">
-Bem-vindo de volta. Acesse o painel da sua usina.
-</p>
+                    <input class="campos" type="password" id="senha" name="senha" placeholder="••••••••" minlength="6"
+                        required>
 
+                    <div class="linha-opcoes">
 
-<form method="post" class="formulario-login">
-<label for="email">E-mail</label>
+                        <label>
+                            <input type="checkbox" name="lembrar" checked>
+                            Lembrar-me
+                        </label>
 
-<input type="email" id="email" name="email" placeholder="nome@empresa.com" required>
+                        <a href="esqueci-senha.php">Esqueci a senha</a>
 
-<label for="senha">Senha</label>
-<input type="password" id="senha" name="senha" placeholder="••••••••" minlength="6" required>
+                    </div>
 
-<div class="linha-opcoes">
+                    <button class="entrar" type="submit">Entrar</button>
 
-<label>
-<input type="checkbox" name="lembrar" checked>
-Lembrar-me
-</label>
+                </form>
 
-<a href="esqueci-senha.php">Esqueci a senha</a>
+                <p class="texto-auxiliar texto-centralizado">
+                    Não tem conta?
+                    <a href="cadastro.php">Criar conta</a>
+                </p>
 
-</div>
+            </div>
 
-<button type="submit">Entrar</button>
+        </section>
 
-<?php  echo "Ocorreu o seguinte erro: ".$mensagem_erro; ?>
+        <section class="secao-sobre" id="Sobre">
+            <div class="textos-secao-sobre">
+                <h1 class="titulo-secao">
+                    O que é a<span class="destaque-verde"> SolarControl?</span>
+                    <hr class="divisao">
+                </h1>
 
-</form>
+                <h2 class="texto-secao-inicial">
+                    Mais controle para<br>
+                    um <span class="destaque-verde">futuro sustentável.</span>
+                    <hr class="divisao2">
+                </h2>
+                <p>
+                    O Solar Control reúne as informações mais importantes do seu sistema fotovoltaico<br> em uma
+                    experiência simples e intuitiva. Acompanhe a geração, entenda<br> o consumo e veja como sua energia
+                    está performando.
+                </p>
+            </div>
+            <div class="secao-sobre-img">
+                <img src="painelsolar.png" alt="imagem ilustrativa solar control">
+            </div>
+        </section>
 
-<p class="texto-auxiliar texto-centralizado">
-Não tem conta?
-<a href="cadastro.php">Criar conta</a>
-</p>
+        <section class="secao-destaque" id="Porque">
 
-</div>
+            <div class="titulo-container">
+                <h1 class="titulo-secao">
+                    Porque a<span class="destaque-verde"> SolarControl?</span>
+                </h1>
+            </div>
 
-</section>
+        </section>
 
-<section class="secao-sobre" id="Sobre">
-<h1 class="titulo-secao">Sobre<span class="destaque-laranja"> nós</span></h1>
-<h2>A SolarControl é uma plataforma desenvolvida para tornar o monitoramento<br> de sistemas
-fotovoltaicos mais simples, inteligente e eficiente. Nosso objetivo<br> é conectar tecnologia e
-sustentabilidade, oferecendo ferramentas que<br>permitem acompanhar a geração de energia, analisar o
-desempenho dos painéis<br> solares e otimizar o consumo energético. Acreditamos em um futuro mais
-sustentável,<br> onde a tecnologia transforma a maneira como utilizamos a energia solar.</h2>
-</section>
+        <section class="Equipe" id="Preferencia">
 
+            <div class="titulo-container">
+                <h1 class="titulo-secao">
+                    Nossa<span class="destaque-verde"> Equipe</span>
+                </h1>
+            </div>
 
-<section class="secao-destaque" id="Porque">
-<div class="titulo-container">
-<h1 class="titulo-secao">Porque a<span class="destaque-laranja"> SolarControl?</span></h1>
-</div>
-</section>
+        </section>
 
+        <section class="secao-objetivos" id="Objetivos">
 
-<section class="secao-destaque" id="Preferencia">
-<div class="titulo-container">
-<h1 class="titulo-secao">Nossa<span class="destaque-laranja"> Equipe</span></h1>
-</div>
-</section>
+            <h1 class="titulo-secao">
+                Nossos<span class="destaque-verde"> Objetivos</span>
+            </h1>
 
+            <h2></h2>
 
-<section class="secao-objetivos" id="Objetivos">
+        </section>
 
-<h1 class="titulo-secao">Nossos<span class="destaque-laranja"> Objetivos</span></h1>
-<h2></h2>
-</section>
-</main>
-
-
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+        <script src="js/ScrollSmoother.min.js"></script>
+        <script src="definitivo.js"></script>
+    </main>
 </body>
 
 </html>
