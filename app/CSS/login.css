@@ -48,7 +48,7 @@ body {
 .secao-inicial {
     display: flex;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-image: url(fundo1.png);
+    background-image: url(/app/imagens/fundo1.png);
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
