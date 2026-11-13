@@ -38,7 +38,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SolarControl</title>
-    <link rel="stylesheet" href="CSS/login.css">
+    <link rel="stylesheet" href="CSS/javascript/login.css">
 </head>
 
 <body>
@@ -48,7 +48,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <div class="links-navegacao">
 
                     <button class="botao-navegacao">
-                        <a href="#Login">Login</a>
+                        <a href="#javascript/login">javascript/login</a>
                     </button>
 
                     <button class="botao-navegacao">
@@ -71,7 +71,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
         </nav>
 
-        <section class="secao-inicial" id="Login">
+        <section class="secao-inicial" id="javascript/login">
 
             <div class="texto-introducao">
 
@@ -89,7 +89,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </h2>
             </div>
 
-            <div class="painel-login">
+            <div class="painel-javascript/login">
                 <div class="logo">SolarControl</div>
 
                 <h2>Entrar</h2>
@@ -98,7 +98,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     Bem-vindo de volta. Acesse o painel da sua usina.
                 </p>
 
-                <form method="POST" class="formulario-login">
+                <form method="POST" class="formulario-javascript/login">
 
                     <label for="email">E-mail</label>
 
@@ -115,6 +115,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <input type="checkbox" name="lembrar" checked>
                             Lembrar-me
                         </label>
+
+                        <a href="esqueci-senha.php">Esqueci a senha</a>
 
                     </div>
 
@@ -138,10 +140,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <hr class="divisao">
                 </h1>
 
-                <h2 class="texto-secao-inicial">
+                <div class="digitando">
                     Mais controle para<br>
                     um <span class="destaque-verde">futuro sustentável.</span>
-                    <hr class="divisao2">
+                </div>
                 </h2>
                 <p>
                     O Solar Control reúne as informações mais importantes do seu sistema fotovoltaico<br> em uma
@@ -149,8 +151,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     está performando.
                 </p>
             </div>
-            <div class="secao-sobre-img">
-                <img src="painelsolar.png" alt="imagem ilustrativa solar control">
+            <div>
+                <img src="">
             </div>
         </section>
 
@@ -184,10 +186,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         </section>
 
+
+
+
+
+
+
+
         <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
         <script src="js/ScrollSmoother.min.js"></script>
-        <script src="definitivo.js"></script>
+        <script src="javascript/login.js"></script>
     </main>
 </body>
 

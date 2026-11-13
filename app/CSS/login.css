@@ -48,7 +48,7 @@ body {
 .secao-inicial {
     display: flex;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-image: url(../imagens/fundo1.png);
+    background-image: url(fundo1.png);
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
@@ -135,36 +135,38 @@ body {
     background-clip: text;
 }
 
+
+
+
+
 .secao-sobre {
     font-family: 'DM Sans', sans-serif;
     padding-left: 200px;
     padding-top: 170px;
     display: flex;
-
-    .texto-secao-inicial {
+    .texto-secao-inicial{
         font-size: 70px;
     }
-
-    .divisao {
+    
+    .divisao{
         width: 500px;
         margin-top: 30px;
         margin-left: 0;
         border: 1px solid #2E7D32;
     }
-
-    .divisao2 {
+    
+    .divisao2{
         width: 500px;
         margin-top: 40px;
         margin-left: 300px;
         border: 1px solid #2E7D32;
     }
-
-    p {
+    
+    p{
         margin-bottom: 200px;
         font-size: 20px;
     }
-
-    .secao-sobre-img img {
+    .secao-sobre-img img{
         width: 700px;
         margin-left: 90px;
         border-radius: 10px;
@@ -174,8 +176,43 @@ body {
 }
 
 
-.secao-destaque {
+.secao-destaque{
     background-color: #edf1eb;
     height: 700px;
     box-shadow: 0 0 20px gray;
 }
+
+.digitando{
+    font-size: 60px;
+     border-right: 2px solid #2E7D32;
+     animation: cursor 0.5s infinite,
+     typing 5.0s infinite steps(22);
+     white-space: nowrap;
+     width: 22ch;
+     overflow: hidden;
+
+     
+}
+
+@keyframes cursor {
+    50%{
+        border-right-color: transparent;
+    }
+}
+@keyframes typing{
+    0%{
+     width:0
+    }
+    
+    40%{
+    width: 22ch;
+    }
+
+    60%{
+    width: 22ch;
+    }
+
+    100%{
+       width: 0;
+    } 
+} 
