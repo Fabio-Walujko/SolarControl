@@ -38,8 +38,6 @@ if (!isset($_SESSION['usuario_logado']) || $_SESSION['usuario_logado'] !== true)
     <div class="menu-rodape">
       <nav class="menu-links" aria-label="Navegação da conta">
         <p class="titulo-menu">GESTÃO</p>
-      <a href="reports.php">Relatórios</a>
-        <a href="profile.php">Meu perfil</a>
         <a href="config.php">Configurações</a>
       </nav>
 
@@ -58,15 +56,35 @@ if (!isset($_SESSION['usuario_logado']) || $_SESSION['usuario_logado'] !== true)
 
   <main class="conteudo">
     <h1>Visão geral</h1>
-    <p>Acompanhe sua instalação solar.</p>
+    <p>Acompanhe os principais indicadores da sua instalação.</p>
+ <!-- INDICADORES -->
+    <section class="indicadores" aria-label="Indicadores principais">
+      <article class="indicador card">
+        <p class="letrasCard"><span>Geração hoje</span></p>
+        <strong>19,5<small>kWh</small></strong>
+        <p>Previsto até agora: 21,7 kWh · dia inteiro: 34,0 kWh</p>
+      </article>
 
-      <div>
-          <div>
+      <article class="indicador card">
+         <p class="letrasCard"><span>Geração no mês</span></p>
+        <strong>366<small>kWh</small></strong>
+        <p><span class="negativo">-9,1%</span> em relação a 1–13 de outubro</p>
+      </article>
 
-          
+      <article class="indicador card">
+        <p class="letrasCard"><span>Economia no mês</span></p>
+        <strong>R$ 336,71</strong>
+        <p class="prescricao"><span>366 kWh × R$ 0,92 · consumo do mês: 283 kWh</span></p>
+      </article>
 
-          </div>
-      </div>
+      <article class="indicador card">
+        <p class="letrasCard"><span>Desempenho</span></p>
+        <strong>89,9<small>%</small></strong>
+        <p><span class="negativo">−8,2 p.p.</span> desde a limpeza de 03/10</p>
+        <div class="progresso" aria-hidden="true"><i style="width: 89.9%"></i></div>
+      </article>
+    </section>
+
   </main>
 </body>
 </html>

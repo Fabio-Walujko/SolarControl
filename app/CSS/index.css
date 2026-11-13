@@ -137,8 +137,89 @@ body {
   text-decoration: none;
 }
 
-/* Conteúdo ao lado do menu */
 .conteudo {
   margin-left: 309px;
   padding: 32px;
+}
+/* divs blocos */
+
+.indicadores {
+  margin-bottom: 20px;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.indicador {
+  padding: 18px 20px;
+}
+
+.indicador span {
+  color: #526758;
+  font-size: 13px;
+}
+
+.indicador strong {
+  margin: 10px 0 6px;
+  display: block;
+  font-size: 28px;
+}
+
+.indicador strong small {
+  margin-left: 4px;
+  color: #65776a;
+  font-size: 14px;
+  font-weight: normal;
+}
+
+.indicador p {
+  margin: 0;
+  color: #65776a;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.positivo {
+  color: #2e7d4a;
+  font-weight: bold;
+}
+
+.negativo {
+  color: #b42318;
+  font-weight: bold;
+}
+
+.progresso {
+  height: 8px;
+  margin-top: 12px;
+  overflow: hidden;
+  border-radius: 8px;
+  background: #e3ebe6;
+}
+
+.progresso i {
+  height: 100%;
+  display: block;
+  border-radius: 8px;
+  background: #34794c;
+}
+.card {
+    background: #fff;
+    border: 1px solid #dce5df;
+    border-radius: 12px;
+}
+.letrasCard {   
+   font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial,sans-serif ;
+  span{
+  font-size: 20px;
+
+  }
+}
+strong{
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+
+.prescricao  {
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif ; 
+  font-size: 108px;
 }
