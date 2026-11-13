@@ -26,9 +26,6 @@
     <div class="menu-rodape">
       <nav class="menu-links" aria-label="Navegação da conta">
         <p class="titulo-menu">GESTÃO</p>
-
-        <a href="reports.php">Relatórios</a>
-        <a href="profile.php">Meu perfil</a>
         <a href="config.php">Configurações</a>
       </nav>
 

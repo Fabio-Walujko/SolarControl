@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -23,14 +24,12 @@
       <a href="alerts.php">Alertas</a>
       <a href="perguntas.php">FAQ</a>
 
-      
+
     </nav>
 
     <div class="menu-rodape">
       <nav class="menu-links" aria-label="Navegação da conta">
         <p class="titulo-menu">GESTÃO</p>
-      <a href="reports.php">Relatórios</a>
-        <a href="profile.php">Meu perfil</a>
         <a href="config.php">Configurações</a>
       </nav>
 
@@ -38,7 +37,7 @@
         <span class="avatar">C</span>
 
         <div class="dados-usuario">
-          <strong>Carlos Oliveira</strong>
+          <strong><? $usuario ?> </strong>
           <small>Conta pessoal</small>
         </div>
 
@@ -58,12 +57,8 @@
       <div class="topo-acoes">
         <a class="link-alertas" href="alerts.php">Alertas</a>
 
-        <a
-          class="avatar-topo"
-          href="profile.php"
-          aria-label="Abrir meu perfil"
-        >
-          IR
+        <a class="avatar-topo" href="profile.php" aria-label="Abrir meu perfil">
+          BB
         </a>
       </div>
     </header>
@@ -78,44 +73,25 @@
 
       <div class="cfg-conteudo">
         <!-- PERFIL -->
-        <section
-          id="perfil"
-          class="cfg-sec card"
-          aria-labelledby="titulo-perfil"
-        >
+        <section id="perfil" class="cfg-sec card" aria-labelledby="titulo-perfil">
           <h2 id="titulo-perfil">Perfil</h2>
           <p class="desc">Como você aparece no Solar Control.</p>
 
           <div class="duas">
             <div>
               <label for="nome">Nome</label>
-              <input
-                id="nome"
-                name="nome"
-                value="Igor"
-                autocomplete="name"
-              >
+              <input id="nome" name="nome" value="Estevão13" autocomplete="name">
             </div>
 
             <div>
               <label for="email">E-mail</label>
-              <input
-                id="email"
-                name="email"
-                type="email"
-                value="igor.rego@gm.com"
-                autocomplete="email"
-              >
+              <input id="email" name="email" type="email" value="Estevão13@gmail.com" autocomplete="email">
             </div>
           </div>
         </section>
 
         <!-- USINA -->
-        <section
-          id="usina"
-          class="cfg-sec card"
-          aria-labelledby="titulo-usina"
-        >
+        <section id="usina" class="cfg-sec card" aria-labelledby="titulo-usina">
           <h2 id="titulo-usina">Usina</h2>
           <p class="desc">
             A tarifa é usada como referência para a economia em reais.
@@ -124,32 +100,18 @@
           <div class="duas">
             <div>
               <label for="kwp">Capacidade instalada (kWp)</label>
-              <input
-                id="kwp"
-                name="kwp"
-                value="8,4"
-                inputmode="decimal"
-              >
+              <input id="kwp" name="kwp" value="8,4" inputmode="decimal">
             </div>
 
             <div>
               <label for="tarifa">Tarifa de energia (R$/kWh)</label>
-              <input
-                id="tarifa"
-                name="tarifa"
-                value="0,92"
-                inputmode="decimal"
-              >
+              <input id="tarifa" name="tarifa" value="0,92" inputmode="decimal">
             </div>
           </div>
         </section>
 
         <!-- NOTIFICAÇÕES -->
-        <section
-          id="notificacoes"
-          class="cfg-sec card"
-          aria-labelledby="titulo-notificacoes"
-        >
+        <section id="notificacoes" class="cfg-sec card" aria-labelledby="titulo-notificacoes">
           <h2 id="titulo-notificacoes">Notificações</h2>
           <p class="desc">Escolha como quer ser avisado.</p>
 
@@ -159,12 +121,7 @@
               <small>Painel offline, falha de inversor</small>
             </span>
 
-            <input
-              type="checkbox"
-              class="switch"
-              name="alerta_email"
-              checked
-            >
+            <input type="checkbox" class="switch" name="alerta_email" checked>
           </label>
 
           <label class="opcao">
@@ -173,12 +130,7 @@
               <small>No navegador e no celular</small>
             </span>
 
-            <input
-              type="checkbox"
-              class="switch"
-              name="push"
-              checked
-            >
+            <input type="checkbox" class="switch" name="push" checked>
           </label>
 
           <label class="opcao">
@@ -187,11 +139,7 @@
               <small>Toda segunda, às 08:00</small>
             </span>
 
-            <input
-              type="checkbox"
-              class="switch"
-              name="resumo"
-            >
+            <input type="checkbox" class="switch" name="resumo">
           </label>
 
           <label class="opcao">
@@ -200,11 +148,7 @@
               <small>Quando a eficiência cair mais de 10%</small>
             </span>
 
-            <input
-              type="checkbox"
-              class="switch"
-              name="limpeza"
-            >
+            <input type="checkbox" class="switch" name="limpeza">
           </label>
         </section>
 
@@ -214,11 +158,7 @@
             Cancelar
           </button>
 
-          <button
-            type="button"
-            class="btn-verde"
-            aria-describedby="aviso-salvar"
-          >
+          <button type="button" class="btn-verde" aria-describedby="aviso-salvar">
             Salvar alterações
           </button>
         </div>
@@ -230,4 +170,5 @@
     </form>
   </main>
 </body>
+
 </html>
