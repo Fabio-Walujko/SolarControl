@@ -1,31 +1,10 @@
 <?php
+if (session_status() !== PHP_SESSION_ACTIVE) {
+    session_start();
+}
 
 require_once __DIR__ . '/banco/database.php';   
 require_once __DIR__ . '/banco/crud.php';   
-
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-
-$email = $_POST['email'];
-$senha = $_POST['senha'];
-$nome = $_POST['nome'];
-
-$pdo = database(); 
-
-    if (!empty($email) && !empty($senha) && !empty($nome)) {
-        try {
-       
-            $sql = "UPDATE usuarios (email, senha) VALUES (:email, :senha)";
-            $stmt = $pdo->prepare($sql);
-            $stmt->execute([':email' => $email, ':senha' => $senha]);
-            header('Location: login.php');
-            exit;
-
-            
-        } catch (PDOException $e) {
-            $mensagem_erro = "Erro no banco de dados: " . $e->getMessage();
-        }
-    }
-}
 
 ?>
 
@@ -73,8 +52,8 @@ $pdo = database();
         <span class="avatar">C</span>
 
         <div class="dados-usuario">
-          <strong>Carlos Oliveira</strong>
-          <small>Conta pessoal</small>
+          <strong><?php echo "Email: ". $_SESSION['email'];?></strong>
+          <small><?php echo "nome: " . $_SESSION['nome']; ?></small>
         </div>
 
         <a class="sair" href="auth/login.php">Sair</a>
@@ -103,7 +82,7 @@ $pdo = database();
       </div>
     </header>
 
-    <form class="cfg" aria-label="Configurações da plataforma">
+    <form action="" class="cfg" aria-label="Configurações da plataforma">
       <!-- NAVEGAÇÃO DAS CONFIGURAÇÕES -->
       <nav class="cfg-nav card" aria-label="Seções das configurações">
         <a href="#perfil" class="aba-perfil">Perfil</a>
@@ -125,25 +104,25 @@ $pdo = database();
             <div>
               <label for="nome">Nome</label>
               <input
-                id="nome"
-                name="nome"
+                id="novo_nome"
+                name="novo_nome"
                 value="Igor"
                 autocomplete="name"
               >
             </div>
 
             <div>
-              <label for="email">E-mail</label>
+              <label for="novo_email">E-mail</label>
               <input
-                id="email"
-                name="email"
+                id="novo_email"
+                name="novo_email"
                 type="email"
-                value="igor.rego@gm.com"
+                value="Teste@email.com"
                 autocomplete="email"
               >
             </div>
           </div>
-        </section>
+        </section>  
 
         <!-- USINA -->
         <section

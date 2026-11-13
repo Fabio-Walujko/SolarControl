@@ -1,7 +1,9 @@
 <?php
+if (session_status() !== PHP_SESSION_ACTIVE) {
+    session_start();
+}
 
 require_once __DIR__ . '/banco/database.php';
-
 require_once __DIR__ . '/banco/crud.php';
 
 
@@ -19,6 +21,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
 
             if ($usuario && $usuario['senha'] == $senha) {
+                $_SESSION['email'] = $email;
+                $_SESSION['nome'] = $usuario['nome'];
                 header('Location: index.php');
                 exit;
             } else {
