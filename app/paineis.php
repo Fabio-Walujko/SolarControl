@@ -1,3 +1,13 @@
+<?php
+require_once __DIR__ . '/init.php';
+
+if (!isset($_SESSION['usuario_logado']) || $_SESSION['usuario_logado'] !== true) {
+    header('Location: login.php');
+    exit;
+}
+
+?>
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -37,7 +47,7 @@
         <span class="avatar">C</span>
 
         <div class="dados-usuario">
-          <strong>Carlos Oliveira</strong>
+          <strong><?php echo $_SESSION['email'];?></strong>
           <small>Conta pessoal</small>
         </div>
 

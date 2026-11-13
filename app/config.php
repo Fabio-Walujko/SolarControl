@@ -1,3 +1,48 @@
+<?php
+if (session_status() !== PHP_SESSION_ACTIVE) {
+    session_start();
+}
+
+require_once __DIR__ . '/init.php';
+
+if (!isset($_SESSION['usuario_logado']) || $_SESSION['usuario_logado'] !== true) {
+    header('Location: login.php');
+    exit;
+}
+
+require_once __DIR__ . '/banco/database.php';   
+require_once __DIR__ . '/banco/crud.php';   
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
+$novo_email = $_POST['novo_email'];
+$novo_nome = $_POST['novo_nome'];
+$email_atual = $_SESSION['email'];
+
+$pdo = database(); 
+
+    if (!empty($novo_email) && !empty($novo_nome) && !empty($email_atual)) {
+        try {
+       
+            $sql = "UPDATE usuarios SET nome = :novo_nome, email = :novo_email WHERE email = :email_atual";
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute([':novo_nome' => $novo_nome, ':novo_email' => $novo_email, ':email_atual' => $email_atual]);
+            $_SESSION['email_usuario'] = $novo_email;
+
+            header('Location: login.php');
+            exit;
+
+            
+        } catch (PDOException $e) {
+            $mensagem_erro = "Erro no banco de dados: " . $e->getMessage();
+        }
+    }
+}
+
+?>
+
+
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -38,7 +83,7 @@
         <span class="avatar">C</span>
 
         <div class="dados-usuario">
-          <strong>Carlos Oliveira</strong>
+          <strong><?php echo $_SESSION['email'];?></strong>
           <small>Conta pessoal</small>
         </div>
 
@@ -88,22 +133,22 @@
 
           <div class="duas">
             <div>
-              <label for="nome">Nome</label>
+              <label for="novo_nome">Nome</label>
               <input
-                id="nome"
-                name="nome"
-                value="Igor"
+                id="novo_nome"
+                name="novo_nome"
+                value="<?php echo $_SESSION['nome']; ?>"
                 autocomplete="name"
               >
             </div>
 
             <div>
-              <label for="email">E-mail</label>
+              <label for="novo_email">E-mail</label>
               <input
-                id="email"
-                name="email"
+                id="novo_email"
+                name="novo_email"
                 type="email"
-                value="igor.rego@gm.com"
+                value="<?php echo $_SESSION['email'];?>"
                 autocomplete="email"
               >
             </div>
