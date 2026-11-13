@@ -6,6 +6,32 @@ if (session_status() !== PHP_SESSION_ACTIVE) {
 require_once __DIR__ . '/banco/database.php';   
 require_once __DIR__ . '/banco/crud.php';   
 
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
+$novo_email = $_POST['novo_email'];
+$novo_nome = $_POST['novo_nome'];
+$email_atual = $_SESSION['email'];
+
+$pdo = database(); 
+
+    if (!empty($novo_email) && !empty($novo_nome) && !empty($email_atual)) {
+        try {
+       
+            $sql = "UPDATE usuarios SET nome = :novo_nome, email = :novo_email WHERE email = :email_atual";
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute([':novo_nome' => $novo_nome, ':novo_email' => $novo_email, ':email_atual' => $email_atual]);
+            $_SESSION['email_usuario'] = $novo_email;
+
+            header('Location: login.php');
+            exit;
+
+            
+        } catch (PDOException $e) {
+            $mensagem_erro = "Erro no banco de dados: " . $e->getMessage();
+        }
+    }
+}
+
 ?>
 
 
@@ -82,7 +108,7 @@ require_once __DIR__ . '/banco/crud.php';
       </div>
     </header>
 
-    <form action="" class="cfg" aria-label="Configurações da plataforma">
+    <form action="" class="cfg" aria-label="Configurações da plataforma" method="POST">
       <!-- NAVEGAÇÃO DAS CONFIGURAÇÕES -->
       <nav class="cfg-nav card" aria-label="Seções das configurações">
         <a href="#perfil" class="aba-perfil">Perfil</a>
@@ -102,11 +128,11 @@ require_once __DIR__ . '/banco/crud.php';
 
           <div class="duas">
             <div>
-              <label for="nome">Nome</label>
+              <label for="novo_nome">Nome</label>
               <input
                 id="novo_nome"
                 name="novo_nome"
-                value="Igor"
+                value="<?php echo $_SESSION['nome']; ?>"
                 autocomplete="name"
               >
             </div>
@@ -117,7 +143,7 @@ require_once __DIR__ . '/banco/crud.php';
                 id="novo_email"
                 name="novo_email"
                 type="email"
-                value="Teste@email.com"
+                value="<?php echo $_SESSION['email'];?>"
                 autocomplete="email"
               >
             </div>
@@ -229,7 +255,7 @@ require_once __DIR__ . '/banco/crud.php';
           </button>
 
           <button
-            type="button"
+            type="submit"
             class="btn-verde"
             aria-describedby="aviso-salvar"
           >
@@ -240,6 +266,7 @@ require_once __DIR__ . '/banco/crud.php';
         <p class="aviso" id="aviso-salvar">
           Tela demonstrativa: as alterações não são salvas.
         </p>
+        <p><?php echo $mensagem_erro; ?></p>
       </div>
     </form>
   </main>
