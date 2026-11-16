@@ -124,7 +124,6 @@ $pdo = database();
 
           <div class="duas">
             <div>
-<<<<<<< HEAD
               <label for="novo_nome">Nome</label>
               <input
                 id="novo_nome"
@@ -143,15 +142,6 @@ $pdo = database();
                 value="<?php echo $_SESSION['email'];?>"
                 autocomplete="email"
               >
-=======
-              <label for="nome">Nome</label>
-              <input id="nome" name="nome" value="Estevão13" autocomplete="name">
-            </div>
-
-            <div>
-              <label for="email">E-mail</label>
-              <input id="email" name="email" type="email" value="Estevão13@gmail.com" autocomplete="email">
->>>>>>> origin/branchIgorNav
             </div>
           </div>
         </section>
