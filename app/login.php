@@ -109,6 +109,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         <section class="secao-sobre" id="Sobre">
             <div class="textos-secao-sobre">
+                <div class="textodefundo">
+                    <h1>SolarControl</h1>
+                </div>
                 <h1 class="titulo-secao">
                     O que é a<span class="destaque-verde"> SolarControl?</span>
                     <hr class="divisao">
@@ -130,15 +133,60 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
         </section>
 
-        <section class="secao-destaque" id="Porque">
+               
+<section class="secao-destaque" id="Porque">
+            <div class="mae-secao-destaque">
+                <div class="img-secao-destaque">
+                    <img src="painelsolar.png" alt="Imagem teste">
+                </div>
+                <div class="textos-secao-destaque">
+                    <hr class="divisao3">
+                    <h1 class="titulo-secao">
+                        Porque a<span class="destaque-verde"> SolarControl?</span>
+                    </h1>
+
+                    <p>
+                        O Solar Control reúne as informações mais importantes do seu sistema fotovoltaico<br> em uma
+                        experiência simples e intuitiva. Acompanhe a geração, entenda<br> o consumo e veja como sua
+                        energia
+                        está performando.
+                    </p>
+                    <div class="banners-secao-destaque">
+                        <ul class="banners">
+                            
+                            <li>teste1 </li>
+                            <li>teste2 </li>
+                            <li>teste3 </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+
+        <section class="Equipe" id="Preferencia">
 
             <div class="titulo-container">
                 <h1 class="titulo-secao">
-                    Porque a<span class="destaque-verde"> SolarControl?</span>
+                    Nossa<span class="destaque-verde"> Equipe</span>
                 </h1>
             </div>
 
         </section>
+
+        <section class="secao-objetivos" id="Objetivos">
+
+            <h1 class="titulo-secao">
+                Nossos<span class="destaque-verde"> Objetivos</span>
+            </h1>
+
+            <h2></h2>
+
+        </section>
+
+
+        
 
         <section class="Equipe" id="Preferencia">
 
