@@ -43,33 +43,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <body>
     <main class="conteudo-principal">
-        <nav class="navegacao">
-            <div class="barra-navegacao">
-                <div class="links-navegacao">
-
-                    <button class="botao-navegacao">
-                        <a href="#javascript/login">javascript/login</a>
-                    </button>
-
-                    <button class="botao-navegacao">
-                        <a href="#Sobre">Sobre</a>
-                    </button>
-
-                    <button class="botao-navegacao">
-                        <a href="#Porque">Preferencia</a>
-                    </button>
-
-                    <button class="botao-navegacao">
-                        <a href="#Preferencia">Equipe</a>
-                    </button>
-
-                    <button class="botao-navegacao">
-                        <a href="#Objetivos">Objetivos</a>
-                    </button>
-
-                </div>
-            </div>
-        </nav>
+        
 
         <section class="secao-inicial" id="javascript/login">
 
@@ -89,7 +63,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </h2>
             </div>
 
-            <div class="painel-javascript/login">
+            <div class="painel-login">
                 <div class="logo">SolarControl</div>
 
                 <h2>Entrar</h2>
@@ -98,7 +72,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     Bem-vindo de volta. Acesse o painel da sua usina.
                 </p>
 
-                <form method="POST" class="formulario-javascript/login">
+                <form method="POST" class="formulario-login">
 
                     <label for="email">E-mail</label>
 
@@ -151,8 +125,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     está performando.
                 </p>
             </div>
-            <div>
-                <img src="">
+            <div class="secao-sobre-img">
+                <img src="../app/imagens/painelsolar.png" alt="Painel Solar">
             </div>
         </section>
 
