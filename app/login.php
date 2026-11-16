@@ -95,8 +95,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </h2>
             </div>
 
-            <div class="painel-javascript/login">
-                <div class="logo">SolarControl</div>
 
                 <h2>Entrar</h2>
 

@@ -27,7 +27,7 @@ if (!isset($_SESSION['usuario_logado']) || $_SESSION['usuario_logado'] !== true)
       <p class="titulo-menu">MENU</p>
 
       <a href="index.php" aria-current="page">Visão geral</a>
-      <a href="paineis.php">Painéis</a>
+      <a href="paineis.php"> Clientes e Painéis</a>
       <a href="monitoramento.php">Monitoramento</a>
       <a href="alerts.php">Alertas</a>
       <a href="perguntas.php">FAQ</a>
