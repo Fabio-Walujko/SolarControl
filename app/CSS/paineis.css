@@ -1,6 +1,4 @@
-* {
-  box-sizing: border-box;
-}
+* { box-sizing: border-box; }
 
 body {
   margin: 0;
@@ -9,6 +7,7 @@ body {
   color: #243329;
 }
 
+/* ===== Menu lateral ===== */
 .menu-lateral {
   position: fixed;
   top: 0;
@@ -23,7 +22,6 @@ body {
   color: #d0dcd3;
 }
 
-/* Nome do projeto */
 .marca {
   margin: 8px 14px 30px;
   color: #fff;
@@ -32,12 +30,8 @@ body {
   text-decoration: none;
 }
 
-.marca span {
-  color: #a4b7aa;
-  font-weight: normal;
-}
+.marca span { color: #a4b7aa; font-weight: normal; }
 
-/* Links */
 .titulo-menu {
   margin: 20px 14px 10px;
   color: #91a797;
@@ -51,7 +45,6 @@ body {
   padding: 12px 14px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
   border-radius: 7px;
   color: #c1d0c5;
   font-size: 15px;
@@ -64,32 +57,9 @@ body {
   color: #fff;
 }
 
-.menu-links a[aria-current="page"] {
-  font-weight: bold;
-}
+.menu-links a[aria-current="page"] { font-weight: bold; }
 
-.menu-links a:focus-visible,
-.marca:focus-visible,
-.sair:focus-visible {
-  outline: 2px solid #a6d7b0;
-  outline-offset: 2px;
-}
-
-/* Número de alertas */
-.contador {
-  min-width: 20px;
-  padding: 3px 6px;
-  border-radius: 20px;
-  background: #a6d7b0;
-  color: #163620;
-  font-size: 11px;
-  text-align: center;
-}
-
-/* Parte inferior */
-.menu-rodape {
-  margin-top: auto;
-}
+.menu-rodape { margin-top: auto; }
 
 .usuario {
   margin-top: 18px;
@@ -111,14 +81,12 @@ body {
   color: #285438;
 }
 
-.dados-usuario {
-  flex: 1;
-}
+.dados-usuario { flex: 1; }
+.dados-usuario strong, .dados-usuario small { display: block; }
+.dados-usuario strong { color: #fff; font-size: 12px; }
+.dados-usuario small { margin-top: 4px; color: #a0b3a6; font-size: 11px; }
 
-.dados-usuario strong,
-.dados-usuario small {
-  display: block;
-}
+.sair { color: #b5d4be; font-size: 12px; text-decoration: none; }
 
 .dados-usuario strong {
   color: #fff;
@@ -138,8 +106,85 @@ body {
 }
 
 /* Conteúdo ao lado do menu */
+
 .conteudo {
   margin-left: 309px;
   padding: 32px;
 }
 
+
+.conteudo h1 { margin: 0 0 6px; font-size: 32px; }
+.subtitulo { margin: 0 0 24px; color: #5f7366; font-size: 16px; }
+
+/* Cartões de resumo */
+.resumo {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+
+.resumo-card {
+  padding: 18px 20px;
+  background: #fff;
+  border: 1px solid #dce5df;
+  border-radius: 12px;
+}
+
+.resumo-card span { color: #5f7366; font-size: 15px; }
+.resumo-card strong { display: block; margin-top: 8px; font-size: 28px; }
+.resumo-card small { font-size: 15px; color: #5f7366; font-weight: normal; }
+
+/* Tabelas */
+.tabela-card {
+  margin-top: 24px;
+  padding: 20px 24px;
+  background: #fff;
+  border: 1px solid #dce5df;
+  border-radius: 12px;
+  overflow-x: auto;
+}
+
+.tabela-card h2 { margin: 0 0 14px; font-size: 21px; }
+
+.tabela {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 16px;
+}
+
+.tabela th {
+  padding: 12px 14px;
+  background: #f3f7f4;
+  color: #4f6457;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  text-align: left;
+}
+
+.tabela td {
+  padding: 14px;
+  border-top: 1px solid #e9efea;
+}
+
+.tabela tr:hover td { background: #f8fbf9; }
+
+/* Status */
+.status {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: bold;
+  white-space: nowrap;
+}
+
+.ativo { background: #e5f2e9; color: #2c6842; }
+.manutencao { background: #fbf0dc; color: #8a5a12; }
+
+/* Telas menores */
+@media (max-width: 900px) {
+  .menu-lateral { position: static; width: auto; height: auto; }
+  .conteudo { margin-left: 0; padding: 20px 14px; }
+  .resumo { grid-template-columns: 1fr 1fr; }
+}
+>>>>>>> origin/branchIgorSegunda
