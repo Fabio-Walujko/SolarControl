@@ -14,7 +14,7 @@ if (!isset($_SESSION['usuario_logado']) || $_SESSION['usuario_logado'] !== true)
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Projeto Integrador</title>
-  <link rel="stylesheet" href="CSS/index.css">
+  <link rel="stylesheet" href="CSS/paineis.css">
 </head>
 
 <body>
@@ -45,7 +45,7 @@ if (!isset($_SESSION['usuario_logado']) || $_SESSION['usuario_logado'] !== true)
         <span class="avatar">C</span>
 
         <div class="dados-usuario">
-          <strong><?php echo $_SESSION['email'];?></strong>
+          <strong><?php echo $_SESSION['nome'];?></strong>
           <small>Conta pessoal</small>
         </div>
 

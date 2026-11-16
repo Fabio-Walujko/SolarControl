@@ -128,7 +128,7 @@ body {
 .dados-usuario small {
   margin-top: 4px;
   color: #a0b3a6;
-  font-size: 11px;
+  font-size: 12px;
 }
 
 .sair {
@@ -215,11 +215,13 @@ body {
 
   }
 }
-strong{
-  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-}
 
 .prescricao  {
   font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif ; 
   font-size: 108px;
+}
+
+.dados-usuario strong {
+  color: #fff;
+  font-size: 12px;
 }

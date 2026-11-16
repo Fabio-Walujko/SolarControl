@@ -82,7 +82,7 @@ $pdo = database();
         <span class="avatar">C</span>
 
         <div class="dados-usuario">
-          <strong><?php echo $_SESSION['email'];?></strong>
+          <strong><?php echo $_SESSION['nome'];?></strong>
           <small>Conta pessoal</small>
         </div>
 
