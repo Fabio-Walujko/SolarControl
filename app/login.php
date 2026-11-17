@@ -21,13 +21,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $stmt->execute(['email' => $email]);
             $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
 
-            if ($usuario && $usuario['senha'] == $senha) {
+            if ($usuario && $usuario['senha'] == $senha && $usuario['TIPO'] == 'cliente') {
                 $_SESSION['usuario_logado'] = true;
                 $_SESSION['email'] = $email;
                 $_SESSION['nome'] = $usuario['nome'];
                 header('Location: index.php');
                 exit;
-            } else {
+            }
+            
+            if ($usuario && $usuario['senha'] == $senha && $usuario['TIPO'] == 'adm') {
+                $_SESSION['usuario_logado'] = true;
+                $_SESSION['email'] = $email;
+                $_SESSION['nome'] = $usuario['nome'];
+                $_SESSION['TIPO'] = $usuario['TIPO'];
+                header('Location: index.php');
+                exit;
+
+            }
+
+            else {
                 $mensagem_erro = "E-mail ou senha inválidos.";
             }
         } catch (PDOException $e) {
