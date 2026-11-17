@@ -43,9 +43,36 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <body>
     <main class="conteudo-principal">
-        
 
-        <section class="secao-inicial" id="javascript/login">
+
+        <nav class="navegacao">
+            <div class="links-navegacao">
+
+                <button class="botao-navegacao">
+                    <a href="#login">Login</a>
+                </button>
+
+                <button class="botao-navegacao">
+                    <a href="#Sobre">Sobre</a>
+                </button>
+
+                <button class="botao-navegacao">
+                    <a href="#Preferencia">Preferência</a>
+                </button>
+
+                <button class="botao-navegacao">
+                    <a href="#Equipe">Equipe</a>
+                </button>
+
+                <button class="botao-navegacao">
+                    <a href="#Objetivos">Objetivos</a>
+                </button>
+
+            </div>
+        </nav>
+
+
+        <section class="secao-inicial" id="login">
 
             <div class="texto-introducao">
 
@@ -130,45 +157,68 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </p>
             </div>
             <div class="secao-sobre-img">
-                <img src="../app/imagens/painelsolar.png" alt="Painel Solar">
+                <img src="imagens/painelsolar.png" alt="Painel Solar">
             </div>
         </section>
 
-               
-<section class="secao-destaque" id="Porque">
+
+        <section class="secao-destaque" id="Porque">
             <div class="mae-secao-destaque">
                 <div class="img-secao-destaque">
-                    <img src="../app/imagens/porqueasolar.png" alt="Imagem teste">
+                    <img src="imagens/porqueasolar.png" alt="Imagem teste">
                     <hr class="divisao3">
                     <p class="descricao-imagem">
-    Transformamos dados em decisões inteligentes,
-    ajudando você a aproveitar melhor sua energia solar.
-</p>
+                        Transformamos dados em decisões inteligentes,
+                        ajudando você a aproveitar melhor sua energia solar.
+                    </p>
                 </div>
                 <div class="texto-secao-destaque-titulo">
-                <h1 class="verdedestaqueforte">Clean,</h1>
-                <h1 class="verdedestaque">Energy,</h1>
-                <h1>Smart &</h1>
-                <h1>Saving</h1>
+                    <h1 class="verdedestaqueforte">Clean,</h1>
+                    <h1 class="verdedestaque">Energy,</h1>
+                    <h1>Smart &</h1>
+                    <h1>Saving</h1>
                 </div>
             </div>
         </section>
 
 
 
-        <section class="Equipe" id="Preferencia">
+
+        <section class="Equipe" id="Equipe">
 
             <div class="titulo-container">
                 <h1 class="titulo-secao">
                     Nossa<span class="destaque-verde"> Equipe</span>
                 </h1>
+                <h2>Pessoas que impulsionam o futuro da energia.</h2>
             </div>
+            <div class="cardsparticipa">
+                <div class="card"><img>
+                    <p>cnauncoadnc</p>
+                </div>
+                <div class="card"><img>
+                    <p>cnauncoadnc</p>
+                </div>
+                <div class="card"><img>
+                    <p>cnauncoadnc</p>
+                </div>
+                <div class="card"><img>
+                    <p>cnauncoadnc</p>
+                </div>
 
+            </div>
         </section>
+
+
+
+
+
+
 
         <section class="secao-objetivos" id="Objetivos">
 
             <h1 class="titulo-secao">
+                <hr class="divisao3">
                 Nossos<span class="destaque-verde"> Objetivos</span>
             </h1>
 
@@ -176,6 +226,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         </section>
 
+        <footer class="rodape">
+
+
+            <div class="rodape-marca">
+                    <span class="destaque-verde">SolarControl</span>
+                    <span class="destaque-verde">© 2026 by Solar Control</span>
+               
+            </div>
+
+            <div class="rodape-creditos">
+                <p>
+                    <span>© Copyright 2026</span>
+                    <span>|</span>
+                    <span>Desenvolvido por: <strong>Solar Control</strong></span>
+                </p>
+            </div>
+        </footer>
 
 
 
