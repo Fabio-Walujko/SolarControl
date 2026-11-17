@@ -8,7 +8,9 @@ body {
 }
 
 .navegacao {
+    position: fixed;
     top: 15px;
+    z-index: 9999;
     position: fixed;
     display: flex;
     left: 38%;
@@ -21,6 +23,7 @@ body {
     background: rgba(11, 31, 22, 0.35);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
+
 }
 
 .links-navegacao {
@@ -285,6 +288,63 @@ body {
 
 }
 
+
+.titulo-container {
+    text-align: center;
+    margin-top: 150px;
+    font-family: 'DM Sans', sans-serif;
+
+    h1 {
+        font-size: 60px;
+    }
+
+}
+
+.cardsparticipa {
+    margin-top: 100px;
+    margin-right: 6px;
+    justify-content: center;
+    display: flex;
+    gap: 100px;
+    .card{
+    background-color:#FFFFFF ;
+    border-radius: 12px;
+    box-shadow: 0 0 20px gray;
+    width: 250px;
+    height: 400px;
+    }
+}
+
+
+
+
+
+
+.secao-objetivos{
+    background-color: black;
+        height: 1000px;
+
+    margin-top: 260px;
+    box-shadow: 0 0 40px gray;
+
+
+
+    .titulo-secao{
+        color:#FFFFFF;
+        font-size: 60px;
+        font-family: 'DM Sans', sans-serif;
+        margin-left: 100px;
+        padding-top: 40px;
+    }
+    
+     .divisao3 {
+        border: 2px solid white;
+        width: 200px;
+        margin-left: 0;
+    }
+}
+
+
 @keyframes cursor {
     50% {
         border-right-color: transparent;
@@ -320,3 +380,60 @@ body {
         opacity: 1;
     }
 }
+
+
+
+.rodape {
+    background-color: #ffffff;
+    border-top: 1px solid #e5e5e5;
+    margin-top: 0;
+    width: 100%;
+    text-align: center;
+}
+
+.rodape-marca {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    padding: 20px;
+    width: 100%;
+    box-sizing: border-box;
+    text-align: center;
+}
+
+.rodape-marca hr {
+    width: 100%;
+    border: none;
+    border-top: 1px solid #e5e5e5;
+}
+
+.destaque-verde {
+    color: #1a4130;
+    font-weight: 700;
+}
+
+.rodape-creditos {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding: 15px 20px;
+    box-sizing: border-box;
+    background: linear-gradient(90deg, #1a4130, #275844);
+    color: #E8F5E9;
+    font-size: 13px;
+    text-align: center;
+}
+
+.rodape-creditos p {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 8px 10px;
+    margin: 0;
+}
+
