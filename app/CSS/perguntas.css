@@ -1,3 +1,8 @@
+/*Página do site*/
+:root {
+  interpolate-size: allow-keywords;
+}
+
 * {
   box-sizing: border-box;
 }
@@ -10,8 +15,7 @@ body {
     Roboto, Helvetica, Arial, sans-serif;
 }
 
-/* NAVEGAÇÃO */
-
+/* Menu lateral */
 .menu-lateral {
   position: fixed;
   top: 0;
@@ -78,8 +82,6 @@ body {
   outline-offset: 2px;
 }
 
-/* GESTÃO E CONTA NA PARTE INFERIOR */
-
 .menu-rodape {
   margin-top: auto;
 }
@@ -121,7 +123,7 @@ body {
 .dados-usuario small {
   margin-top: 4px;
   color: #a0b3a6;
-  font-size: 12px;
+  font-size: 11px;
 }
 
 .sair {
@@ -130,8 +132,7 @@ body {
   text-decoration: none;
 }
 
-/* CONTEÚDO DO FAQ */
-
+/* Conteúdo principal */
 .conteudo-principal {
   margin-left: 309px;
   padding: 0 0 80px;
@@ -144,6 +145,8 @@ body {
   position: relative;
   display: block;
   margin-bottom: 40px;
+  box-shadow: 0 0 100px gray;
+
 }
 
 .topo img {
@@ -167,7 +170,7 @@ body {
   background-clip: text;
   -webkit-text-fill-color: transparent;
   color: transparent;
-  font-size: 60px;
+  font-size: 40px;
   font-weight: 400;
   margin-top: 0;
   margin-bottom: 10px;
@@ -179,11 +182,12 @@ body {
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
-  font-size: 36px;
+  font-size: 23px;
   font-weight: 400;
   margin-bottom: 40px;
 }
 
+/* Cards de categorias */
 .card-categoria {
   background-color: transparent;
   border: none;
@@ -197,7 +201,7 @@ body {
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
-  font-size: 50px;
+  font-size: 30px;
   font-weight: 600;
   margin-bottom: 15px;
   display: block;
@@ -207,30 +211,43 @@ body {
 }
 
 .card-categoria details {
+  perspective: 1000px;
   border-bottom: 1px solid #0a0a0a;
   padding: 0;
   margin: 0;
-  transition: background-color 0.2s ease;
+  overflow: hidden;
+  transition: background-color 0.4s ease, border-color 0.4s ease;
 }
 
 .card-categoria details[open] {
-  background-color: #f2f2f2;
+  background-color: #f2f7f4;
+  border-bottom-color: #3b883f;
+  animation: pulsoCard 0.5s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .card-categoria summary {
-  font-size: 40px;
+  font-size: 27px;
   font-weight: 600;
   color: #111;
-  padding: 20px 40px 20px 15px;
+  padding: 20px 55px 20px 15px;
   cursor: pointer;
   user-select: none;
   list-style: none;
   position: relative;
-  transition: color 0.2s ease;
+  transition: color 0.3s ease, transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .card-categoria summary:hover {
   color: #275844;
+  transform: translateX(6px);
+}
+
+.card-categoria summary:active {
+  transform: scale(0.99);
+}
+
+.card-categoria details[open] summary {
+  color: #3b883f;
 }
 
 .card-categoria summary::-webkit-details-marker {
@@ -240,18 +257,41 @@ body {
 .card-categoria summary::after {
   content: "";
   position: absolute;
-  right: 15px;
+  right: 20px;
   top: 50%;
-  width: 8px;
-  height: 8px;
-  border-right: 2px solid #333;
-  border-bottom: 2px solid #333;
+  width: 14px;
+  height: 14px;
+  border-right: 3px solid #333;
+  border-bottom: 3px solid #333;
   transform: translateY(-65%) rotate(45deg);
-  transition: transform 0.3s ease;
+  transition: transform 0.6s cubic-bezier(0.68, -0.6, 0.32, 1.6), border-color 0.3s ease;
 }
 
 .card-categoria details[open] summary::after {
-  transform: translateY(-20%) rotate(-135deg);
+  transform: translateY(-20%) rotate(225deg) scale(1.15);
+  border-color: #3b883f;
+}
+
+.card-categoria details::details-content {
+  height: 0;
+  opacity: 0;
+  overflow: clip;
+  transform-origin: top center;
+  transform: rotateX(-40deg) scale(0.95);
+  filter: blur(6px);
+  transition:
+    height 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.5s ease,
+    transform 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+    filter 0.5s ease,
+    content-visibility 0.6s ease allow-discrete;
+}
+
+.card-categoria details[open]::details-content {
+  height: auto;
+  opacity: 1;
+  transform: rotateX(0deg) scale(1);
+  filter: blur(0);
 }
 
 .card-categoria p {
@@ -260,4 +300,124 @@ body {
   line-height: 1.6;
   margin: 0;
   padding: 0 20px 22px 15px;
+}
+
+.card-categoria details[open] > *:not(summary) {
+  opacity: 0;
+  animation: entradaCascata 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.card-categoria details[open] > *:not(summary):nth-child(2) {
+  animation-delay: 0.08s;
+}
+
+.card-categoria details[open] > *:not(summary):nth-child(3) {
+  animation-delay: 0.18s;
+}
+
+.card-categoria details[open] > *:not(summary):nth-child(4) {
+  animation-delay: 0.28s;
+}
+
+/* Rodapé */
+.rodape {
+  background-color: #ffffff;
+  border-top: 1px solid #e5e5e5;
+  margin-top: 80px;
+  width: 100%;
+  text-align: center;
+}
+
+.rodape-links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 12px 18px;
+  padding: 40px 20px 25px 20px;
+}
+
+.rodape-links a {
+  text-decoration: none;
+  color: #111111;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  transition: color 0.2s ease;
+}
+
+.rodape-links a:hover {
+  color: #3b883f;
+}
+
+.rodape-links .separador {
+  color: #cccccc;
+  font-size: 16px;
+  user-select: none;
+}
+
+.rodape-marca {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  padding: 15px 20px 35px 20px;
+}
+
+.rodape-logo {
+  height: 32px;
+  width: auto;
+}
+
+.rodape-nome {
+  font-size: 20px;
+  font-weight: 800;
+  color: #1a4130;
+  letter-spacing: -0.5px;
+  margin-left: 300px;
+}
+
+.rodape-copy {
+  font-size: 12px;
+  color: #555555;
+  margin-left: 8px;
+}
+
+.rodape-creditos {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 8px 10px;
+  width: 100%;
+  padding: 14px 20px;
+  background: linear-gradient(90deg, #1a4130, #275844);
+  color: #E8F5E9;
+  font-size: 13px;
+  margin-left: 145px;
+}
+
+/* Animações */
+@keyframes pulsoCard {
+  0% {
+    transform: scale(1);
+  }
+  40% {
+    transform: scale(1.015);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes entradaCascata {
+  from {
+    opacity: 0;
+    transform: translateX(-20px) skewX(-4deg);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0) skewX(0);
+  }
 }
