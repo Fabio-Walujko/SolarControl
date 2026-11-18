@@ -274,6 +274,20 @@ body {
         font-size: 20px;
     }
 
+    .titulo-abaixo {
+        margin-top: 60px;
+        font-size: 40px;
+        font-family: 'DM Sans', sans-serif;
+
+        .branco {
+            color: #0d3f10;
+        }
+    }
+
+    .descricao-imagem {
+        font-size: 30px;
+    }
+
 
 
 
@@ -306,41 +320,129 @@ body {
     justify-content: center;
     display: flex;
     gap: 100px;
-    .card{
-    background-color:#FFFFFF ;
-    border-radius: 12px;
-    box-shadow: 0 0 20px gray;
-    width: 250px;
-    height: 400px;
+
+    .card {
+        background-color: #FFFFFF;
+        border-radius: 12px;
+        box-shadow: 0 0 20px gray;
+        width: 250px;
+        height: 400px;
+
+        img {
+            width: 250px;
+            border-radius: 12px;
+        }
     }
+}
+
+.equipe {
+    margin-bottom: 240px;
+}
+
+.cards-equipe {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+    flex-wrap: wrap;
+    margin-top: 50px;
+}
+
+.card-equipe {
+    width: 230px;
+    padding: 20px;
+    text-align: center;
+    background-color: #ffffff;
+    border-radius: 18px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+    transition: 0.3s;
+}
+
+.card-equipe:hover {
+    transform: translateY(-8px);
+}
+
+.card-equipe img {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.card-equipe h3 {
+    color: #222;
+    margin-top: 15px;
+}
+
+.card-equipe p {
+    color: #777;
 }
 
 
 
-
-
-
-.secao-objetivos{
-    background-color: black;
-        height: 1000px;
-
+.secao-objetivos {
+    background-color: white;
+    height: 1000px;
     margin-top: 260px;
     box-shadow: 0 0 40px gray;
+    text-align: center;
+    justify-content: center;
+    font-family: 'DM Sans', sans-serif;
+    background-color: black;
 
-
-
-    .titulo-secao{
-        color:#FFFFFF;
-        font-size: 60px;
-        font-family: 'DM Sans', sans-serif;
-        margin-left: 100px;
-        padding-top: 40px;
+    .titulo-secao {
+        margin-left: 40px;
     }
-    
-     .divisao3 {
-        border: 2px solid white;
-        width: 200px;
-        margin-left: 0;
+
+    .texto-principal {
+        font-size: 40px;
+        padding-top: 2rem;
+        padding: 2rem;
+    }
+
+    .destaque-verde {
+        color: #43A047;
+    }
+
+    .branco {
+        color: white;
+    }
+
+    .container-apresentacao {
+        margin-bottom: 40px
+    }
+
+    .branco-espacado {
+        color: white;
+        margin-top: 40px;
+        font-size: 20px;
+    }
+
+    .cards-objetivos {
+        display: grid;
+        gap: 25px;
+
+    }
+
+    .card-objetivo {
+        border: 2px solid #8BCF91;
+        border-radius: 12px;
+        padding: 22px;
+        color: white;
+
+        margin-right: 100px;
+        margin-left: 100px;
+
+        h3 {
+            color: #8BCF91;
+        }
+
+        .icone {
+            font-size: 40px;
+            color: #70C878;
+            margin-bottom: 10px;
+        }
+
     }
 }
 
@@ -389,6 +491,7 @@ body {
     margin-top: 0;
     width: 100%;
     text-align: center;
+    box-shadow: 0 0 40px white;
 }
 
 .rodape-marca {
@@ -436,4 +539,3 @@ body {
     gap: 8px 10px;
     margin: 0;
 }
-
