@@ -34,7 +34,7 @@ $pdo = database();
 
             
         } catch (PDOException $e) {
-            $mensagem_erro = "Erro no banco de dados: " . $e->getMessage();
+            $mensagem_erro = "Erro: " . $e->getMessage();
         }
     }
 }
@@ -167,7 +167,7 @@ $pdo = database();
         </div>
 
         <p class="aviso" id="aviso-salvar">
-          Tela demonstrativa: as alterações não são salvas.
+          <?php echo $mensagem_erro ?>
         </p>
       </div>
     </form>

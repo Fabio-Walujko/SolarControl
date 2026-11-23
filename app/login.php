@@ -117,17 +117,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <input class="campos" type="password" id="senha" name="senha" placeholder="••••••••" minlength="6"
                         required>
 
-                    <div class="linha-opcoes">
-
-                        <label>
-                            <input type="checkbox" name="lembrar" checked>
-                            Lembrar-me
-                        </label>
-
-                        <a href="esqueci-senha.php">Esqueci a senha</a>
-
-                    </div>
-
                     <button class="entrar" type="submit">Entrar</button>
 
                 </form>
@@ -136,6 +125,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     Não tem conta?
                     <a href="cadastro.php">Criar conta</a>
                 </p>
+
+                <p><?php echo $mensagem_erro; ?> </p>
+
 
             </div>
 
