@@ -289,14 +289,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </footer>
 
 
-
-
-
-
-
-
-
-
         <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
         <script src="js/ScrollSmoother.min.js"></script>
