@@ -295,13 +295,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             </div>
 
-            <div class="rodape-creditos">
-                <p>
-                    <span>© Copyright 2026</span>
-                    <span>|</span>
-                    <span>Desenvolvido por: <strong>Solar Control</strong></span>
-                </p>
-            </div>
         </footer>
 
 
