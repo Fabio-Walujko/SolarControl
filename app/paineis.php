@@ -132,7 +132,7 @@ $clientes = $pdo->query('SELECT ID_USUARIO, nome, TIPO FROM usuarios ORDER BY no
 $nome = $_SESSION['nome'] ?? 'Usuário';
 $inicial = preg_match('/./u', $nome, $letra) ? $letra[0] : '?';   // primeira letra do nome (funciona com acento)
 ?>
->>>>>>> origin/BranchIgorSegunda23/11
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -143,34 +143,8 @@ $inicial = preg_match('/./u', $nome, $letra) ? $letra[0] : '?';   // primeira le
   <link rel="stylesheet" href="CSS/paineis.css?v=<?= filemtime(__DIR__ . '/CSS/paineis.css') ?>">
 </head>
 <body>
-<body>
+  
   <?php include __DIR__ . '/menu.php'; ?>
-
-    <nav class="menu-links" aria-label="Navegação do painel">
-      <p class="titulo-menu">MENU</p>
-      <a href="index.php">Visão geral</a>
-      <a href="paineis.php" aria-current="page">Painéis</a>
-      <a href="monitoramento.php">Monitoramento</a>
-      <a href="alerts.php">Alertas</a>
-      <a href="perguntas.php">FAQ</a>
-    </nav>
-
-    <div class="menu-rodape">
-      <nav class="menu-links" aria-label="Navegação da conta">
-        <p class="titulo-menu">GESTÃO</p>
-        <a href="config.php">Configurações</a>
-      </nav>
-
-      <div class="usuario">
-        <span class="avatar"><?= h($inicial) ?></span>
-        <div class="dados-usuario">
-          <strong><?= h($nome) ?></strong>
-          <small>Conta pessoal</small>
-        </div>
-        <a class="sair" href="encerrarSessao.php">Sair</a>
-      </div>
-    </div>
-  </aside>
 
   <main class="conteudo">
     <h1>Painéis</h1>
