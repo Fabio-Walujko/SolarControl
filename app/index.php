@@ -18,41 +18,9 @@ if (!isset($_SESSION['usuario_logado']) || $_SESSION['usuario_logado'] !== true)
 </head>
 
 <body>
-  <aside class="menu-lateral">
-    <a class="marca" href="index.php">
-      solar<span>control</span>
-    </a>
+<body>
+  <?php include __DIR__ . '/menu.php'; ?>
 
-    <nav class="menu-links" aria-label="Navegação do painel">
-      <p class="titulo-menu">MENU</p>
-
-      <a href="index.php" aria-current="page">Visão geral</a>
-      <a href="paineis.php"> Clientes e Painéis</a>
-      <a href="monitoramento.php">Monitoramento</a>
-      <a href="alerts.php">Alertas</a>
-      <a href="perguntas.php">FAQ</a>
-
-      
-    </nav>
-
-    <div class="menu-rodape">
-      <nav class="menu-links" aria-label="Navegação da conta">
-        <p class="titulo-menu">GESTÃO</p>
-        <a href="config.php">Configurações</a>
-      </nav>
-
-      <div class="usuario">
-        <span class="avatar">C</span>
-
-        <div class="dados-usuario">
-          <strong><?php echo $_SESSION['nome']; ?></strong>
-          <small>Conta pessoal</small>
-        </div>
-
-        <a class="sair" href="login.php">Sair</a>
-      </div>
-    </div>
-  </aside>
 
   <main class="conteudo">
     <h1>Visão geral</h1>

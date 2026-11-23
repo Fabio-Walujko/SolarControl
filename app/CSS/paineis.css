@@ -187,4 +187,30 @@ body {
   .conteudo { margin-left: 0; padding: 20px 14px; }
   .resumo { grid-template-columns: 1fr 1fr; }
 }
->>>>>>> origin/branchIgorSegunda
+
+.menu-links a {
+  min-height: 44px;
+  margin-bottom: 3px;
+  padding: 12px 14px;
+  display: flex;
+  align-items: center;
+  border-radius: 7px;
+  color: #c1d0c5;
+  font-size: 15px;
+  text-decoration: none;
+  /* Adiciona transição suave de 0.25s */
+  transition: background-color 0.25s ease, color 0.25s ease, transform 0.2s ease;
+}
+
+.menu-links a:hover {
+  background: #284b36;
+  color: #fff;
+  /* Desliza levemente para a direita */
+  transform: translateX(6px);
+}
+
+.menu-links a[aria-current="page"] {
+  background: #284b36;
+  color: #fff;
+  font-weight: bold;
+}
