@@ -516,26 +516,3 @@ body {
     color: #1a4130;
     font-weight: 700;
 }
-
-.rodape-creditos {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    padding: 15px 20px;
-    box-sizing: border-box;
-    background: linear-gradient(90deg, #1a4130, #275844);
-    color: #E8F5E9;
-    font-size: 13px;
-    text-align: center;
-}
-
-.rodape-creditos p {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: center;
-    gap: 8px 10px;
-    margin: 0;
-}

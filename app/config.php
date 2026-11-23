@@ -112,7 +112,6 @@ $pdo = database();
       <!-- NAVEGAÇÃO DAS CONFIGURAÇÕES -->
       <nav class="cfg-nav card" aria-label="Seções das configurações">
         <a href="#perfil" class="aba-perfil">Perfil</a>
-        <a href="#usina" class="aba-usina">Usina</a>
         <a href="#notificacoes" class="aba-notif">Notificações</a>
       </nav>
 
@@ -144,27 +143,7 @@ $pdo = database();
               >
             </div>
           </div>
-        </section>
-
-        <!-- USINA -->
-        <section id="usina" class="cfg-sec card" aria-labelledby="titulo-usina">
-          <h2 id="titulo-usina">Usina</h2>
-          <p class="desc">
-            A tarifa é usada como referência para a economia em reais.
-          </p>
-
-          <div class="duas">
-            <div>
-              <label for="kwp">Capacidade instalada (kWp)</label>
-              <input id="kwp" name="kwp" value="8,4" inputmode="decimal">
-            </div>
-
-            <div>
-              <label for="tarifa">Tarifa de energia (R$/kWh)</label>
-              <input id="tarifa" name="tarifa" value="0,92" inputmode="decimal">
-            </div>
-          </div>
-        </section>
+        </section>  
 
         <!-- NOTIFICAÇÕES -->
         <section id="notificacoes" class="cfg-sec card" aria-labelledby="titulo-notificacoes">
