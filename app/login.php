@@ -169,13 +169,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </section>
 
 
-        <section class="secao-destaque" id="Porque">
+        <section class="secao-destaque" id="Preferencia">
             <div class="mae-secao-destaque">
                 <div class="img-secao-destaque">
                     <img src="imagens/porqueasolar.png" alt="Imagem teste">
                     <hr class="divisao3">
+                    <h1 class="titulo-abaixo">Transformamos dados em <span class="branco">decisões inteligentes</span>
+                    </h1>
                     <p class="descricao-imagem">
-                        Transformamos dados em decisões inteligentes,
                         ajudando você a aproveitar melhor sua energia solar.
                     </p>
                 </div>
@@ -189,34 +190,45 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </section>
 
 
-
-
-        <section class="Equipe" id="Equipe">
+        <section class="equipe" id="Equipe">
 
             <div class="titulo-container">
                 <h1 class="titulo-secao">
-                    Nossa<span class="destaque-verde"> Equipe</span>
+                    Nossa <span class="destaque-verde">Equipe</span>
                 </h1>
+
                 <h2>Pessoas que impulsionam o futuro da energia.</h2>
             </div>
-            <div class="cardsparticipa">
-                <div class="card"><img>
-                    <p>cnauncoadnc</p>
+
+            <div class="cards-equipe">
+
+                <div class="card-equipe">
+                    <img src="imagens/pessoa1.png" alt="Integrante da equipe">
+                    <h3>Nome do integrante</h3>
+                    <p>Desenvolvedor</p>
                 </div>
-                <div class="card"><img>
-                    <p>cnauncoadnc</p>
+
+                <div class="card-equipe">
+                    <img src="imagens/pessoa2.png" alt="Integrante da equipe">
+                    <h3>Nome do integrante</h3>
+                    <p>Designer</p>
                 </div>
-                <div class="card"><img>
-                    <p>cnauncoadnc</p>
+
+                <div class="card-equipe">
+                    <img src="imagens/pessoa3.png" alt="Integrante da equipe">
+                    <h3>Nome do integrante</h3>
+                    <p>Analista</p>
                 </div>
-                <div class="card"><img>
-                    <p>cnauncoadnc</p>
+
+                <div class="card-equipe">
+                    <img src="imagens/pessoa4.png" alt="Integrante da equipe">
+                    <h3>Nome do integrante</h3>
+                    <p>Gestor de projetos</p>
                 </div>
 
             </div>
+
         </section>
-
-
 
 
 
@@ -226,10 +238,51 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             <h1 class="titulo-secao">
                 <hr class="divisao3">
-                Nossos<span class="destaque-verde"> Objetivos</span>
+                <div class="texto-principal">
+                    <span class="destaque-verde">NOSSO PROPÓSITO</span>
+                </div>
+                <br>
+                <div class="container-apresentacao">
+                    <span class="branco">NOSSOS</span><span class="destaque-verde"> OBJETIVOS</span>
+                    <br>
+                    <span class="branco-espacado">Tecnologia e sustentabilidade trabalhando juntas para transformar o
+                        futuro.</span>
+                </div>
             </h1>
+            <div class="cards-objetivos">
 
-            <h2></h2>
+                <div class="card-objetivo">
+                    <div class="icone">
+                    </div>
+                    <h3>Energia Sustentável</h3>
+                    <p>Incentivar o uso de energia limpa, contribuindo para um futuro mais sustentável.</p>
+                </div>
+
+                <div class="card-objetivo">
+                    <div class="icone">
+                        <i class="fa-solid fa-wallet"></i>
+                    </div>
+                    <h3>Economia Inteligente</h3>
+                    <p>Reduzir gastos com energia elétrica por meio de soluções fotovoltaicas.</p>
+                </div>
+
+                <div class="card-objetivo">
+                    <div class="icone">
+                        <i class="fa-solid fa-chart-line"></i>
+                    </div>
+                    <h3>Monitoramento Eficiente</h3>
+                    <p>Facilitar o acompanhamento da produção e do desempenho energético.</p>
+                </div>
+
+                <div class="card-objetivo">
+                    <div class="icone">
+                    </div>
+                    <h3>Inovação Tecnológica</h3>
+                    <p>Desenvolver soluções modernas que aproximem as pessoas da energia renovável.</p>
+                </div>
+
+            </div>
+
 
         </section>
 
@@ -237,9 +290,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 
             <div class="rodape-marca">
-                    <span class="destaque-verde">SolarControl</span>
-                    <span class="destaque-verde">© 2026 by Solar Control</span>
-               
+                <span class="destaque-verde">SolarControl</span>
+                <span class="destaque-verde">© 2026 by Solar Control</span>
+
             </div>
 
             <div class="rodape-creditos">
