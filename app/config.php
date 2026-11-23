@@ -108,7 +108,7 @@ $pdo = database();
       </div>
     </header>
 
-    <form class="cfg" aria-label="Configurações da plataforma">
+    <form method= "POST" class="cfg" aria-label="Configurações da plataforma">
       <!-- NAVEGAÇÃO DAS CONFIGURAÇÕES -->
       <nav class="cfg-nav card" aria-label="Seções das configurações">
         <a href="#perfil" class="aba-perfil">Perfil</a>
@@ -214,7 +214,7 @@ $pdo = database();
             Cancelar
           </button>
 
-          <button type="button" class="btn-verde" aria-describedby="aviso-salvar">
+          <button type="submit" class="btn-verde" aria-describedby="aviso-salvar">
             Salvar alterações
           </button>
         </div>
