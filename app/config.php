@@ -112,7 +112,6 @@ $pdo = database();
       <!-- NAVEGAÇÃO DAS CONFIGURAÇÕES -->
       <nav class="cfg-nav card" aria-label="Seções das configurações">
         <a href="#perfil" class="aba-perfil">Perfil</a>
-        <a href="#usina" class="aba-usina">Usina</a>
         <a href="#notificacoes" class="aba-notif">Notificações</a>
       </nav>
 
