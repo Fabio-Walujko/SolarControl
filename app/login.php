@@ -127,7 +127,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                 <p class="texto-auxiliar texto-centralizado">
                     Não tem conta?
-                    <a href="cadastro.php">Criar conta</a>
+                    <a class="criarconta" href="cadastro.php">Criar conta</a>
                 </p>
 
             </div>
@@ -218,7 +218,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <h3>Nome do integrante</h3>
                     <p>Gestor de projetos</p>
                 </div>
-
+                
+                <div class="card-equipe">
+                    <img src="imagens/pessoa4.png" alt="Integrante da equipe">
+                    <h3>Nome do integrante</h3>
+                    <p>Gestor de projetos</p>
+                </div>
             </div>
 
         </section>

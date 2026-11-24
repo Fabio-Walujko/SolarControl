@@ -40,33 +40,64 @@ $pdo = database();
 </head>
 <body>
 
-    <div class="posicaoforms">
-        <div class="logo">🪐 Solar<span>Control</span></div>
-        <h2>Criar conta</h2>
-        <p class="sub">Preencha o formulário para criar sua conta.</p>
+     <section class="secao-inicial" id="login">
 
-        <form action="" method="POST" class="formulario">
-            <label for="nome">Nome</label>
-            <input type="text" id="nome" name="nome" placeholder="nome completo" required>
+            <div class="texto-introducao">
 
-            <label for="email">E-mail</label>
-            <input type="email" id="email" name="email" placeholder="nome@empresa.com" required>
+                <h1 class="titulo-secao">
+                    Controle<br>
+                    <span class="destaque-verde">
+                        inteligente<br>Energia sustentável
+                    </span>
+                </h1>
 
-            <label for="senha">Senha</label>
-            <input type="password" id="senha" name="senha" placeholder="••••••••" minlength="6" required>
+                <h2>
+                    Monitore sua produção de energia solar,<br>
+                    acompanhe seu consumo e<br>
+                    tenha controle total do seu sistema em um só lugar.
+                </h2>
+            </div>
 
-            <button type="submit">Criar</button>
-        </form>
+            <div class="painel-login">
+                <div class="logo">SolarControl</div>
 
+                <h2>Criar Conta</h2>
 
-        <div class="paivoltar">
-    <a href="login.php" class="botao-voltar">
-        <span aria-hidden="true">←</span>
-        Voltar para o login
-    </a>
-    <p><?php  echo $mensagem_erro; ?></php></p>
-</div>
+                <p class="texto-auxiliar">
+                    Bem-vindo! Acesse o painel da sua usina.
+                </p>
 
+                <form method="POST" class="formulario-login">
 
+                    <label for="email">E-mail</label>
+
+                    <input class="campos" type="email" id="email" name="email" placeholder="nome@empresa.com" required>
+
+                    <label for="senha">Senha</label>
+
+                    <input class="campos" type="password" id="senha" name="senha" placeholder="••••••••" minlength="6"
+                        required>
+
+                    <div class="linha-opcoes">
+
+                        <label>
+                            <input type="checkbox" name="lembrar" checked>
+                            Lembrar-me
+                        </label>
+
+                        
+
+                    </div>
+
+                    <button class="entrar" type="submit">Criar</button>
+
+                </form>
+
+                <p class="texto-auxiliar texto-centralizado">
+                    
+                    <a class="criarconta" href="login.php">Tela de Login</a>
+                </p>
+
+            </div>
 </body>
 </html>
