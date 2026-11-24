@@ -66,14 +66,6 @@ $pdo = database();
         <span class="crumb">Ajustar</span>
         <h1>Configurações</h1>
       </div>
-
-      <div class="topo-acoes">
-        <a class="link-alertas" href="alerts.php">Alertas</a>
-
-        <a class="avatar-topo" href="profile.php" aria-label="Abrir meu perfil">
-          BB
-        </a>
-      </div>
     </header>
 
     <form method= "POST" class="cfg" aria-label="Configurações da plataforma">
