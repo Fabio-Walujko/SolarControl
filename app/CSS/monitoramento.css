@@ -126,11 +126,16 @@ body {
   text-decoration: none;
 }
 
-/* Conteúdo principal */
+/* Conteúdo centralizado ao lado do menu */
 .conteudo {
   margin-left: 309px;
   padding: 32px;
-  max-width: 1200px;
+  min-height: 100vh;
+}
+
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
 }
 
 .cabecalho h1 {
@@ -372,4 +377,11 @@ body {
 
 .barra-consumida {
   background: #d9822b;
+}
+
+/* Gráfico */
+.grafico-container {
+  position: relative;
+  height: 320px;
+  width: 100%;
 }
