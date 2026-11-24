@@ -27,6 +27,7 @@ body {
   display: flex;
   flex-direction: column;
   overflow-y: auto;
+  overflow-x: hidden;
   background: #16261c;
   color: #d0dcd3;
   font-family: Arial, sans-serif;
@@ -146,7 +147,6 @@ body {
   display: block;
   margin-bottom: 40px;
   box-shadow: 0 0 100px gray;
-
 }
 
 .topo img {
@@ -324,7 +324,7 @@ body {
   background-color: #ffffff;
   border-top: 1px solid #e5e5e5;
   margin-top: 80px;
-  width: 100%;
+  margin-left: 309px;
   text-align: center;
 }
 
@@ -375,7 +375,6 @@ body {
   font-weight: 800;
   color: #1a4130;
   letter-spacing: -0.5px;
-  margin-left: 300px;
 }
 
 .rodape-copy {
@@ -390,12 +389,10 @@ body {
   justify-content: center;
   align-items: center;
   gap: 8px 10px;
-  width: 100%;
   padding: 14px 20px;
   background: linear-gradient(90deg, #1a4130, #275844);
   color: #E8F5E9;
   font-size: 13px;
-  margin-left: 145px;
 }
 
 /* Animações */
@@ -448,4 +445,5 @@ body {
   background: #284b36;
   color: #fff;
   font-weight: bold;
+
 }

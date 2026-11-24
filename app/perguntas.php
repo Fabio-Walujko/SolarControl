@@ -201,23 +201,5 @@ if (!isset($_SESSION['usuario_logado']) || $_SESSION['usuario_logado'] !== true)
     </div>
   </main>
 
-
-  <footer class="rodape">
-            
-
-            
-            <div class="rodape-marca">
-                <span class="rodape-nome">SolarControl</span>
-                <span class="rodape-copy">© 2026 by Solar Control</span>
-            </div>
-
-            
-            <div class="rodape-creditos">
-                <span>© Copyright 2026</span>
-                <span>|</span>
-                <span>Desenvolvido por: <strong>Solar Control</strong></span>
-            </div>
-        </footer>
-
 </body>
 </html>
