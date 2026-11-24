@@ -2,14 +2,15 @@
 require_once __DIR__ . '/init.php';
 
 if (!isset($_SESSION['usuario_logado']) || $_SESSION['usuario_logado'] !== true) {
-    header('Location: login.php');
-    exit;
+  header('Location: login.php');
+  exit;
 }
 
 ?>
 
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -18,14 +19,12 @@ if (!isset($_SESSION['usuario_logado']) || $_SESSION['usuario_logado'] !== true)
 </head>
 
 <body>
-<body>
   <?php include __DIR__ . '/menu.php'; ?>
-
 
   <main class="conteudo">
     <h1>Visão geral</h1>
     <p>Acompanhe os principais indicadores da sua instalação.</p>
- <!-- INDICADORES -->
+
     <section class="indicadores" aria-label="Indicadores principais">
       <article class="indicador card">
         <p class="letrasCard"><span>Geração hoje</span></p>
@@ -34,7 +33,7 @@ if (!isset($_SESSION['usuario_logado']) || $_SESSION['usuario_logado'] !== true)
       </article>
 
       <article class="indicador card">
-         <p class="letrasCard"><span>Geração no mês</span></p>
+        <p class="letrasCard"><span>Geração no mês</span></p>
         <strong>366<small>kWh</small></strong>
         <p><span class="negativo">-9,1%</span> em relação a 1–13 de outubro</p>
       </article>
@@ -53,6 +52,75 @@ if (!isset($_SESSION['usuario_logado']) || $_SESSION['usuario_logado'] !== true)
       </article>
     </section>
 
+
+    <section class="resumo-simples" aria-label="Informações gerais do sistema">
+      <article class="indicador card card-grande">
+        <p class="letrasCard"><span>Status do Sistema</span></p>
+        <strong class="positivo">Online</strong>
+        <p>Inversor sincronizado e operando normalmente com a rede.</p>
+      </article>
+
+      <article class="indicador card card-grande">
+        <p class="letrasCard"><span>Última Manutenção</span></p>
+        <strong>03/10/2026</strong>
+        <p>Próxima limpeza preventiva recomendada para 03/01/2027.</p>
+      </article>
+
+      <article class="indicador card card-grande">
+        <p class="letrasCard"><span>Potência Instalada</span></p>
+        <strong>5,4<small>kWp</small></strong>
+        <p>12 módulos fotovoltaicos ativos · Tarifa atual: R$ 0,92/kWh.</p>
+      </article>
+
+      <article class="indicador card card-grande">
+        <p class="letrasCard"><span>Geração nos últimos meses (kWh)</span></p>
+        <div class="mini-grafico" role="img" aria-label="Gráfico de geração dos últimos 4 meses">
+          <div class="coluna">
+            <small>310</small>
+            <div class="barra-box">
+              <div class="barra" style="height: 75%;"></div>
+            </div>
+            <span>Jul</span>
+          </div>
+          <div class="coluna">
+            <small>345</small>
+            <div class="barra-box">
+              <div class="barra" style="height: 85%;"></div>
+            </div>
+            <span>Ago</span>
+          </div>
+          <div class="coluna">
+            <small>390</small>
+            <div class="barra-box">
+              <div class="barra" style="height: 95%;"></div>
+            </div>
+            <span>Set</span>
+          </div>
+          <div class="coluna">
+            <small>366</small>
+            <div class="barra-box">
+              <div class="barra ativa" style="height: 88%;"></div>
+            </div>
+            <span>Out</span>
+          </div>
+        </div>
+      </article>
+    </section>
+
   </main>
+
+  <footer class="rodape">
+    <div class="rodape-marca">
+      <span class="rodape-nome">SolarControl</span>
+      <span class="rodape-copy">© 2026 by Solar Control</span>
+    </div>
+
+    <div class="rodape-creditos">
+      <span>© Copyright 2026</span>
+      <span>|</span>
+      <span>Desenvolvido por: <strong>Solar Control</strong></span>
+    </div>
+  </footer>
 </body>
+
 </html>

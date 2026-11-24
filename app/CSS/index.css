@@ -23,7 +23,7 @@ body {
   color: #d0dcd3;
 }
 
-/* Nome do projeto */
+/*solar*/
 .marca {
   margin: 8px 14px 30px;
   color: #fff;
@@ -86,7 +86,7 @@ body {
   text-align: center;
 }
 
-/* Parte inferior */
+/* Rodapé */
 .menu-rodape {
   margin-top: auto;
 }
@@ -139,7 +139,7 @@ body {
 
 .conteudo {
   margin-left: 309px;
-  padding: 32px;
+  padding: 32px 32px 130px 32px;
 }
 /* divs blocos */
 
@@ -224,4 +224,141 @@ body {
 .dados-usuario strong {
   color: #fff;
   font-size: 12px;
+}
+
+
+.resumo-simples {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.card-grande {
+  padding: 28px 24px;
+}
+
+.rodape {
+  position: fixed;
+  bottom: 0;
+  left: 309px;
+  right: 0; 
+  background-color: #ffffff;
+  border-top: 1px solid #e5e5e5;
+  text-align: center;
+  z-index: 10;
+}
+
+.rodape-links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 12px 18px;
+  padding: 40px 20px 25px 20px;
+}
+
+.rodape-links a {
+  text-decoration: none;
+  color: #111111;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  transition: color 0.2s ease;
+}
+
+.rodape-links a:hover {
+  color: #3b883f;
+}
+
+.rodape-links .separador {
+  color: #cccccc;
+  font-size: 16px;
+  user-select: none;
+}
+
+.rodape-marca {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  padding: 15px 20px;
+}
+
+.rodape-logo {
+  height: 32px;
+  width: auto;
+}
+
+.rodape-nome {
+  font-size: 20px;
+  font-weight: 800;
+  color: #1a4130;
+  letter-spacing: -0.5px;
+}
+
+.rodape-copy {
+  font-size: 12px;
+  color: #555555;
+  margin-left: 8px;
+}
+
+.rodape-creditos {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 8px 10px;
+  width: 100%;
+  padding: 14px 20px;
+  background: linear-gradient(90deg, #1a4130, #275844);
+  color: #E8F5E9;
+  font-size: 13px;
+}
+
+/* Gráfico */
+.mini-grafico {
+  margin-top: 16px;
+  display: flex;
+  align-items: flex-end;
+  gap: 16px;
+}
+
+.mini-grafico .coluna {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.mini-grafico .barra-box {
+  width: 100%;
+  height: 75px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  border-bottom: 1px solid #dce5df;
+}
+
+.mini-grafico .barra {
+  width: 100%;
+  max-width: 44px;
+  background: #c8d6cd;
+  border-radius: 6px 6px 0 0;
+}
+
+.mini-grafico .barra.ativa {
+  background: #34794c;
+}
+
+.mini-grafico small {
+  font-size: 11px;
+  color: #65776a;
+}
+
+.mini-grafico span {
+  font-size: 12px;
+  color: #243329;
+  font-weight: bold;
 }
