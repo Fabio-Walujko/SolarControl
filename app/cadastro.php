@@ -44,6 +44,7 @@ $pdo = database();
 
         <section class="secao-inicial" id="login">
 
+
             <div class="texto-introducao">
 
                 <h1 class="titulo-secao">
@@ -63,6 +64,7 @@ $pdo = database();
             <div class="painel-login">
                 <div class="logo">SolarControl</div>
 
+                <h2>Criar Conta</h2>
 
                 <h2>Cadastrar-se</h2>
 
@@ -102,6 +104,8 @@ $pdo = database();
         <footer class="rodape">
 
 
+                <form method="POST" class="formulario-login">
+
             <div class="rodape-marca">
                 <span class="destaque-verde">SolarControl</span>
                 <span class="destaque-verde">© 2026 by Solar Control</span>
@@ -111,6 +115,36 @@ $pdo = database();
         </footer>
 
     </main>
-</body>
 
+                    <label for="email">E-mail</label>
+
+                    <input class="campos" type="email" id="email" name="email" placeholder="nome@empresa.com" required>
+
+                    <label for="senha">Senha</label>
+
+                    <input class="campos" type="password" id="senha" name="senha" placeholder="••••••••" minlength="6"
+                        required>
+
+                    <div class="linha-opcoes">
+
+                        <label>
+                            <input type="checkbox" name="lembrar" checked>
+                            Lembrar-me
+                        </label>
+
+                        
+
+                    </div>
+
+                    <button class="entrar" type="submit">Criar</button>
+
+                </form>
+
+                <p class="texto-auxiliar texto-centralizado">
+                    
+                    <a class="criarconta" href="login.php">Tela de Login</a>
+                </p>
+
+            </div>
+</body>
 </html>
