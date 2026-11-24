@@ -1,10 +1,11 @@
 <?php
 require_once __DIR__ . '/init.php';
 
-if (!isset($_SESSION['usuario_logado']) \vert{}\vert{}$_SESSION['usuario_logado'] !== true) {
+if (!isset($_SESSION['usuario_logado']) || $_SESSION['usuario_logado'] !== true) {
     header('Location: login.php');
     exit;
 }
+
 
 $categorias = [
     'geral' => [
