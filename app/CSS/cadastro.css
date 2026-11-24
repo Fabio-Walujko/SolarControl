@@ -1,18 +1,16 @@
+
 html {
     scroll-behavior: smooth;
-
 }
 
 body {
     margin: 0;
-    animation: animacaoup 2s forwards;
 }
 
 .navegacao {
     position: fixed;
     top: 15px;
     z-index: 9999;
-    position: fixed;
     display: flex;
     left: 38%;
     padding-left: 17px;
@@ -24,7 +22,6 @@ body {
     background: rgba(11, 31, 22, 0.35);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
-
 }
 
 .links-navegacao {
@@ -60,11 +57,12 @@ body {
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
-    width: 97.5%;
-    height: 100%;
+    min-height: 800px;
+    padding-top: 90px;
     padding-left: 50px;
     margin: 0;
     color: #E8F5E9;
+    box-shadow: 0 0 40px gray;
 }
 
 .texto-introducao {
@@ -90,8 +88,6 @@ body {
     display: flex;
     flex-direction: column;
     margin-bottom: 250px;
-    width: 400px;
-
 
     .logo {
         font-size: 35px;
@@ -136,7 +132,6 @@ body {
         transform: translateY(-2px);
         background-color: #43A047;
     }
-   
 }
 
 .destaque-verde {
@@ -145,10 +140,6 @@ body {
     -webkit-text-fill-color: transparent;
     background-clip: text;
 }
-
-
-
-
 
 .secao-sobre {
     font-family: 'DM Sans', sans-serif;
@@ -179,7 +170,6 @@ body {
         margin-bottom: 200px;
         font-size: 20px;
         line-height: 1.5;
-
     }
 
     .secao-sobre-img img {
@@ -191,7 +181,6 @@ body {
     }
 }
 
-
 .secao-destaque {
     background-color: #edf1eb;
     height: 700px;
@@ -199,16 +188,20 @@ body {
     pointer-events: none;
 }
 
+/* ANIMAÇÃO DE DIGITAÇÃO */
 .digitando {
     font-size: 60px;
     border-right: 2px solid #2E7D32;
-    animation: cursor 0.5s infinite,
-        typing 5.0s steps(22) infinite;
     white-space: nowrap;
     width: 22ch;
     overflow: hidden;
 
+    animation:
+        typing 5s steps(22) both,
+        cursor 0.5s step-end infinite;
 
+    animation-timeline: view();
+    animation-range: entry 0% entry 50%;
 }
 
 .textodefundo {
@@ -222,9 +215,6 @@ body {
     pointer-events: none;
 }
 
-
-
-
 .secao-destaque {
     margin-top: 10px;
     border: 40px solid #A5D6A7;
@@ -236,7 +226,6 @@ body {
     animation: animacaoup 5s forwards;
     padding-bottom: 6rem;
 
-
     .texto-secao-destaque-titulo {
         font-family: 'DM Sans', sans-serif;
         width: 0;
@@ -244,7 +233,6 @@ body {
         margin-left: 200px;
         border-left: transparent;
         pointer-events: none;
-
     }
 
     .divisao3 {
@@ -259,7 +247,6 @@ body {
         text-align: center;
         margin-right: 50px;
         display: flex;
-
     }
 
     .verdedestaqueforte {
@@ -290,9 +277,6 @@ body {
         font-size: 30px;
     }
 
-
-
-
     .img-secao-destaque img {
         box-shadow: 0 0 20px #E8F5E9;
         width: 1000px;
@@ -301,9 +285,7 @@ body {
         margin-top: 200px;
         margin-left: 70px;
     }
-
 }
-
 
 .titulo-container {
     text-align: center;
@@ -313,7 +295,6 @@ body {
     h1 {
         font-size: 60px;
     }
-
 }
 
 .cardsparticipa {
@@ -380,8 +361,6 @@ body {
     color: #777;
 }
 
-
-
 .secao-objetivos {
     background-color: white;
     height: 1000px;
@@ -411,7 +390,7 @@ body {
     }
 
     .container-apresentacao {
-        margin-bottom: 40px
+        margin-bottom: 40px;
     }
 
     .branco-espacado {
@@ -423,7 +402,6 @@ body {
     .cards-objetivos {
         display: grid;
         gap: 25px;
-
     }
 
     .card-objetivo {
@@ -431,7 +409,6 @@ body {
         border-radius: 12px;
         padding: 22px;
         color: white;
-
         margin-right: 100px;
         margin-left: 100px;
 
@@ -444,10 +421,8 @@ body {
             color: #70C878;
             margin-bottom: 10px;
         }
-
     }
 }
-
 
 @keyframes cursor {
     50% {
@@ -457,7 +432,7 @@ body {
 
 @keyframes typing {
     0% {
-        width: 0
+        width: 0;
     }
 
     40% {
@@ -484,8 +459,6 @@ body {
         opacity: 1;
     }
 }
-
-
 
 .rodape {
     background-color: #ffffff;

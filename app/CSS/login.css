@@ -14,8 +14,7 @@ body {
     position: fixed;
     display: flex;
     left: 38%;
-    padding-left: 17px;
-    padding-right: 30px;
+    padding: 0 20px 0 20px;
     padding-top: 10px;
     padding-bottom: 10px;
     border-radius: 12px;
@@ -23,12 +22,13 @@ body {
     background: rgba(11, 31, 22, 0.35);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
-
+    
 }
 
 .links-navegacao {
     .botao-navegacao {
-        margin-left: 20px;
+        padding-left: 20px;
+        padding-right: 10px;
     }
 }
 
@@ -59,7 +59,7 @@ body {
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
-    min-height: 800px;
+    min-height: 900px;
     padding-top: 90px;
     padding-left: 50px;
     margin: 0;
