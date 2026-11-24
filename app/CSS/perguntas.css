@@ -1,26 +1,19 @@
-/*Página do site*/
-:root {
-  interpolate-size: allow-keywords;
-}
-
 * {
   box-sizing: border-box;
 }
 
 body {
   margin: 0;
-  background: #f8f8f8;
+  font-family: Arial, sans-serif;
+  background: #f5f7f5;
   color: #243329;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
-    Roboto, Helvetica, Arial, sans-serif;
 }
 
-/* Menu lateral */
+/* Menu lateral (mesmo padrão das outras páginas) */
 .menu-lateral {
   position: fixed;
   top: 0;
   left: 0;
-  z-index: 100;
   width: 309px;
   height: 100vh;
   padding: 28px 12px 16px;
@@ -30,7 +23,6 @@ body {
   overflow-x: hidden;
   background: #16261c;
   color: #d0dcd3;
-  font-family: Arial, sans-serif;
 }
 
 .marca {
@@ -64,15 +56,18 @@ body {
   color: #c1d0c5;
   font-size: 15px;
   text-decoration: none;
+  transition: background-color 0.25s ease, color 0.25s ease, transform 0.2s ease;
 }
 
-.menu-links a:hover,
+.menu-links a:hover {
+  background: #284b36;
+  color: #fff;
+  transform: translateX(6px);
+}
+
 .menu-links a[aria-current="page"] {
   background: #284b36;
   color: #fff;
-}
-
-.menu-links a[aria-current="page"] {
   font-weight: bold;
 }
 
@@ -124,7 +119,7 @@ body {
 .dados-usuario small {
   margin-top: 4px;
   color: #a0b3a6;
-  font-size: 11px;
+  font-size: 12px;
 }
 
 .sair {
@@ -133,10 +128,11 @@ body {
   text-decoration: none;
 }
 
-/* Conteúdo principal */
-.conteudo-principal {
+/* Conteúdo principal centralizado */
+.conteudo {
   margin-left: 309px;
-  padding: 0 0 80px;
+  padding: 32px;
+  min-height: 100vh;
 }
 
 .topo {
@@ -149,157 +145,111 @@ body {
   box-shadow: 0 0 100px gray;
 }
 
-.topo img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center;
-  display: block;
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
 }
 
-.conteudo-principal h1,
-.conteudo-principal h2,
-.card-categoria {
-  margin-left: 60px;
-  margin-right: 60px;
+.cabecalho h1 {
+  margin: 0 0 6px;
+  font-size: 28px;
+  color: #16261c;
 }
 
-.conteudo-principal h1 {
-  background: linear-gradient(90deg, #3b883f, #46a84b, #66bb6a);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  color: transparent;
-  font-size: 40px;
-  font-weight: 400;
-  margin-top: 0;
-  margin-bottom: 10px;
-  letter-spacing: -0.5px;
+.cabecalho p {
+  margin: 0 0 24px;
+  color: #54695b;
 }
 
-.conteudo-principal h2 {
-  background: linear-gradient(90deg, #3b883f, #46a84b, #66bb6a);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  font-size: 23px;
-  font-weight: 400;
-  margin-bottom: 40px;
+.painel-box {
+  background: #fff;
+  border: 1px solid #dfe7e1;
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 20px;
 }
 
-/* Cards de categorias */
-.card-categoria {
-  background-color: transparent;
-  border: none;
-  border-radius: 0;
-  padding: 0;
-  margin-bottom: 45px;
+/* Categorias e acordeão */
+.categoria-topo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
 }
 
-.card-categoria h3 {
-  background: linear-gradient(90deg, #3b883f, #46a84b, #66bb6a);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  font-size: 30px;
-  font-weight: 600;
-  margin-bottom: 15px;
-  display: block;
-  padding-bottom: 8px;
-  border-bottom: 3px solid;
-  border-image: linear-gradient(90deg, #3b883f, #46a84b, #66bb6a) 1;
-}
-
-.card-categoria details {
-  perspective: 1000px;
-  border-bottom: 1px solid #0a0a0a;
-  padding: 0;
+.categoria-topo h2 {
   margin: 0;
-  overflow: hidden;
-  transition: background-color 0.4s ease, border-color 0.4s ease;
+  font-size: 18px;
+  color: #16261c;
 }
 
-.card-categoria details[open] {
-  background-color: #f2f7f4;
-  border-bottom-color: #3b883f;
-  animation: pulsoCard 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+.badge {
+  padding: 4px 10px;
+  border-radius: 20px;
+  background: #d9ebe0;
+  color: #163620;
+  font-size: 12px;
+  font-weight: bold;
 }
 
-.card-categoria summary {
-  font-size: 27px;
-  font-weight: 600;
-  color: #111;
-  padding: 20px 55px 20px 15px;
-  cursor: pointer;
-  user-select: none;
+.lista-perguntas {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.faq-item {
+  border: 1px solid #e2eae4;
+  border-radius: 8px;
+  background: #fafcfa;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.faq-item[open] {
+  border-color: #284b36;
+  background: #fff;
+}
+
+.faq-item summary {
   list-style: none;
-  position: relative;
-  transition: color 0.3s ease, transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+  padding: 14px 16px;
+  font-weight: bold;
+  font-size: 15px;
+  color: #16261c;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
 }
 
-.card-categoria summary:hover {
-  color: #275844;
-  transform: translateX(6px);
-}
-
-.card-categoria summary:active {
-  transform: scale(0.99);
-}
-
-.card-categoria details[open] summary {
-  color: #3b883f;
-}
-
-.card-categoria summary::-webkit-details-marker {
+.faq-item summary::-webkit-details-marker {
   display: none;
 }
 
-.card-categoria summary::after {
-  content: "";
-  position: absolute;
-  right: 20px;
-  top: 50%;
-  width: 14px;
-  height: 14px;
-  border-right: 3px solid #333;
-  border-bottom: 3px solid #333;
-  transform: translateY(-65%) rotate(45deg);
-  transition: transform 0.6s cubic-bezier(0.68, -0.6, 0.32, 1.6), border-color 0.3s ease;
-}
-
-.card-categoria details[open] summary::after {
-  transform: translateY(-20%) rotate(225deg) scale(1.15);
-  border-color: #3b883f;
-}
-
-.card-categoria details::details-content {
-  height: 0;
-  opacity: 0;
-  overflow: clip;
-  transform-origin: top center;
-  transform: rotateX(-40deg) scale(0.95);
-  filter: blur(6px);
-  transition:
-    height 0.6s cubic-bezier(0.22, 1, 0.36, 1),
-    opacity 0.5s ease,
-    transform 0.6s cubic-bezier(0.22, 1, 0.36, 1),
-    filter 0.5s ease,
-    content-visibility 0.6s ease allow-discrete;
-}
-
-.card-categoria details[open]::details-content {
-  height: auto;
-  opacity: 1;
-  transform: rotateX(0deg) scale(1);
-  filter: blur(0);
-}
-
-.card-categoria p {
-  color: #444;
+.faq-item summary::after {
+  content: "+";
   font-size: 20px;
+  font-weight: normal;
+  color: #284b36;
+  line-height: 1;
+}
+
+.faq-item[open] summary::after {
+  content: "−";
+}
+
+.faq-resposta {
+  padding: 0 16px 16px;
+  border-top: 1px solid #edf2ee;
+}
+
+.faq-resposta p {
+  margin: 12px 0 14px;
   line-height: 1.6;
-  margin: 0;
-  padding: 0 20px 22px 15px;
+  font-size: 14px;
+  color: #3a4f41;
 }
 
 .card-categoria details[open] > *:not(summary) {
@@ -328,13 +278,12 @@ body {
   text-align: center;
 }
 
-.rodape-links {
+/* Feedback útil */
+.feedback {
   display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
   align-items: center;
   gap: 12px 18px;
-  padding: 40px 20px 25px 20px;
+  padding: 10px 0 0;
 }
 
 .rodape-links a {
@@ -378,9 +327,9 @@ body {
 }
 
 .rodape-copy {
+  gap: 8px;
   font-size: 12px;
-  color: #555555;
-  margin-left: 8px;
+  color: #5d7264;
 }
 
 .rodape-creditos {
@@ -395,55 +344,22 @@ body {
   font-size: 13px;
 }
 
-/* Animações */
-@keyframes pulsoCard {
-  0% {
-    transform: scale(1);
-  }
-  40% {
-    transform: scale(1.015);
-  }
-  100% {
-    transform: scale(1);
-  }
+.btn-feedback {
+  padding: 4px 10px;
+  border: 1px solid #c7d5cb;
+  border-radius: 6px;
+  background: #fff;
+  color: #243329;
+  font-size: 12px;
+  cursor: pointer;
 }
 
-@keyframes entradaCascata {
-  from {
-    opacity: 0;
-    transform: translateX(-20px) skewX(-4deg);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0) skewX(0);
-  }
+.btn-feedback:hover {
+  background: #d9ebe0;
+  border-color: #284b36;
 }
 
-/* Substitua ou atualize estas regras no seu CSS */
-.menu-links a {
-  min-height: 44px;
-  margin-bottom: 3px;
-  padding: 12px 14px;
-  display: flex;
-  align-items: center;
-  border-radius: 7px;
-  color: #c1d0c5;
-  font-size: 15px;
-  text-decoration: none;
-  /* Adiciona transição suave de 0.25s */
-  transition: background-color 0.25s ease, color 0.25s ease, transform 0.2s ease;
-}
-
-.menu-links a:hover {
-  background: #284b36;
-  color: #fff;
-  /* Desliza levemente para a direita */
-  transform: translateX(6px);
-}
-
-.menu-links a[aria-current="page"] {
-  background: #284b36;
-  color: #fff;
+.feedback-obrigado {
+  color: #1f6e3c;
   font-weight: bold;
-
 }
