@@ -6,6 +6,7 @@ html {
 body {
     margin: 0;
     animation: animacaoup 2s forwards;
+    width: 100%;
 }
 
 .navegacao {
@@ -105,7 +106,8 @@ body {
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
-    width: 97.5%;
+
+    width: 100%;
     height: 100%;
     padding-left: 50px;
     margin: 0;
@@ -606,4 +608,63 @@ body {
     align-items: center;
     gap: 8px 10px;
     margin: 0;
+}
+
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html, body {
+    width: 100%;
+    height: 100vh;
+    overflow: hidden; /* Trava a rolagem horizontal e vertical */
+}
+
+.secao-inicial {
+    display: flex;
+    align-items: center; /* Centraliza verticalmente */
+    justify-content: space-around; /* Distribui o espaço sem estourar a direita */
+    width: 100%;
+    height: 100vh; /* Ocupa exatamente a altura da tela */
+    padding: 0 5%;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-image: url(../imagens/fundo1.png);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    color: #E8F5E9;
+}
+
+.texto-introducao {
+    margin: 0; /* Remove as margens fixas que empurravam o layout */
+    pointer-events: none;
+    max-width: 55%;
+}
+
+.texto-introducao h1 {
+    font-size: clamp(40px, 4.5vw, 75px); /* Ajusta o tamanho da fonte conforme a tela */
+    margin-bottom: 20px;
+}
+
+.texto-introducao h2 {
+    font-size: clamp(16px, 1.3vw, 22px);
+    font-weight: 400;
+}
+
+.painel-login {
+    margin: 0; /* Remove margin-top: 130px e margin-bottom: 250px */
+    width: 100%;
+    max-width: 400px;
+    padding: 25px 30px;
+    border-radius: 20px;
+    border: 2px solid rgba(165, 214, 167, 0.7);
+    background: rgba(11, 31, 22, 0.35);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }

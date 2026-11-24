@@ -69,7 +69,7 @@ $pdo = database();
                 <h2>Cadastrar-se</h2>
 
                 <p class="texto-auxiliar">
-                    Bem-vindo de volta. Acesse o painel da sua usina.
+                    Boas-vindas ao melhor site de controle fotovoltaica! 
                 </p>
 
                 <form method="POST" class="formulario-login">
@@ -114,37 +114,5 @@ $pdo = database();
 
         </footer>
 
-    </main>
-
-                    <label for="email">E-mail</label>
-
-                    <input class="campos" type="email" id="email" name="email" placeholder="nome@empresa.com" required>
-
-                    <label for="senha">Senha</label>
-
-                    <input class="campos" type="password" id="senha" name="senha" placeholder="••••••••" minlength="6"
-                        required>
-
-                    <div class="linha-opcoes">
-
-                        <label>
-                            <input type="checkbox" name="lembrar" checked>
-                            Lembrar-me
-                        </label>
-
-                        
-
-                    </div>
-
-                    <button class="entrar" type="submit">Criar</button>
-
-                </form>
-
-                <p class="texto-auxiliar texto-centralizado">
-                    
-                    <a class="criarconta" href="login.php">Tela de Login</a>
-                </p>
-
-            </div>
 </body>
 </html>
