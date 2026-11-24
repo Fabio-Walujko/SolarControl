@@ -8,8 +8,6 @@ if (!isset($_SESSION['usuario_logado']) || $_SESSION['usuario_logado'] !== true)
 }
 
 
-
-
 function h($texto) { return htmlspecialchars((string) $texto); }   // texto seguro no HTML
 
 /* Status: o valor é o que vai para o banco (igual ao seed.sql), o texto é o que aparece na tela */
