@@ -194,25 +194,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <div class="cards-equipe">
 
                 <div class="card-equipe">
-                    <img src="imagens/pessoa1.png" alt="Integrante da equipe">
+                    <img src="imagens/igor.png" alt="Integrante da equipe">
                     <h3>Nome do integrante</h3>
                     <p>Desenvolvedor</p>
                 </div>
 
                 <div class="card-equipe">
-                    <img src="imagens/pessoa2.png" alt="Integrante da equipe">
+                    <img src="imagens/fabio.png" alt="Integrante da equipe">
                     <h3>Nome do integrante</h3>
                     <p>Designer</p>
                 </div>
 
                 <div class="card-equipe">
-                    <img src="imagens/pessoa3.png" alt="Integrante da equipe">
+                    <img src="imagens/gustavo.png" alt="Integrante da equipe">
                     <h3>Nome do integrante</h3>
                     <p>Analista</p>
                 </div>
 
                 <div class="card-equipe">
-                    <img src="imagens/pessoa4.png" alt="Integrante da equipe">
+                    <img src="imagens/palu.png" alt="Integrante da equipe">
                     <h3>Nome do integrante</h3>
                     <p>Gestor de projetos</p>
                 </div>
