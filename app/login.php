@@ -218,12 +218,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <h3>Nome do integrante</h3>
                     <p>Gestor de projetos</p>
                 </div>
-                
-                <div class="card-equipe">
-                    <img src="imagens/pessoa4.png" alt="Integrante da equipe">
-                    <h3>Nome do integrante</h3>
-                    <p>Gestor de projetos</p>
-                </div>
+
             </div>
 
         </section>
