@@ -1,25 +1,35 @@
 <?php
-require_once __DIR__ . '/banco/database.php';
-require_once __DIR__ . '/banco/crud.php';
+require_once __DIR__ . '/init.php';
 
 $mensagem_erro = '';
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $email = $_POST['email'];
-    $senha = $_POST['senha'];
-    $nome = $_POST['nome'];
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $email = trim((string) ($_POST['email'] ?? ''));
+    $senha = (string) ($_POST['senha'] ?? '');
+    $nome = trim((string) ($_POST['nome'] ?? ''));
 
-    $pdo = database();
-
-    if (!empty($email) && !empty($senha) && !empty($nome)) {
+    if ($email === '' || $senha === '' || $nome === '') {
+        $mensagem_erro = 'Preencha nome, e-mail e senha.';
+    } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $mensagem_erro = 'Informe um e-mail válido.';
+    } elseif (strlen($senha) < 6 || strlen($senha) > 20) {
+        // A coluna usuarios.senha é VARCHAR(20)
+        $mensagem_erro = 'A senha precisa ter entre 6 e 20 caracteres.';
+    } else {
         try {
-            $sql = "INSERT INTO usuarios (nome, email, senha) VALUES (:nome, :email, :senha)";
-            $stmt = $pdo->prepare($sql);
-            $stmt->execute([':nome' => $nome, ':email' => $email, ':senha' => $senha]);
+            // Novo usuário entra como "cliente" (padrão da tabela)
+            create($pdo, 'usuarios', [
+                'nome' => substr($nome, 0, 100),
+                'email' => substr($email, 0, 100),
+                'senha' => $senha,
+            ]);
             header('Location: login.php');
             exit;
         } catch (PDOException $e) {
-            $mensagem_erro = "Erro no banco de dados: " . $e->getMessage();
+            $mensagem_erro = $e->getCode() === '23000'
+                ? 'Já existe uma conta com este e-mail.'
+                : 'Não foi possível criar a conta agora. Tente novamente.';
+            error_log('Erro no cadastro: ' . $e->getMessage());
         }
     }
 }
@@ -68,7 +78,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <input class="campos" type="email" id="email" name="email" placeholder="nome@empresa.com" required>
 
                     <label for="senha">Senha</label>
-                    <input class="campos" type="password" id="senha" name="senha" placeholder="••••••••" minlength="6" required>
+                    <input class="campos" type="password" id="senha" name="senha" placeholder="••••••••" minlength="6" maxlength="20" required>
 
                     <button class="entrar" type="submit">Criar</button>
                 </form>
@@ -78,7 +88,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </p>
 
                 <?php if ($mensagem_erro !== ''): ?>
-                    <p class="mensagem-erro"><?php echo htmlspecialchars($mensagem_erro); ?></p>
+                    <p class="mensagem-erro"><?= h($mensagem_erro) ?></p>
                 <?php endif; ?>
             </div>
         </section>

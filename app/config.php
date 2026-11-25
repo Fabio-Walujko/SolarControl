@@ -1,48 +1,50 @@
 <?php
-if (session_status() !== PHP_SESSION_ACTIVE) {
-    session_start();
-}
-
 require_once __DIR__ . '/init.php';
 
-if (!isset($_SESSION['usuario_logado']) || $_SESSION['usuario_logado'] !== true) {
-    header('Location: login.php');
-    exit;
-}
+$usuarioLogado = exigirLogin($pdo);
+$mensagem_erro = '';
+$mensagem_ok = $_SESSION['flash_config'] ?? '';
+unset($_SESSION['flash_config']);
 
-require_once __DIR__ . '/banco/database.php';   
-require_once __DIR__ . '/banco/crud.php';   
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $novo_email = trim((string) ($_POST['novo_email'] ?? ''));
+    $novo_nome = trim((string) ($_POST['novo_nome'] ?? ''));
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-
-$novo_email = $_POST['novo_email'];
-$novo_nome = $_POST['novo_nome'];
-$email_atual = $_SESSION['email'];
-
-$pdo = database(); 
-
-    if (!empty($novo_email) && !empty($novo_nome) && !empty($email_atual)) {
+    if ($novo_nome === '' || $novo_email === '') {
+        $mensagem_erro = 'Preencha nome e e-mail.';
+    } elseif (!filter_var($novo_email, FILTER_VALIDATE_EMAIL)) {
+        $mensagem_erro = 'Informe um e-mail válido.';
+    } else {
         try {
-       
-            $sql = "UPDATE usuarios SET nome = :novo_nome, email = :novo_email WHERE email = :email_atual";
-            $stmt = $pdo->prepare($sql);
-            $stmt->execute([':novo_nome' => $novo_nome, ':novo_email' => $novo_email, ':email_atual' => $email_atual]);
-            $_SESSION['email_usuario'] = $novo_email;
+            // Atualiza pelo ID do usuário logado (não depende do e-mail antigo)
+            update(
+                $pdo,
+                'usuarios',
+                ['nome' => substr($novo_nome, 0, 100), 'email' => substr($novo_email, 0, 100)],
+                'ID_USUARIO = ?',
+                [(int) $usuarioLogado['ID_USUARIO']]
+            );
 
-            header('Location: login.php');
+            // Atualiza a sessão para o menu já mostrar o nome novo
+            $_SESSION['nome'] = $novo_nome;
+            $_SESSION['email'] = $novo_email;
+            $_SESSION['flash_config'] = 'Perfil atualizado com sucesso.';
+
+            header('Location: config.php');
             exit;
-
-            
         } catch (PDOException $e) {
-            $mensagem_erro = "Erro: " . $e->getMessage();
+            // 23000 = violação de UNIQUE (e-mail já usado por outra conta)
+            $mensagem_erro = $e->getCode() === '23000'
+                ? 'Este e-mail já está em uso por outra conta.'
+                : 'Não foi possível salvar agora. Tente novamente.';
+            error_log('Erro ao salvar perfil: ' . $e->getMessage());
         }
     }
 }
 
+$valorNome = $_POST['novo_nome'] ?? $usuarioLogado['nome'];
+$valorEmail = $_POST['novo_email'] ?? $usuarioLogado['email'];
 ?>
-
-
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 
@@ -55,9 +57,7 @@ $pdo = database();
 
 <body>
   <!-- MENU LATERAL -->
-<body>
   <?php include __DIR__ . '/menu.php'; ?>
-
 
   <!-- CONTEÚDO -->
   <main class="conteudo">
@@ -68,7 +68,7 @@ $pdo = database();
       </div>
     </header>
 
-    <form method= "POST" class="cfg" aria-label="Configurações da plataforma">
+    <form method="POST" class="cfg" aria-label="Configurações da plataforma">
       <!-- NAVEGAÇÃO DAS CONFIGURAÇÕES -->
       <nav class="cfg-nav card" aria-label="Seções das configurações">
         <a href="#perfil" class="aba-perfil">Perfil</a>
@@ -79,7 +79,12 @@ $pdo = database();
         <!-- PERFIL -->
         <section id="perfil" class="cfg-sec card" aria-labelledby="titulo-perfil">
           <h2 id="titulo-perfil">Perfil</h2>
-          <p class="desc">Como você aparece no Solar Control.</p>
+          <p class="desc">
+            Como você aparece no Solar Control · Conta: <strong><?= h(nomeTipoUsuario($usuarioLogado['TIPO'])) ?></strong>
+            <?php if (!empty($usuarioLogado['cidade'])): ?>
+              · <?= h($usuarioLogado['cidade'] . ($usuarioLogado['estado'] ? ' - ' . $usuarioLogado['estado'] : '')) ?>
+            <?php endif; ?>
+          </p>
 
           <div class="duas">
             <div>
@@ -87,7 +92,7 @@ $pdo = database();
               <input
                 id="novo_nome"
                 name="novo_nome"
-                value="<?php echo $_SESSION['nome']; ?>"
+                value="<?= h($valorNome) ?>"
                 autocomplete="name"
               >
             </div>
@@ -98,12 +103,12 @@ $pdo = database();
                 id="novo_email"
                 name="novo_email"
                 type="email"
-                value="<?php echo $_SESSION['email'];?>"
+                value="<?= h($valorEmail) ?>"
                 autocomplete="email"
               >
             </div>
           </div>
-        </section>  
+        </section>
 
         <!-- NOTIFICAÇÕES -->
         <section id="notificacoes" class="cfg-sec card" aria-labelledby="titulo-notificacoes">
@@ -159,7 +164,7 @@ $pdo = database();
         </div>
 
         <p class="aviso" id="aviso-salvar">
-          <?php echo $mensagem_erro ?>
+          <?= h($mensagem_erro ?: $mensagem_ok) ?>
         </p>
       </div>
     </form>

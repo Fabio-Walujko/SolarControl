@@ -362,3 +362,132 @@ body {
   color: #243329;
   font-weight: bold;
 }
+/* ===== Visão geral com dados do usuário ===== */
+.cabecalho-visao {
+  margin-bottom: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.cabecalho-visao p {
+  margin: 0;
+  color: #526758;
+}
+
+.cabecalho-visao .local {
+  color: #7a8c7f;
+}
+
+.seletor-cliente {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: #526758;
+}
+
+.seletor-cliente select {
+  padding: 8px 10px;
+  border: 1px solid #cbd8ce;
+  border-radius: 8px;
+  background: #fff;
+  color: #243329;
+}
+
+.atencao {
+  color: #b7791f;
+  font-weight: bold;
+}
+
+.nota {
+  color: #7a8c7f;
+  font-size: 11px;
+}
+
+.bloco-tabela {
+  margin-top: 20px;
+  padding: 22px 24px;
+}
+
+.bloco-titulo {
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.bloco-titulo h2 {
+  margin: 0;
+  font-size: 18px;
+}
+
+.bloco-titulo a,
+.vazio a {
+  color: #2e7d4a;
+  font-size: 13px;
+  font-weight: bold;
+}
+
+.tabela-wrapper {
+  overflow-x: auto;
+}
+
+.tabela-usuario {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.tabela-usuario th,
+.tabela-usuario td {
+  padding: 11px 10px;
+  border-bottom: 1px solid #e6ede8;
+  text-align: left;
+}
+
+.tabela-usuario th {
+  color: #54695b;
+  font-size: 12px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.status {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 20px;
+  background: #e3ebe6;
+  color: #243329;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.status.ok {
+  background: #d9ebe0;
+  color: #1f5b34;
+}
+
+.status.meio {
+  background: #fbefd5;
+  color: #8a5a0b;
+}
+
+.status.ruim {
+  background: #f8dcd9;
+  color: #9b1c12;
+}
+
+.vazio {
+  margin: 0;
+  color: #6a7d70;
+  font-size: 14px;
+}
+
+@media (max-width: 1100px) {
+  .indicadores {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

@@ -1,40 +1,51 @@
 <?php
-if (session_status() !== PHP_SESSION_ACTIVE) {
+require_once __DIR__ . '/init.php';
+
+$mensagem_erro = '';
+
+// Se já estiver logado, vai direto para a visão geral
+try {
+    if (buscarUsuarioDaSessao($pdo) !== null) {
+        header('Location: index.php');
+        exit;
+    }
+} catch (Throwable $e) {
+    // Sessão antiga ou inválida: limpa e mostra o formulário normalmente
+    error_log('Erro ao ler a sessão no login: ' . $e->getMessage());
+    encerrarSessaoUsuario();
     session_start();
 }
 
-require_once __DIR__ . '/init.php';
-require_once __DIR__ . '/banco/database.php';
-require_once __DIR__ . '/banco/crud.php';
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $email = trim((string) ($_POST['email'] ?? ''));
+    $senha = (string) ($_POST['senha'] ?? '');
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $email = $_POST['email'];
-    $senha = $_POST['senha'];
-
-    $pdo = database();
-
-    if (!empty($email) && !empty($senha)) {
+    if ($email === '' || $senha === '') {
+        $mensagem_erro = 'Preencha e-mail e senha.';
+    } else {
         try {
-            $sql = "SELECT * FROM usuarios WHERE email = :email";
-            $stmt = $pdo->prepare($sql);
-            $stmt->execute(['email' => $email]);
-            $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
+            $stmt = $pdo->prepare('SELECT ID_USUARIO, nome, email, senha, TIPO FROM usuarios WHERE email = ?');
+            $stmt->execute([$email]);
+            $usuario = $stmt->fetch();
 
-            if ($usuario && $usuario['senha'] == $senha) {
-                $_SESSION['usuario_logado'] = true;
-                $_SESSION['email'] = $email;
-                $_SESSION['nome'] = $usuario['nome'];
+            // hash_equals compara em tempo constante
+            if ($usuario && hash_equals((string) $usuario['senha'], $senha)) {
+                // Guarda ID_USUARIO e TIPO na sessão: é isso que filtra os dados de cada pessoa
+                iniciarSessaoUsuario($usuario);
                 header('Location: index.php');
                 exit;
-            } else {
-                $mensagem_erro = "E-mail ou senha inválidos.";
             }
-        } catch (PDOException $e) {
-            $mensagem_erro = "Erro no banco de dados: " . $e->getMessage();
+
+            $mensagem_erro = 'E-mail ou senha inválidos.';
+        } catch (Throwable $e) {
+            // O detalhe técnico vai para o log do servidor, não para a tela
+            error_log('Erro no login: ' . $e->getMessage());
+            $mensagem_erro = 'Não foi possível entrar agora. Tente novamente em instantes.';
         }
     }
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="pt-br">

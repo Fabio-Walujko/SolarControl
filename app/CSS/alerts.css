@@ -324,6 +324,34 @@ body {
     transform: translateY(-2px);
 }
 
+/* ===== Alertas automáticos ===== */
+.alerta-baixa {
+    border-left-color: #4f7fb0;
+}
+
+.botoes button[aria-pressed="true"] {
+    background: #284b36;
+    border-color: #284b36;
+    color: #fff;
+}
+
+.cartoes .etiqueta {
+    display: inline-block;
+    margin-right: 6px;
+    padding: 3px 10px;
+    border-radius: 20px;
+    background: #eef3ef;
+    color: #344b3b;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.cartoes a.botao {
+    display: inline-block;
+    text-decoration: none;
+}
+
+
 
 
 

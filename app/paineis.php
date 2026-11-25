@@ -2,15 +2,15 @@
 
 require_once __DIR__ . '/init.php';
 
-if (!isset($_SESSION['usuario_logado']) || $_SESSION['usuario_logado'] !== true) {
-    header('Location: login.php');
-    exit;
-}
+// Usuário logado e permissão:
+// - cliente: vê e altera apenas os próprios sistemas;
+// - funcionário/adm: vê e altera os sistemas de todos os clientes.
+$usuarioLogado = exigirLogin($pdo);
+$equipe = ehEquipe($usuarioLogado);
+$idUsuario = (int) $usuarioLogado['ID_USUARIO'];
+$escopo = escopoUsuario($usuarioLogado); // null = todos (equipe)
 
-function h($texto)
-{
-    return htmlspecialchars((string) $texto);
-}
+/* h() agora fica em sessao.php e é usada por todas as páginas */
 
 /* Status: valor salvo no banco => texto exibido */
 $opcoes = [
@@ -44,30 +44,43 @@ $erro = '';
 
 /* Excluir o sistema e seus registros relacionados */
 if (isset($_POST['excluir'])) {
-    try {
-        $pdo->beginTransaction();
+    $idExcluir = (int) $_POST['excluir'];
 
-        delete($pdo, 'registros', 'ID_fotovoltaicos = ?', [$_POST['excluir']]);
-        delete($pdo, 'manutencao_e_instalacao', 'ID_SISTEMAS = ?', [$_POST['excluir']]);
-        delete($pdo, 'fotovoltaicos', 'ID_fotovoltaicos = ?', [$_POST['excluir']]);
+    if (!podeAcessarSistema($pdo, $idExcluir, $usuarioLogado)) {
+        $erro = 'Você não tem permissão para excluir este sistema.';
+    } else {
+        try {
+            $pdo->beginTransaction();
 
-        $pdo->commit();
+            delete($pdo, 'registros', 'ID_fotovoltaicos = ?', [$idExcluir]);
+            delete($pdo, 'manutencao_e_instalacao', 'ID_SISTEMAS = ?', [$idExcluir]);
+            delete($pdo, 'fotovoltaicos', 'ID_fotovoltaicos = ?', [$idExcluir]);
 
-        header('Location: paineis.php');
-        exit;
-    } catch (PDOException $e) {
-        if ($pdo->inTransaction()) {
-            $pdo->rollBack();
+            $pdo->commit();
+
+            header('Location: paineis.php');
+            exit;
+        } catch (PDOException $e) {
+            if ($pdo->inTransaction()) {
+                $pdo->rollBack();
+            }
+
+            error_log('Erro ao excluir sistema: ' . $e->getMessage());
+            $erro = 'Não foi possível excluir este sistema.';
         }
-
-        $erro = 'Não foi possível excluir este sistema.';
     }
 }
 
 /* Salvar: atualiza se houver ID; caso contrário, cadastra */
 if (isset($_POST['modelo_painel'])) {
+    // Cliente não escolhe o dono: o sistema é sempre dele
+    if (!$equipe) {
+        $_POST['ID_USUARIO'] = (string) $idUsuario;
+        $_POST['cliente_antes'] = $_POST['id'] !== '' ? (string) $idUsuario : '';
+    }
+
     $dados = [
-        'ID_USUARIO' => $_POST['ID_USUARIO'],
+        'ID_USUARIO' => (int) $_POST['ID_USUARIO'],
         'modelo_painel' => trim($_POST['modelo_painel']),
         'data_intalacao' => $_POST['data_intalacao'],
         'status_sistema' => $_POST['status_sistema'],
@@ -86,7 +99,11 @@ if (isset($_POST['modelo_painel'])) {
     $trocouCliente = $_POST['cliente_antes'] !== ''
         && $_POST['cliente_antes'] != $_POST['ID_USUARIO'];
 
-    if (!isset($opcoes[$dados['status_sistema']])) {
+    if ($_POST['id'] !== '' && !podeAcessarSistema($pdo, (int) $_POST['id'], $usuarioLogado)) {
+        $erro = 'Você não tem permissão para alterar este sistema.';
+    } elseif (!buscarUsuario($pdo, $dados['ID_USUARIO'])) {
+        $erro = 'Escolha um cliente válido.';
+    } elseif (!isset($opcoes[$dados['status_sistema']])) {
         $erro = 'Escolha um status da lista.';
     } elseif ($local['CEP'] !== '' && strlen($local['CEP']) !== 8) {
         $erro = 'O CEP precisa ter 8 números.';
@@ -141,7 +158,7 @@ if (isset($_POST['modelo_painel'])) {
 /* Buscar sistema para edição */
 $editar = [];
 
-if (isset($_GET['editar'])) {
+if (isset($_GET['editar']) && podeAcessarSistema($pdo, (int) $_GET['editar'], $usuarioLogado)) {
     $busca = $pdo->prepare('
         SELECT f.*, e.CEP, e.estado, e.cidade, e.logradouro, e.numero
         FROM fotovoltaicos f
@@ -150,7 +167,7 @@ if (isset($_GET['editar'])) {
         WHERE f.ID_fotovoltaicos = ?
     ');
 
-    $busca->execute([$_GET['editar']]);
+    $busca->execute([(int) $_GET['editar']]);
     $editar = $busca->fetch() ?: [];
 }
 
@@ -163,8 +180,9 @@ if ($erro && isset($_POST['modelo_painel'])) {
     );
 }
 
-/* Buscar sistemas, clientes, registros e próxima manutenção */
-$sistemas = $pdo->query('
+/* Buscar sistemas, clientes, registros e próxima manutenção
+   (cliente: só os dele · equipe: todos) */
+$sqlSistemas = '
     SELECT
         f.*,
         u.nome AS cliente,
@@ -194,15 +212,21 @@ $sistemas = $pdo->query('
     FROM fotovoltaicos f
     LEFT JOIN usuarios u ON u.ID_USUARIO = f.ID_USUARIO
     LEFT JOIN enderecos e ON e.ID_ENDERECO = u.id_endereco
+' . ($escopo !== null ? ' WHERE f.ID_USUARIO = ?' : '') . '
     ORDER BY u.nome
-')->fetchAll();
+';
+$stmtSistemas = $pdo->prepare($sqlSistemas);
+$stmtSistemas->execute($escopo !== null ? [$escopo] : []);
+$sistemas = $stmtSistemas->fetchAll();
 
-$clientes = $pdo->query(
-    'SELECT ID_USUARIO, nome, TIPO FROM usuarios ORDER BY nome'
-)->fetchAll();
-
-$nome = $_SESSION['nome'] ?? 'Usuário';
-$inicial = preg_match('/./u', $nome, $letra) ? $letra[0] : '?';
+/* Lista do seletor "Cliente": a equipe vê todos; o cliente vê só a si mesmo */
+$clientes = $equipe
+    ? listarUsuarios($pdo)
+    : [[
+        'ID_USUARIO' => $idUsuario,
+        'nome' => $usuarioLogado['nome'],
+        'TIPO' => $usuarioLogado['TIPO'],
+    ]];
 ?>
 
 <!DOCTYPE html>
@@ -219,6 +243,11 @@ $inicial = preg_match('/./u', $nome, $letra) ? $letra[0] : '?';
 
     <main class="conteudo">
         <h1>Painéis</h1>
+        <p class="dica">
+            <?= $equipe
+                ? 'Você está vendo os sistemas de todos os clientes (' . h(nomeTipoUsuario($usuarioLogado['TIPO'])) . ').'
+                : 'Você está vendo apenas os sistemas da sua conta.' ?>
+        </p>
 
         <?php if ($erro): ?>
             <p class="erro-msg"><?= h($erro) ?></p>

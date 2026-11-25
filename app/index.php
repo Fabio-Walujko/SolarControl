@@ -1,11 +1,56 @@
 <?php
 require_once __DIR__ . '/init.php';
 
-if (!isset($_SESSION['usuario_logado']) || $_SESSION['usuario_logado'] !== true) {
-  header('Location: login.php');
-  exit;
+// Usuário logado (lido do banco pelo ID salvo na sessão)
+$usuarioLogado = exigirLogin($pdo);
+$equipe = ehEquipe($usuarioLogado);
+
+// Por padrão mostra os dados de quem está logado.
+// Funcionário/adm pode escolher um cliente para ver a visão geral dele.
+$donoVisao = $usuarioLogado;
+$listaUsuarios = [];
+
+if ($equipe) {
+    $listaUsuarios = listarUsuarios($pdo);
+    $idEscolhido = (int) ($_GET['cliente'] ?? 0);
+
+    if ($idEscolhido > 0 && $idEscolhido !== (int) $usuarioLogado['ID_USUARIO']) {
+        $donoVisao = buscarUsuario($pdo, $idEscolhido) ?: $usuarioLogado;
+    }
 }
 
+$visao = montarVisaoGeral($pdo, (int) $donoVisao['ID_USUARIO']);
+$vendoOutroUsuario = (int) $donoVisao['ID_USUARIO'] !== (int) $usuarioLogado['ID_USUARIO'];
+
+$mes = $visao['mes_ref'];
+$anterior = $visao['mes_anterior'];
+$status = $visao['status'];
+$totalSistemas = count($visao['sistemas']);
+$potencia = $visao['potencia'];
+
+$nomesStatus = ['Ativo' => 'Ativo', 'Manutencao' => 'Em manutenção', 'Inativo' => 'Inativo'];
+$classesStatus = ['Ativo' => 'ok', 'Manutencao' => 'meio', 'Inativo' => 'ruim'];
+
+// Texto e cor do card "Status do Sistema"
+if ($totalSistemas === 0) {
+    $statusTitulo = 'Sem sistema';
+    $statusClasse = '';
+    $statusTexto = 'Nenhum sistema fotovoltaico cadastrado para esta conta.';
+} elseif ($status['Inativo'] > 0) {
+    $statusTitulo = $status['Inativo'] === $totalSistemas ? 'Inativo' : 'Atenção';
+    $statusClasse = 'negativo';
+    $statusTexto = "{$status['Ativo']} de {$totalSistemas} sistema(s) ativo(s) · {$status['Inativo']} inativo(s).";
+} elseif ($status['Manutencao'] > 0) {
+    $statusTitulo = 'Em manutenção';
+    $statusClasse = 'atencao';
+    $statusTexto = "{$status['Ativo']} de {$totalSistemas} sistema(s) ativo(s) · {$status['Manutencao']} em manutenção.";
+} else {
+    $statusTitulo = 'Online';
+    $statusClasse = 'positivo';
+    $statusTexto = "{$status['Ativo']} de {$totalSistemas} sistema(s) ativo(s) e operando normalmente.";
+}
+
+$autossuficiencia = $visao['autossuficiencia'];
 ?>
 
 <!DOCTYPE html>
@@ -14,99 +59,243 @@ if (!isset($_SESSION['usuario_logado']) || $_SESSION['usuario_logado'] !== true)
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Projeto Integrador</title>
-  <link rel="stylesheet" href="CSS/index.css">
+  <title>Visão geral — SolarControl</title>
+  <link rel="stylesheet" href="CSS/index.css?v=<?= filemtime(__DIR__ . '/CSS/index.css') ?>">
 </head>
 
 <body>
   <?php include __DIR__ . '/menu.php'; ?>
 
   <main class="conteudo">
-    <h1>Visão geral</h1>
-    <p>Acompanhe os principais indicadores da sua instalação.</p>
+    <header class="cabecalho-visao">
+      <div>
+        <h1>Visão geral</h1>
+        <p>
+          <?php if ($vendoOutroUsuario): ?>
+            Indicadores da instalação de <strong><?= h($donoVisao['nome']) ?></strong>.
+          <?php else: ?>
+            Olá, <strong><?= h($usuarioLogado['nome']) ?></strong>! Acompanhe os indicadores da sua instalação.
+          <?php endif; ?>
+          <?php if (!empty($donoVisao['cidade'])): ?>
+            <span class="local">· <?= h($donoVisao['cidade'] . ($donoVisao['estado'] ? ' - ' . $donoVisao['estado'] : '')) ?></span>
+          <?php endif; ?>
+        </p>
+      </div>
+
+      <?php if ($equipe): ?>
+        <!-- Somente funcionário/adm: escolher de qual cliente ver os dados -->
+        <form class="seletor-cliente" method="get">
+          <label for="cliente">Ver dados de</label>
+          <select id="cliente" name="cliente" onchange="this.form.submit()">
+            <?php foreach ($listaUsuarios as $u): ?>
+              <option value="<?= (int) $u['ID_USUARIO'] ?>" <?= (int) $u['ID_USUARIO'] === (int) $donoVisao['ID_USUARIO'] ? 'selected' : '' ?>>
+                <?= h($u['nome']) ?> (<?= h(nomeTipoUsuario($u['TIPO'])) ?>)
+              </option>
+            <?php endforeach; ?>
+          </select>
+          <noscript><button type="submit">Ver</button></noscript>
+        </form>
+      <?php endif; ?>
+    </header>
 
     <section class="indicadores" aria-label="Indicadores principais">
+      <!-- 1. Geração de hoje -->
       <article class="indicador card">
         <p class="letrasCard"><span>Geração hoje</span></p>
-        <strong>19,5<small>kWh</small></strong>
-        <p>Previsto até agora: 21,7 kWh · dia inteiro: 34,0 kWh</p>
+        <strong><?= number_format($visao['hoje']['gerada'], 0, ',', '.') ?><small>kWh</small></strong>
+        <p>
+          <?php if ($visao['hoje']['lancamentos'] > 0): ?>
+            Consumo hoje: <?= formatarKwh($visao['hoje']['consumida']) ?>
+          <?php elseif ($visao['ultimo_dia']): ?>
+            Nenhum lançamento hoje · último: <?= formatarKwh((int) $visao['ultimo_dia']['gerada']) ?>
+            em <?= formatarData($visao['ultimo_dia']['data_registro']) ?>
+          <?php else: ?>
+            Nenhum lançamento de energia ainda.
+          <?php endif; ?>
+        </p>
       </article>
 
+      <!-- 2. Geração no mês de referência -->
       <article class="indicador card">
-        <p class="letrasCard"><span>Geração no mês</span></p>
-        <strong>366<small>kWh</small></strong>
-        <p><span class="negativo">-9,1%</span> em relação a 1–13 de outubro</p>
+        <p class="letrasCard"><span>Geração em <?= h($mes['rotulo']) ?></span></p>
+        <strong><?= number_format($mes['gerada'], 0, ',', '.') ?><small>kWh</small></strong>
+        <p>
+          <?php if ($visao['variacao'] !== null): ?>
+            <span class="<?= $visao['variacao'] >= 0 ? 'positivo' : 'negativo' ?>">
+              <?= ($visao['variacao'] >= 0 ? '+' : '') . number_format($visao['variacao'], 1, ',', '.') ?>%
+            </span>
+            em relação a <?= h($anterior['rotulo']) ?>
+            <?= $mes['eh_atual'] ? '(mesmo período)' : '' ?>
+          <?php else: ?>
+            Sem geração em <?= h($anterior['rotulo']) ?> para comparar.
+          <?php endif; ?>
+          <?php if (!$mes['eh_atual']): ?>
+            <br><small class="nota">Mês atual sem lançamentos; mostrando o último mês registrado.</small>
+          <?php endif; ?>
+        </p>
       </article>
 
+      <!-- 3. Economia = geração × tarifa -->
       <article class="indicador card">
-        <p class="letrasCard"><span>Economia no mês</span></p>
-        <strong>R$ 336,71</strong>
-        <p class="prescricao"><span>366 kWh × R$ 0,92 · consumo do mês: 283 kWh</span></p>
+        <p class="letrasCard"><span>Economia em <?= h($mes['rotulo']) ?></span></p>
+        <strong><?= formatarReais($visao['economia']) ?></strong>
+        <p class="prescricao">
+          <span>
+            <?= formatarKwh($mes['gerada']) ?> × <?= formatarReais(TARIFA_KWH) ?>
+            · consumo do mês: <?= formatarKwh($mes['consumida']) ?>
+          </span>
+        </p>
       </article>
 
+      <!-- 4. Autossuficiência = geração ÷ consumo -->
       <article class="indicador card">
-        <p class="letrasCard"><span>Desempenho</span></p>
-        <strong>89,9<small>%</small></strong>
-        <p><span class="negativo">−8,2 p.p.</span> desde a limpeza de 03/10</p>
-        <div class="progresso" aria-hidden="true"><i style="width: 89.9%"></i></div>
+        <p class="letrasCard"><span>Autossuficiência</span></p>
+        <?php if ($autossuficiencia !== null): ?>
+          <strong><?= number_format($autossuficiencia, 1, ',', '.') ?><small>%</small></strong>
+          <p>
+            A geração cobriu
+            <span class="<?= $autossuficiencia >= 100 ? 'positivo' : 'negativo' ?>"><?= number_format($autossuficiencia, 1, ',', '.') ?>%</span>
+            do consumo em <?= h($mes['rotulo']) ?>.
+          </p>
+          <div class="progresso" aria-hidden="true"><i style="width: <?= min(100, round($autossuficiencia, 1)) ?>%"></i></div>
+        <?php else: ?>
+          <strong>—</strong>
+          <p>Sem consumo registrado em <?= h($mes['rotulo']) ?>.</p>
+        <?php endif; ?>
       </article>
     </section>
-
 
     <section class="resumo-simples" aria-label="Informações gerais do sistema">
       <article class="indicador card card-grande">
         <p class="letrasCard"><span>Status do Sistema</span></p>
-        <strong class="positivo">Online</strong>
-        <p>Inversor sincronizado e operando normalmente com a rede.</p>
+        <strong class="<?= $statusClasse ?>"><?= h($statusTitulo) ?></strong>
+        <p><?= h($statusTexto) ?></p>
       </article>
 
       <article class="indicador card card-grande">
         <p class="letrasCard"><span>Última Manutenção</span></p>
-        <strong>03/10/2026</strong>
-        <p>Próxima limpeza preventiva recomendada para 03/01/2027.</p>
+        <strong><?= $visao['ultima_manutencao'] ? formatarData($visao['ultima_manutencao']) : 'Sem registro' ?></strong>
+        <p>
+          <?php if ($visao['qualidade']): ?>
+            Qualidade avaliada: <?= h($visao['qualidade']) ?> ·
+          <?php endif; ?>
+          <?php if ($visao['proxima_manutencao']): ?>
+            Próxima manutenção: <?= formatarData($visao['proxima_manutencao']) ?>.
+          <?php else: ?>
+            Nenhuma manutenção prevista.
+          <?php endif; ?>
+        </p>
       </article>
 
       <article class="indicador card card-grande">
         <p class="letrasCard"><span>Potência Instalada</span></p>
-        <strong>5,4<small>kWp</small></strong>
-        <p>12 módulos fotovoltaicos ativos · Tarifa atual: R$ 0,92/kWh.</p>
+        <strong>
+          <?= $potencia['kwp'] > 0 ? number_format($potencia['kwp'], 2, ',', '.') : '—' ?><small>kWp</small>
+        </strong>
+        <p>
+          <?= (int) $potencia['modulos'] ?> módulo(s) em <?= $totalSistemas ?> sistema(s)
+          · Tarifa atual: <?= formatarReais(TARIFA_KWH) ?>/kWh.
+          <?php if ($potencia['sem_potencia'] > 0): ?>
+            <br><small class="nota"><?= (int) $potencia['sem_potencia'] ?> modelo(s) sem potência (W) no nome.</small>
+          <?php endif; ?>
+        </p>
       </article>
 
       <article class="indicador card card-grande">
         <p class="letrasCard"><span>Geração nos últimos meses (kWh)</span></p>
         <div class="mini-grafico" role="img" aria-label="Gráfico de geração dos últimos 4 meses">
-          <div class="coluna">
-            <small>310</small>
-            <div class="barra-box">
-              <div class="barra" style="height: 75%;"></div>
+          <?php foreach ($visao['grafico'] as $barra): ?>
+            <div class="coluna">
+              <small><?= number_format($barra['gerada'], 0, ',', '.') ?></small>
+              <div class="barra-box">
+                <div class="barra <?= $barra['ativo'] ? 'ativa' : '' ?>" style="height: <?= $barra['altura'] ?>%;"></div>
+              </div>
+              <span><?= h($barra['rotulo']) ?></span>
             </div>
-            <span>Jul</span>
-          </div>
-          <div class="coluna">
-            <small>345</small>
-            <div class="barra-box">
-              <div class="barra" style="height: 85%;"></div>
-            </div>
-            <span>Ago</span>
-          </div>
-          <div class="coluna">
-            <small>390</small>
-            <div class="barra-box">
-              <div class="barra" style="height: 95%;"></div>
-            </div>
-            <span>Set</span>
-          </div>
-          <div class="coluna">
-            <small>366</small>
-            <div class="barra-box">
-              <div class="barra ativa" style="height: 88%;"></div>
-            </div>
-            <span>Out</span>
-          </div>
+          <?php endforeach; ?>
         </div>
       </article>
     </section>
 
+    <!-- Tabela: sistemas do usuário -->
+    <section class="card bloco-tabela" aria-labelledby="titulo-sistemas">
+      <div class="bloco-titulo">
+        <h2 id="titulo-sistemas"><?= $vendoOutroUsuario ? 'Sistemas do cliente' : 'Meus sistemas' ?></h2>
+        <a href="paineis.php">Gerenciar</a>
+      </div>
+
+      <?php if (!$visao['sistemas']): ?>
+        <p class="vazio">Nenhum sistema cadastrado. Cadastre o primeiro em <a href="monitoramento.php">Monitoramento</a>.</p>
+      <?php else: ?>
+        <div class="tabela-wrapper">
+          <table class="tabela-usuario">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Modelo</th>
+                <th>Instalação</th>
+                <th>Registros</th>
+                <th>Último registro</th>
+                <th>Próx. manutenção</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <?php foreach ($visao['sistemas'] as $s): ?>
+                <?php $st = normalizarStatus($s['status_sistema']); ?>
+                <tr>
+                  <td>#<?= (int) $s['ID_fotovoltaicos'] ?></td>
+                  <td><?= h($s['modelo_painel']) ?></td>
+                  <td><?= formatarData($s['data_intalacao']) ?></td>
+                  <td><?= (int) $s['total_registros'] ?></td>
+                  <td><?= formatarData($s['ultimo_registro']) ?></td>
+                  <td><?= formatarData($s['proxima_agendada'] ?: $s['previsao_manutencao']) ?></td>
+                  <td><span class="status <?= $classesStatus[$st] ?? '' ?>"><?= h($nomesStatus[$st] ?? $s['status_sistema']) ?></span></td>
+                </tr>
+              <?php endforeach; ?>
+            </tbody>
+          </table>
+        </div>
+      <?php endif; ?>
+    </section>
+
+    <!-- Tabela: últimos lançamentos de energia -->
+    <section class="card bloco-tabela" aria-labelledby="titulo-registros">
+      <div class="bloco-titulo">
+        <h2 id="titulo-registros">Últimos lançamentos</h2>
+        <a href="monitoramento.php">Ver histórico</a>
+      </div>
+
+      <?php if (!$visao['registros']): ?>
+        <p class="vazio">Nenhum lançamento de geração e consumo ainda.</p>
+      <?php else: ?>
+        <div class="tabela-wrapper">
+          <table class="tabela-usuario">
+            <thead>
+              <tr>
+                <th>Data</th>
+                <th>Sistema</th>
+                <th>Gerada</th>
+                <th>Consumida</th>
+                <th>Saldo</th>
+              </tr>
+            </thead>
+            <tbody>
+              <?php foreach ($visao['registros'] as $r): ?>
+                <?php $saldo = (int) $r['energia_gerada'] - (int) $r['energia_consumida']; ?>
+                <tr>
+                  <td><?= formatarData($r['data_registro']) ?></td>
+                  <td>#<?= (int) $r['ID_fotovoltaicos'] ?> · <?= h($r['modelo_painel']) ?></td>
+                  <td><?= formatarKwh((int) $r['energia_gerada']) ?></td>
+                  <td><?= formatarKwh((int) $r['energia_consumida']) ?></td>
+                  <td class="<?= $saldo >= 0 ? 'positivo' : 'negativo' ?>"><?= ($saldo >= 0 ? '+' : '') . formatarKwh($saldo) ?></td>
+                </tr>
+              <?php endforeach; ?>
+            </tbody>
+          </table>
+        </div>
+      <?php endif; ?>
+    </section>
   </main>
 
 </body>

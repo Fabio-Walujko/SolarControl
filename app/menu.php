@@ -1,6 +1,22 @@
 <?php
 // Pega o nome do arquivo atual (ex: index.php, paineis.php, etc.)
 $paginaAtual = basename($_SERVER['PHP_SELF']);
+
+// $usuarioLogado é definido pela página com exigirLogin($pdo)
+$usuarioMenu = $usuarioLogado ?? [
+    'nome' => $_SESSION['nome'] ?? 'Usuário',
+    'TIPO' => $_SESSION['TIPO'] ?? 'cliente',
+];
+
+// Quantidade de alertas pendentes do usuário (equipe vê de todos os clientes)
+$alertasPendentesMenu = 0;
+if (isset($usuarioLogado, $pdo)) {
+    try {
+        $alertasPendentesMenu = contarAlertasPendentes($pdo, escopoUsuario($usuarioLogado));
+    } catch (Throwable $e) {
+        error_log('Erro ao contar alertas: ' . $e->getMessage());
+    }
+}
 ?>
 
 <aside class="menu-lateral">
@@ -14,7 +30,12 @@ $paginaAtual = basename($_SERVER['PHP_SELF']);
     <a href="index.php" <?php if ($paginaAtual == 'index.php') echo 'aria-current="page"'; ?>>Visão geral</a>
     <a href="paineis.php" <?php if ($paginaAtual == 'paineis.php') echo 'aria-current="page"'; ?>>Painéis</a>
     <a href="monitoramento.php" <?php if ($paginaAtual == 'monitoramento.php') echo 'aria-current="page"'; ?>>Monitoramento</a>
-    <a href="alerts.php" <?php if ($paginaAtual == 'alerts.php') echo 'aria-current="page"'; ?>>Alertas</a>
+    <a href="alerts.php" <?php if ($paginaAtual == 'alerts.php') echo 'aria-current="page"'; ?>>
+      Alertas
+      <?php if ($alertasPendentesMenu > 0): ?>
+        <span class="contador" aria-label="<?= (int) $alertasPendentesMenu ?> alertas pendentes"><?= (int) $alertasPendentesMenu ?></span>
+      <?php endif; ?>
+    </a>
     <a href="perguntas.php" <?php if ($paginaAtual == 'perguntas.php') echo 'aria-current="page"'; ?>>FAQ</a>
   </nav>
 
@@ -25,11 +46,11 @@ $paginaAtual = basename($_SERVER['PHP_SELF']);
     </nav>
 
     <div class="usuario">
-      <span class="avatar">C</span>
+      <span class="avatar"><?= h(inicialNome((string) $usuarioMenu['nome'])) ?></span>
 
       <div class="dados-usuario">
-        <strong><?php echo $_SESSION['nome'] ?? 'Usuário'; ?></strong>
-        <small>Conta pessoal</small>
+        <strong><?= h($usuarioMenu['nome']) ?></strong>
+        <small><?= h(nomeTipoUsuario($usuarioMenu['TIPO'] ?? 'cliente')) ?></small>
       </div>
 
       <a class="sair" href="encerrarSessao.php">Sair</a>
