@@ -33,8 +33,7 @@ $usuarioInicial = substr($usuarioNome, 0, 1);
       <nav class="menu-links" aria-label="Navegação da conta">
         <p class="titulo-menu">GESTÃO</p>
 
-        <a href="reports.php" <?= $paginaAtual == 'reports.php' ? 'aria-current="page"' : '' ?>>Relatórios</a>
-        <a href="profile.php" <?= $paginaAtual == 'profile.php' ? 'aria-current="page"' : '' ?>>Meu perfil</a>
+
         <a href="config.php" <?= $paginaAtual == 'config.php' ? 'aria-current="page"' : '' ?>>Configurações</a>
       </nav>
 
