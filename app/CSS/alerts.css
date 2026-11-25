@@ -72,12 +72,7 @@ body {
     font-weight: bold;
 }
 
-.menu-links a:focus-visible,
-.marca:focus-visible,
-.sair:focus-visible {
-    outline: 2px solid #a6d7b0;
-    outline-offset: 2px;
-}
+
 
 .contador {
     min-width: 20px;
@@ -117,7 +112,7 @@ body {
     flex: 1;
 }
 
-.dados-usuario strong,
+.dados-usuario,
 .dados-usuario small {
     display: block;
 }
@@ -152,6 +147,7 @@ body {
     margin-bottom: 8px;
     color: #1d3928;
     font-size: 30px;
+    pointer-events: none;
 }
 
 .textprincipal p {
@@ -182,7 +178,7 @@ body {
     transform: translateY(-2px);
 }
 
-.cartoes {
+.cartoes{
     margin: 24px 0;
     padding: 20px 22px;
     border: 1px solid #e0e7e1;
@@ -284,13 +280,6 @@ body {
     transition: 0.2s;
 }
 
-.formularioemcima input:focus,
-.formularioemcima textarea:focus,
-.formularioemcima select:focus,
-.formularioabaixo textarea:focus {
-    border-color: #477b55;
-    box-shadow: 0 0 0 3px rgba(71, 123, 85, 0.12);
-}
 
 .formularioemcima textarea,
 .formularioabaixo textarea {
@@ -324,6 +313,8 @@ body {
     transform: translateY(-2px);
 }
 
+.recado{
+}
 
 
 

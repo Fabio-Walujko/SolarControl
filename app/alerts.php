@@ -13,7 +13,7 @@ if (!isset($_SESSION['usuario_logado']) || $_SESSION['usuario_logado'] !== true)
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Alertas | Solar Control</title>
+  <title>Alertas  Solar Control</title>
   <link rel="stylesheet" href="CSS/alerts.css">
 </head>
 
@@ -46,26 +46,7 @@ if (!isset($_SESSION['usuario_logado']) || $_SESSION['usuario_logado'] !== true)
 
     <main>
 
-      <details class="formularioabaixo" class="acima">
-        <summary class="verdetalhesemcima">+ Criar alerta manual</summary>
-
-        <form class="formularioemcima">
-          <label for="titulo">Título do alerta:</label>
-          <input type="text" id="titulo" name="titulo" required>
-
-          <label for="descricao">Descrição:</label>
-          <textarea id="descricao" name="descricao" required></textarea>
-
-          <label for="prioridade">Prioridade:</label>
-          <select id="prioridade" name="prioridade">
-            <option value="alta">Alta</option>
-            <option value="media">Média</option>
-            <option value="baixa">Baixa</option>
-          </select>
-
-          <button class="botao" type="submit">Criar alerta</button>
-        </form>
-      </details class="formularioabaixo">
+    
 
       <section>
 
@@ -86,7 +67,7 @@ if (!isset($_SESSION['usuario_logado']) || $_SESSION['usuario_logado'] !== true)
           </small>
 
           <p>
-            💬 Liguei para a cliente, ela vai confirmar o melhor dia para a visita.
+             Liguei para a cliente, ela vai confirmar o melhor dia para a visita.
           </p>
 
           <details class="formularioabaixo">
@@ -96,10 +77,11 @@ if (!isset($_SESSION['usuario_logado']) || $_SESSION['usuario_logado'] !== true)
             <p>Tipo: Manutenção preventiva</p>
             <p>Data prevista: 10/11/2026</p>
 
-            <label for="recado1">Deixe um recado:</label>
-            <textarea id="recado1"></textarea>
+            <label class="recado" for="recado1">Deixe um recado:</label>
             <br>
-            <button class="botao" type="button">Marcar como resolvido</button>
+            <textarea class="quadroanotacao" id="recado1"></textarea>
+            <br>
+       
           </details class="formularioabaixo">
 
         </article>
@@ -121,7 +103,7 @@ if (!isset($_SESSION['usuario_logado']) || $_SESSION['usuario_logado'] !== true)
           </small>
 
           <p>
-            💬 Alerta criado automaticamente pelo SolarControl.
+             Alerta criado automaticamente pelo SolarControl.
           </p>
 
           <details class="formularioabaixo">
@@ -131,10 +113,10 @@ if (!isset($_SESSION['usuario_logado']) || $_SESSION['usuario_logado'] !== true)
             <p>Tipo: Sistema parado</p>
             <p>Status: Inativo</p>
 
-            <label for="recado2">Deixe um recado:</label>
-            <textarea id="recado2"></textarea>
+            <label class="recado" for="recado2">Deixe um recado:</label>
+            <br>
+            <textarea class="quadroanotacao" id="recado2"></textarea>
 <br>
-            <button class="botaobaixo" type="button">Marcar como resolvido</button>
           </details class="formularioabaixo">
 
         </article>
@@ -156,7 +138,7 @@ if (!isset($_SESSION['usuario_logado']) || $_SESSION['usuario_logado'] !== true)
           </small>
 
           <p>
-            💬 A cliente contou que tem uma obra ao lado soltando
+             A cliente contou que tem uma obra ao lado soltando
             muita poeira. Provável sujeira nos módulos.
           </p>
 
@@ -167,10 +149,11 @@ if (!isset($_SESSION['usuario_logado']) || $_SESSION['usuario_logado'] !== true)
             <p>Geração esperada: 100%</p>
             <p>Geração atual: 63%</p>
 
-            <label for="recado3">Deixe um recado:</label>
-            <textarea id="recado3"></textarea>
+            <label class="recado" for="recado3">Deixe um recado:</label>
+            <br>
+            <textarea class="quadroanotacao" id="recado3"></textarea>
 <br>
-            <button class="botao" type="button">Marcar como resolvido</button>
+       
           </details class="formularioabaixo">
 
         </article>
@@ -193,7 +176,7 @@ if (!isset($_SESSION['usuario_logado']) || $_SESSION['usuario_logado'] !== true)
           </small>
 
           <p>
-            💬 Status: Aberto → Em andamento · Responsável: Carlos Souza
+             Status: Aberto → Em andamento · Responsável: Carlos Souza
             · Prazo: 25/11/2026 · Inversor com falha no MPPT 2.
           </p>
 
@@ -204,10 +187,11 @@ if (!isset($_SESSION['usuario_logado']) || $_SESSION['usuario_logado'] !== true)
             <p>Responsável: Carlos Souza</p>
             <p>Prazo: 25/11/2026</p>
 
-            <label for="recado4">Deixe um recado:</label>
-            <textarea id="recado4"></textarea>
+            <label class="recado" for="recado4">Deixe um recado:</label>
+            <br>
+            <textarea class="quadroanotacao" id="recado4"></textarea>
 <br>
-            <button class="botao" type="button">Marcar como resolvido</button>
+       
           </details class="formularioabaixo">
 
         </article>
@@ -227,15 +211,16 @@ if (!isset($_SESSION['usuario_logado']) || $_SESSION['usuario_logado'] !== true)
             Energia Verde · Comunicação interrompida
           </small>
 
-          <p>💬 Aguardando verificação da conexão.</p>
+          <p> Aguardando verificação da conexão.</p>
 
           <details class="formularioabaixo">
             <summary class="verdetalhes">Ver detalhes</summary>
 
-            <label for="recado5">Deixe um recado:</label>
-            <textarea id="recado5"></textarea>
+            <label class="recado" for="recado5">Deixe um recado:</label>
+            <br>
+            <textarea class="quadroanotacao" id="recado5"></textarea>
 <br>
-            <button class="botao" type="button">Marcar como resolvido</button>
+       
           </details class="formularioabaixo">
 
         </article>
