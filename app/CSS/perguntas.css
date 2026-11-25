@@ -139,23 +139,7 @@ body {
   padding: 0 0 80px;
 }
 
-.topo {
-  width: 100%;
-  height: 350px;
-  overflow: hidden;
-  position: relative;
-  display: block;
-  margin-bottom: 40px;
-  box-shadow: 0 0 100px gray;
-}
 
-.topo img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center;
-  display: block;
-}
 
 .conteudo-principal h1,
 .conteudo-principal h2,
@@ -165,25 +149,20 @@ body {
 }
 
 .conteudo-principal h1 {
-  background: linear-gradient(90deg, #3b883f, #46a84b, #66bb6a);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  color: transparent;
+  color: #123b32;
+  font-family: Arial, sans-serif;
   font-size: 40px;
-  font-weight: 400;
+  font-weight: 700;
   margin-top: 0;
   margin-bottom: 10px;
   letter-spacing: -0.5px;
 }
 
 .conteudo-principal h2 {
-  background: linear-gradient(90deg, #3b883f, #46a84b, #66bb6a);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: #123b32;
+  font-family: Arial, sans-serif;
   font-size: 23px;
-  font-weight: 400;
+  font-weight: 600;
   margin-bottom: 40px;
 }
 
@@ -197,17 +176,14 @@ body {
 }
 
 .card-categoria h3 {
-  background: linear-gradient(90deg, #3b883f, #46a84b, #66bb6a);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: #123b32;
+  font-family: Arial, sans-serif;
   font-size: 30px;
-  font-weight: 600;
+  font-weight: 700;
   margin-bottom: 15px;
   display: block;
   padding-bottom: 8px;
-  border-bottom: 3px solid;
-  border-image: linear-gradient(90deg, #3b883f, #46a84b, #66bb6a) 1;
+  border-bottom: 3px solid #123b32;
 }
 
 .card-categoria details {
