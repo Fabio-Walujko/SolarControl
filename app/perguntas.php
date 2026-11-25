@@ -10,7 +10,7 @@ $usuarioInicial = substr($usuarioNome, 0, 1);
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Perguntas frequentes — Solar Control</title>
-  <link rel="stylesheet" href="../css/perguntas.css">
+  <link rel="stylesheet" href="css/perguntas.css">
 </head>
 
 <body>
