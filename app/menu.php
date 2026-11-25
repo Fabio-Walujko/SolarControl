@@ -12,7 +12,8 @@ $usuarioMenu = $usuarioLogado ?? [
 $alertasPendentesMenu = 0;
 if (isset($usuarioLogado, $pdo)) {
     try {
-        $alertasPendentesMenu = contarAlertasPendentes($pdo, escopoUsuario($usuarioLogado));
+        // Automáticos + alertas criados por clientes/equipe
+        $alertasPendentesMenu = contarAlertasMenu($pdo, $usuarioLogado);
     } catch (Throwable $e) {
         error_log('Erro ao contar alertas: ' . $e->getMessage());
     }
@@ -32,6 +33,9 @@ if (isset($usuarioLogado, $pdo)) {
     <a href="monitoramento.php" <?php if ($paginaAtual == 'monitoramento.php') echo 'aria-current="page"'; ?>>Monitoramento</a>
     <a href="alerts.php" <?php if ($paginaAtual == 'alerts.php') echo 'aria-current="page"'; ?>>
       Alertas
+      <?php if ($alertasPendentesMenu > 0): ?>
+        <span class="contador" aria-label="<?= (int) $alertasPendentesMenu ?> alertas pendentes"><?= (int) $alertasPendentesMenu ?></span>
+      <?php endif; ?>
     </a>
     <a href="perguntas.php" <?php if ($paginaAtual == 'perguntas.php') echo 'aria-current="page"'; ?>>FAQ</a>
   </nav>

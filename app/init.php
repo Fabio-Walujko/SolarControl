@@ -69,6 +69,7 @@ $arquivosNecessarios = [
     'banco/database.php',
     'banco/crud.php',
     'banco/consultas.php',
+    'banco/alertas.php',
     'sessao.php',
 ];
 
