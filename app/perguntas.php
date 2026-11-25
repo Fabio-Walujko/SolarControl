@@ -52,9 +52,7 @@ $usuarioInicial = substr($usuarioNome, 0, 1);
   </aside>
 
   <main class="conteudo-principal">
-    <div class="topo">
-      <img src="imagens/topo.jpg" alt="Banner Solar Control">
-    </div>
+    <br><br>
 
     <h1>Perguntas frequentes</h1>
     <h2>Encontre respostas para as suas dúvidas!</h2>
@@ -107,6 +105,7 @@ $usuarioInicial = substr($usuarioNome, 0, 1);
         </div>
       </details>
     </div>
+    <br>
 
     <div class="card-categoria">
       <h3>Instalação e Requisitos</h3>
@@ -145,6 +144,7 @@ $usuarioInicial = substr($usuarioNome, 0, 1);
         </div>
       </details>
     </div>
+    <br>
 
     <div class="card-categoria">
       <h3>Economia e Financeiro</h3>
@@ -192,6 +192,7 @@ $usuarioInicial = substr($usuarioNome, 0, 1);
         </div>
       </details>
     </div>
+    <br>
 
     <div class="card-categoria">
       <h3>Manutenção e Garantia</h3>
