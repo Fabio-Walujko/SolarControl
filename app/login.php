@@ -7,7 +7,6 @@ require_once __DIR__ . '/init.php';
 require_once __DIR__ . '/banco/database.php';
 require_once __DIR__ . '/banco/crud.php';
 
-
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $_POST['email'];
     $senha = $_POST['senha'];
@@ -50,12 +49,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <body>
     <main class="conteudo-principal">
 
-
         <nav class="navegacao">
             <div class="links-navegacao">
 
                 <button class="botao-navegacao">
                     <a href="#login">Login</a>
+                </button>
+
+                <button class="botao-navegacao">
+                    <a href="#Equipe">Equipe</a>
                 </button>
 
                 <button class="botao-navegacao">
@@ -67,17 +69,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </button>
 
                 <button class="botao-navegacao">
-                    <a href="#Equipe">Equipe</a>
-                </button>
-
-                <button class="botao-navegacao">
                     <a href="#Objetivos">Objetivos</a>
                 </button>
 
             </div>
         </nav>
 
-
+        <!-- 1. LOGIN -->
         <section class="secao-inicial" id="login">
 
             <div class="texto-introducao">
@@ -98,7 +96,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             <div class="painel-login">
                 <div class="logo">SolarControl</div>
-
 
                 <h2>Entrar</h2>
 
@@ -132,55 +129,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         </section>
 
-        <section class="secao-sobre" id="Sobre">
-            <div class="textos-secao-sobre">
-                <div class="textodefundo">
-                    <h1>SolarControl</h1>
-                </div>
-                <h1 class="titulo-secao">
-                    O que é a<span class="destaque-verde"> SolarControl?</span>
-                    <hr class="divisao">
-                </h1>
-
-                <div class="digitando">
-                    Mais controle para<br>
-                    um <span class="destaque-verde">futuro sustentável.</span>
-                </div>
-                <hr class="divisao2">
-                </h2>
-                <p>
-                    O Solar Control reúne as informações mais importantes do seu sistema fotovoltaico<br> em uma
-                    experiência simples e intuitiva. Acompanhe a geração, entenda<br> o consumo e veja como sua energia
-                    está performando.
-                </p>
-            </div>
-            <div class="secao-sobre-img">
-                <img src="imagens/painelsolar.png" alt="Painel Solar">
-            </div>
-        </section>
-
-
-        <section class="secao-destaque" id="Preferencia">
-            <div class="mae-secao-destaque">
-                <div class="img-secao-destaque">
-                    <img src="imagens/porqueasolar.png" alt="Imagem teste">
-                    <hr class="divisao3">
-                    <h1 class="titulo-abaixo">Transformamos dados em <span class="branco">decisões inteligentes</span>
-                    </h1>
-                    <p class="descricao-imagem">
-                        ajudando você a aproveitar melhor sua energia solar.
-                    </p>
-                </div>
-                <div class="texto-secao-destaque-titulo">
-                    <h1 class="verdedestaqueforte">Clean,</h1>
-                    <h1 class="verdedestaque">Energy,</h1>
-                    <h1>Smart &</h1>
-                    <h1>Saving</h1>
-                </div>
-            </div>
-        </section>
-
-
+        <!-- 2. NOSSA EQUIPE (agora logo depois do login) -->
         <section class="equipe" id="Equipe">
 
             <div class="titulo-container">
@@ -216,7 +165,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <h3>Henrique Palu</h3>
                     <p>Engenheiro de dados</p>
                 </div>
-                
+
                 <div class="card-equipe">
                     <img src="imagens/henry.png" alt="Integrante da equipe">
                     <h3>Henry</h3>
@@ -226,10 +175,56 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         </section>
 
+        <!-- 3. O QUE É A SOLARCONTROL -->
+        <section class="secao-sobre" id="Sobre">
+            <div class="textos-secao-sobre">
+                <div class="textodefundo">
+                    <h1>SolarControl</h1>
+                </div>
+                <h1 class="titulo-secao">
+                    O que é a<span class="destaque-verde"> SolarControl?</span>
+                    <hr class="divisao">
+                </h1>
 
+                <div class="digitando">
+                    Mais controle para<br>
+                    um <span class="destaque-verde">futuro sustentável.</span>
+                </div>
+                <hr class="divisao2">
+                </h2>
+                <p>
+                    O Solar Control reúne as informações mais importantes do seu sistema fotovoltaico<br> em uma
+                    experiência simples e intuitiva. Acompanhe a geração, entenda<br> o consumo e veja como sua energia
+                    está performando.
+                </p>
+            </div>
+            <div class="secao-sobre-img">
+                <img src="imagens/painelsolar.png" alt="Painel Solar">
+            </div>
+        </section>
 
+        <!-- 4. PREFERÊNCIA -->
+        <section class="secao-destaque" id="Preferencia">
+            <div class="mae-secao-destaque">
+                <div class="img-secao-destaque">
+                    <img src="imagens/porqueasolar.png" alt="Imagem teste">
+                    <hr class="divisao3">
+                    <h1 class="titulo-abaixo">Transformamos dados em <span class="branco">decisões inteligentes</span>
+                    </h1>
+                    <p class="descricao-imagem">
+                        ajudando você a aproveitar melhor sua energia solar.
+                    </p>
+                </div>
+                <div class="texto-secao-destaque-titulo">
+                    <h1 class="verdedestaqueforte">Clean,</h1>
+                    <h1 class="verdedestaque">Energy,</h1>
+                    <h1>Smart &</h1>
+                    <h1>Saving</h1>
+                </div>
+            </div>
+        </section>
 
-
+        <!-- 5. OBJETIVOS -->
         <section class="secao-objetivos" id="Objetivos">
 
             <h1 class="titulo-secao">
@@ -277,11 +272,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             </div>
 
-
         </section>
 
         <footer class="rodape">
-
 
             <div class="rodape-marca">
                 <span class="destaque-verde">SolarControl</span>
@@ -290,7 +283,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
 
         </footer>
-
 
         <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>

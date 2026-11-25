@@ -232,18 +232,7 @@ $usuarioInicial = substr($usuarioNome, 0, 1);
     </div>
   </main>
 
-  <footer class="rodape">
-    <div class="rodape-marca">
-      <span class="rodape-nome">SolarControl</span>
-      <span class="rodape-copy">© <?= date('Y') ?> by Solar Control</span>
-    </div>
-
-    <div class="rodape-creditos">
-      <span>© Copyright <?= date('Y') ?></span>
-      <span>|</span>
-      <span>Desenvolvido por: <strong>Solar Control</strong></span>
-    </div>
-  </footer>
+  
 
 </body>
 </html>
