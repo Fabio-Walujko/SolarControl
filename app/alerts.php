@@ -28,43 +28,8 @@ if (!isset($_SESSION['usuario_logado']) || $_SESSION['usuario_logado'] !== true)
       <p>Clique em um alerta para ver os detalhes, mudar o status e deixar recados.</p>
     </header>
 
-    <nav class="botoes">
-
-      <button type="button">
-        Pendentes <span>5</span>
-      </button>
-
-      <button type="button">
-        Resolvidos <span>2</span>
-      </button>
-
-      <button type="button">
-        Todos <span>7</span>
-      </button>
-
-    </nav>
-
     <main>
 
-      <details class="formularioabaixo" class="acima">
-        <summary class="verdetalhesemcima">+ Criar alerta manual</summary>
-
-        <form class="formularioemcima">
-          <label for="titulo">Título do alerta:</label>
-          <input type="text" id="titulo" name="titulo" required>
-
-          <label for="descricao">Descrição:</label>
-          <textarea id="descricao" name="descricao" required></textarea>
-
-          <label for="prioridade">Prioridade:</label>
-          <select id="prioridade" name="prioridade">
-            <option value="alta">Alta</option>
-            <option value="media">Média</option>
-            <option value="baixa">Baixa</option>
-          </select>
-
-          <button class="botao" type="submit">Criar alerta</button>
-        </form>
       </details class="formularioabaixo">
 
       <section>
@@ -96,10 +61,8 @@ if (!isset($_SESSION['usuario_logado']) || $_SESSION['usuario_logado'] !== true)
             <p>Tipo: Manutenção preventiva</p>
             <p>Data prevista: 10/11/2026</p>
 
-            <label for="recado1">Deixe um recado:</label>
-            <textarea id="recado1"></textarea>
+
             <br>
-            <button class="botao" type="button">Marcar como resolvido</button>
           </details class="formularioabaixo">
 
         </article>
@@ -131,10 +94,8 @@ if (!isset($_SESSION['usuario_logado']) || $_SESSION['usuario_logado'] !== true)
             <p>Tipo: Sistema parado</p>
             <p>Status: Inativo</p>
 
-            <label for="recado2">Deixe um recado:</label>
-            <textarea id="recado2"></textarea>
+
 <br>
-            <button class="botaobaixo" type="button">Marcar como resolvido</button>
           </details class="formularioabaixo">
 
         </article>
@@ -167,10 +128,7 @@ if (!isset($_SESSION['usuario_logado']) || $_SESSION['usuario_logado'] !== true)
             <p>Geração esperada: 100%</p>
             <p>Geração atual: 63%</p>
 
-            <label for="recado3">Deixe um recado:</label>
-            <textarea id="recado3"></textarea>
 <br>
-            <button class="botao" type="button">Marcar como resolvido</button>
           </details class="formularioabaixo">
 
         </article>
@@ -204,10 +162,8 @@ if (!isset($_SESSION['usuario_logado']) || $_SESSION['usuario_logado'] !== true)
             <p>Responsável: Carlos Souza</p>
             <p>Prazo: 25/11/2026</p>
 
-            <label for="recado4">Deixe um recado:</label>
-            <textarea id="recado4"></textarea>
+
 <br>
-            <button class="botao" type="button">Marcar como resolvido</button>
           </details class="formularioabaixo">
 
         </article>
@@ -232,10 +188,8 @@ if (!isset($_SESSION['usuario_logado']) || $_SESSION['usuario_logado'] !== true)
           <details class="formularioabaixo">
             <summary class="verdetalhes">Ver detalhes</summary>
 
-            <label for="recado5">Deixe um recado:</label>
-            <textarea id="recado5"></textarea>
+
 <br>
-            <button class="botao" type="button">Marcar como resolvido</button>
           </details class="formularioabaixo">
 
         </article>
