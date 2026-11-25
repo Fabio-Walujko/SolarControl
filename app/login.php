@@ -194,33 +194,33 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <div class="cards-equipe">
 
                 <div class="card-equipe">
-                    <img src="imagens/" alt="Integrante da equipe">
-                    <h3>Nome do integrante</h3>
-                    <p>Desenvolvedor</p>
+                    <img src="imagens/igor.png" alt="Integrante da equipe">
+                    <h3>Igor Fazani</h3>
+                    <p>Desenvolvedor Front-end</p>
                 </div>
 
                 <div class="card-equipe">
-                    <img src="imagens/" alt="Integrante da equipe">
-                    <h3>Nome do integrante</h3>
-                    <p>Designer</p>
+                    <img src="imagens/gustavo.png" alt="Integrante da equipe">
+                    <h3>Gustavo Britto</h3>
+                    <p>Desenvolvedor Front-end</p>
                 </div>
 
                 <div class="card-equipe">
-                    <img src="imagens/" alt="Integrante da equipe">
-                    <h3>Nome do integrante</h3>
-                    <p>Analista</p>
+                    <img src="imagens/fabio.png" alt="Integrante da equipe">
+                    <h3>Fabio walujko</h3>
+                    <p>Gerente do Projeto</p>
                 </div>
 
                 <div class="card-equipe">
-                    <img src="imagens/" alt="Integrante da equipe">
-                    <h3>Nome do integrante</h3>
-                    <p>Gestor de projetos</p>
+                    <img src="imagens/palu.png" alt="Integrante da equipe">
+                    <h3>Henrique Palu</h3>
+                    <p>Engenheiro de dados</p>
                 </div>
                 
                 <div class="card-equipe">
-                    <img src="imagens/" alt="Integrante da equipe">
-                    <h3>Nome do integrante</h3>
-                    <p>Gestor de projetos</p>
+                    <img src="imagens/henry.png" alt="Integrante da equipe">
+                    <h3>Henry</h3>
+                    <p>Desenvolvedor Back-end</p>
                 </div>
             </div>
 
