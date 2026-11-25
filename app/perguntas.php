@@ -1,3 +1,9 @@
+<?php
+$paginaAtual = 'perguntas.php';
+$usuarioNome = 'Carlos Oliveira';
+$usuarioTipo = 'Conta pessoal';
+$usuarioInicial = substr($usuarioNome, 0, 1);
+?>
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -16,28 +22,28 @@
     <nav class="menu-links" aria-label="Navegação do painel">
       <p class="titulo-menu">MENU</p>
 
-      <a href="index.php">Visão geral</a>
-      <a href="paineis.php">Painéis</a>
-      <a href="monitoramento.php">Monitoramento</a>
-      <a href="alerts.php">Alertas</a>
-      <a href="perguntas.php" aria-current="page">FAQ</a>
+      <a href="index.php" <?= $paginaAtual == 'index.php' ? 'aria-current="page"' : '' ?>>Visão geral</a>
+      <a href="paineis.php" <?= $paginaAtual == 'paineis.php' ? 'aria-current="page"' : '' ?>>Painéis</a>
+      <a href="monitoramento.php" <?= $paginaAtual == 'monitoramento.php' ? 'aria-current="page"' : '' ?>>Monitoramento</a>
+      <a href="alerts.php" <?= $paginaAtual == 'alerts.php' ? 'aria-current="page"' : '' ?>>Alertas</a>
+      <a href="perguntas.php" <?= $paginaAtual == 'perguntas.php' ? 'aria-current="page"' : '' ?>>FAQ</a>
     </nav>
 
     <div class="menu-rodape">
       <nav class="menu-links" aria-label="Navegação da conta">
         <p class="titulo-menu">GESTÃO</p>
 
-        <a href="reports.php">Relatórios</a>
-        <a href="profile.php">Meu perfil</a>
-        <a href="config.php">Configurações</a>
+        <a href="reports.php" <?= $paginaAtual == 'reports.php' ? 'aria-current="page"' : '' ?>>Relatórios</a>
+        <a href="profile.php" <?= $paginaAtual == 'profile.php' ? 'aria-current="page"' : '' ?>>Meu perfil</a>
+        <a href="config.php" <?= $paginaAtual == 'config.php' ? 'aria-current="page"' : '' ?>>Configurações</a>
       </nav>
 
       <div class="usuario">
-        <span class="avatar">C</span>
+        <span class="avatar"><?= $usuarioInicial ?></span>
 
         <div class="dados-usuario">
-          <strong>Carlos Oliveira</strong>
-          <small>Conta pessoal</small>
+          <strong><?= $usuarioNome ?></strong>
+          <small><?= $usuarioTipo ?></small>
         </div>
 
         <a class="sair" href="login.php">Sair</a>
@@ -226,23 +232,18 @@
     </div>
   </main>
 
-
   <footer class="rodape">
-            
+    <div class="rodape-marca">
+      <span class="rodape-nome">SolarControl</span>
+      <span class="rodape-copy">© <?= date('Y') ?> by Solar Control</span>
+    </div>
 
-            
-            <div class="rodape-marca">
-                <span class="rodape-nome">SolarControl</span>
-                <span class="rodape-copy">© 2026 by Solar Control</span>
-            </div>
-
-            
-            <div class="rodape-creditos">
-                <span>© Copyright 2026</span>
-                <span>|</span>
-                <span>Desenvolvido por: <strong>Solar Control</strong></span>
-            </div>
-        </footer>
+    <div class="rodape-creditos">
+      <span>© Copyright <?= date('Y') ?></span>
+      <span>|</span>
+      <span>Desenvolvido por: <strong>Solar Control</strong></span>
+    </div>
+  </footer>
 
 </body>
 </html>
