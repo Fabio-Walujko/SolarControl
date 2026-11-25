@@ -49,64 +49,217 @@ $nomesPrioridade = ['alta' => 'Alta', 'media' => 'Média', 'baixa' => 'Baixa'];
       </p>
     </header>
 
-    <!-- Filtros (GET): ?filtro=pendentes | resolvidos | todos -->
-    <form class="botoes" method="get">
-      <button type="submit" name="filtro" value="pendentes" aria-pressed="<?= $filtro === 'pendentes' ? 'true' : 'false' ?>">
-        Pendentes <span><?= count($pendentes) ?></span>
-      </button>
-
-      <button type="submit" name="filtro" value="resolvidos" aria-pressed="<?= $filtro === 'resolvidos' ? 'true' : 'false' ?>">
-        Resolvidos <span><?= count($resolvidos) ?></span>
-      </button>
-
-      <button type="submit" name="filtro" value="todos" aria-pressed="<?= $filtro === 'todos' ? 'true' : 'false' ?>">
-        Todos <span><?= count($alertas) ?></span>
-      </button>
-    </form>
-
     <main>
+
+      </details class="formularioabaixo">
+
       <section>
-        <?php if (!$lista): ?>
-          <article class="cartoes alerta-resolvido">
-            <h3>Nenhum alerta aqui</h3>
-            <p>
-              <?= $filtro === 'resolvidos'
-                ? 'Ainda não há manutenções concluídas.'
-                : 'Tudo certo com os sistemas desta conta.' ?>
-            </p>
-          </article>
-        <?php endif; ?>
 
-        <?php foreach ($lista as $a): ?>
-          <?php $classe = $a['situacao'] === 'resolvido' ? 'alerta-resolvido' : 'alerta-' . $a['prioridade']; ?>
-          <article class="cartoes <?= $classe ?>">
-            <h3><?= h($a['titulo']) ?></h3>
+        <article class="cartoes alerta-alta">
 
-            <span class="etiqueta"><?= $a['situacao'] === 'resolvido' ? 'Resolvido' : 'Aberto' ?></span>
-            <span class="etiqueta"><?= h($nomesPrioridade[$a['prioridade']]) ?></span>
+          <h3>Manutenção atrasada</h3>
 
-            <p><?= h($a['descricao']) ?></p>
+          <span>Aberto</span>
+          <span>Alta</span>
 
-            <small>
-              <?= $equipe ? h($a['cliente']) . ' · ' : '' ?><?= h($a['sistema']) ?>
-              <?= $a['data'] ? ' · ' . formatarData($a['data']) : '' ?>
-            </small>
+          <p>
+            A manutenção de Maria Oliveira estava prevista para
+            10/11/2026 e nenhuma visita foi agendada.
+          </p>
 
-            <details class="formularioabaixo">
-              <summary class="verdetalhes">Ver detalhes</summary>
-              <p>Cliente: <?= h($a['cliente']) ?></p>
-              <p>Sistema: <?= h($a['sistema']) ?></p>
-              <p>Prioridade: <?= h($nomesPrioridade[$a['prioridade']]) ?></p>
-              <?php if ($a['situacao'] === 'pendente'): ?>
-                <p>
-                  <a class="botao" href="<?= str_contains($a['titulo'], 'lançamento') ? 'monitoramento.php' : 'paineis.php' ?>">
-                    Resolver
-                  </a>
-                </p>
-              <?php endif; ?>
-            </details>
-          </article>
-        <?php endforeach; ?>
+          <small>
+            Maria Oliveira · Manutenção atrasada · aberto há 7 dia(s)
+          </small>
+
+          <p>
+             Liguei para a cliente, ela vai confirmar o melhor dia para a visita.
+          </p>
+
+          <details class="formularioabaixo">
+            <summary class="verdetalhes">Ver detalhes</summary>
+
+            <p>Cliente: Maria Oliveira</p>
+            <p>Tipo: Manutenção preventiva</p>
+            <p>Data prevista: 10/11/2026</p>
+
+
+            <br>
+          </details class="formularioabaixo">
+
+        </article>
+
+        <article class="cartoes alerta-alta">
+
+          <h3>Sistema Inativo</h3>
+
+          <span>Aberto</span>
+          <span>Alta</span>
+
+          <p>
+            Mercado Bom Preço está com status "Inativo"
+            e não está gerando energia.
+          </p>
+
+          <small>
+            Mercado Bom Preço · Sistema parado · aberto há 48 dia(s)
+          </small>
+
+          <p>
+             Alerta criado automaticamente pelo SolarControl.
+          </p>
+
+          <details class="formularioabaixo">
+            <summary class="verdetalhes">Ver detalhes</summary>
+
+            <p>Cliente: Mercado Bom Preço</p>
+            <p>Tipo: Sistema parado</p>
+            <p>Status: Inativo</p>
+
+
+<br>
+          </details class="formularioabaixo">
+
+        </article>
+
+        <article class="cartoes alerta-media">
+
+          <h3>Eficiência baixa</h3>
+
+          <span>Aberto</span>
+          <span>Média</span>
+
+          <p>
+            Padaria Sol Nascente gerou só 63% do esperado
+            nos últimos 7 dias.
+          </p>
+
+          <small>
+            Padaria Sol Nascente · Eficiência baixa · aberto há 3 dia(s)
+          </small>
+
+          <p>
+             A cliente contou que tem uma obra ao lado soltando
+            muita poeira. Provável sujeira nos módulos.
+          </p>
+
+          <details class="formularioabaixo">
+            <summary class="verdetalhes">Ver detalhes</summary>
+
+            <p>Cliente: Padaria Sol Nascente</p>
+            <p>Geração esperada: 100%</p>
+            <p>Geração atual: 63%</p>
+
+<br>
+          </details class="formularioabaixo">
+
+        </article>
+
+        <article class="cartoes alerta-media">
+
+          <h3>Sistema Em manutenção</h3>
+
+          <span>Em andamento</span>
+          <span>Média</span>
+
+          <p>
+            Escola Técnica Verde está com status "Em manutenção"
+            e não está gerando energia.
+          </p>
+
+          <small>
+            Escola Técnica Verde · Sistema parado · aberto há 17 dia(s)
+            · Responsável: Carlos Souza · Prazo: 25/11/2026
+          </small>
+
+          <p>
+             Status: Aberto → Em andamento · Responsável: Carlos Souza
+            · Prazo: 25/11/2026 · Inversor com falha no MPPT 2.
+          </p>
+
+          <details class="formularioabaixo">
+            <summary class="verdetalhes">Ver detalhes</summary>
+
+            <p>Cliente: Escola Técnica Verde</p>
+            <p>Responsável: Carlos Souza</p>
+            <p>Prazo: 25/11/2026</p>
+
+
+<br>
+          </details class="formularioabaixo">
+
+        </article>
+
+        <article class="cartoes alerta-alta">
+
+          <h3>Falha na comunicação</h3>
+
+          <span>Aberto</span>
+          <span>Alta</span>
+
+          <p>
+            O inversor está sem comunicação com a plataforma de monitoramento.
+          </p>
+
+          <small>
+            Energia Verde · Comunicação interrompida
+          </small>
+
+          <p> Aguardando verificação da conexão.</p>
+
+          <details class="formularioabaixo">
+            <summary class="verdetalhes">Ver detalhes</summary>
+
+
+<br>
+          </details class="formularioabaixo">
+
+        </article>
+
+        <article class="cartoes alerta-resolvido">
+
+          <h3>Limpeza dos módulos concluída</h3>
+
+          <span>Resolvido</span>
+          <span>Média</span>
+
+          <p>
+            A limpeza dos painéis foi realizada e a geração voltou ao normal.
+          </p>
+
+          <small>Fazenda Solar · Resolvido há 2 dias</small>
+
+          <details class="formularioabaixo">
+            <summary class="verdetalhes">Ver detalhes</summary>
+
+            <p>Serviço concluído com sucesso.</p>
+
+          </details class="formularioabaixo">
+
+        </article>
+
+        <article class="cartoes alerta-resolvido">
+
+          <h3>Inversor normalizado</h3>
+
+          <span>Resolvido</span>
+          <span>Alta</span>
+
+          <p>
+            A falha do inversor foi corrigida e o sistema voltou a funcionar.
+          </p>
+
+          <small>Residência Solar · Resolvido há 5 dias</small>
+
+          <details class="formularioabaixo">
+            <summary class="verdetalhes">Ver detalhes</summary>
+
+            <p>Equipamento verificado e funcionando normalmente.</p>
+
+          </details class="formularioabaixo">
+
+        </article>
+
+>>>>>>> c20570d66507f581d89182651a036449b87660ac
       </section>
     </main>
 
