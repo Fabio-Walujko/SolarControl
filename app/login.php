@@ -194,31 +194,31 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <div class="cards-equipe">
 
                 <div class="card-equipe">
-                    <img src="imagens/igor.png" alt="Integrante da equipe">
+                    <img src="imagens/" alt="Integrante da equipe">
                     <h3>Nome do integrante</h3>
                     <p>Desenvolvedor</p>
                 </div>
 
                 <div class="card-equipe">
-                    <img src="imagens/fabio.png" alt="Integrante da equipe">
+                    <img src="imagens/" alt="Integrante da equipe">
                     <h3>Nome do integrante</h3>
                     <p>Designer</p>
                 </div>
 
                 <div class="card-equipe">
-                    <img src="imagens/gustavo.png" alt="Integrante da equipe">
+                    <img src="imagens/" alt="Integrante da equipe">
                     <h3>Nome do integrante</h3>
                     <p>Analista</p>
                 </div>
 
                 <div class="card-equipe">
-                    <img src="imagens/palu.png" alt="Integrante da equipe">
+                    <img src="imagens/" alt="Integrante da equipe">
                     <h3>Nome do integrante</h3>
                     <p>Gestor de projetos</p>
                 </div>
                 
                 <div class="card-equipe">
-                    <img src="imagens/pessoa4.png" alt="Integrante da equipe">
+                    <img src="imagens/" alt="Integrante da equipe">
                     <h3>Nome do integrante</h3>
                     <p>Gestor de projetos</p>
                 </div>
@@ -256,7 +256,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                 <div class="card-objetivo">
                     <div class="icone">
-                        <i class="fa-solid fa-wallet"></i>
                     </div>
                     <h3>Economia Inteligente</h3>
                     <p>Reduzir gastos com energia elétrica por meio de soluções fotovoltaicas.</p>
@@ -264,7 +263,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                 <div class="card-objetivo">
                     <div class="icone">
-                        <i class="fa-solid fa-chart-line"></i>
                     </div>
                     <h3>Monitoramento Eficiente</h3>
                     <p>Facilitar o acompanhamento da produção e do desempenho energético.</p>
