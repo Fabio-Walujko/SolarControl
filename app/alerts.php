@@ -51,7 +51,7 @@ if (!isset($_SESSION['usuario_logado']) || $_SESSION['usuario_logado'] !== true)
           </small>
 
           <p>
-            💬 Liguei para a cliente, ela vai confirmar o melhor dia para a visita.
+             Liguei para a cliente, ela vai confirmar o melhor dia para a visita.
           </p>
 
           <details class="formularioabaixo">
@@ -84,7 +84,7 @@ if (!isset($_SESSION['usuario_logado']) || $_SESSION['usuario_logado'] !== true)
           </small>
 
           <p>
-            💬 Alerta criado automaticamente pelo SolarControl.
+             Alerta criado automaticamente pelo SolarControl.
           </p>
 
           <details class="formularioabaixo">
@@ -117,7 +117,7 @@ if (!isset($_SESSION['usuario_logado']) || $_SESSION['usuario_logado'] !== true)
           </small>
 
           <p>
-            💬 A cliente contou que tem uma obra ao lado soltando
+             A cliente contou que tem uma obra ao lado soltando
             muita poeira. Provável sujeira nos módulos.
           </p>
 
@@ -151,7 +151,7 @@ if (!isset($_SESSION['usuario_logado']) || $_SESSION['usuario_logado'] !== true)
           </small>
 
           <p>
-            💬 Status: Aberto → Em andamento · Responsável: Carlos Souza
+             Status: Aberto → Em andamento · Responsável: Carlos Souza
             · Prazo: 25/11/2026 · Inversor com falha no MPPT 2.
           </p>
 
@@ -183,7 +183,7 @@ if (!isset($_SESSION['usuario_logado']) || $_SESSION['usuario_logado'] !== true)
             Energia Verde · Comunicação interrompida
           </small>
 
-          <p>💬 Aguardando verificação da conexão.</p>
+          <p> Aguardando verificação da conexão.</p>
 
           <details class="formularioabaixo">
             <summary class="verdetalhes">Ver detalhes</summary>
