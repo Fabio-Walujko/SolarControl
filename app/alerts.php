@@ -259,7 +259,6 @@ $nomesPrioridade = ['alta' => 'Alta', 'media' => 'Média', 'baixa' => 'Baixa'];
 
         </article>
 
->>>>>>> c20570d66507f581d89182651a036449b87660ac
       </section>
     </main>
 
