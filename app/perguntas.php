@@ -1,7 +1,9 @@
 <?php
-$paginaAtual = 'perguntas.php';
-$usuarioNome = 'Carlos Oliveira';
-$usuarioTipo = 'Conta pessoal';
+
+require_once __DIR__ . '/init.php';
+$usuarioLogado = exigirLogin($pdo);
+
+
 $usuarioInicial = substr($usuarioNome, 0, 1);
 ?>
 <!DOCTYPE html>
@@ -10,48 +12,13 @@ $usuarioInicial = substr($usuarioNome, 0, 1);
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Perguntas frequentes — Solar Control</title>
-<<<<<<< HEAD
   <link rel="stylesheet" href="CSS/perguntas.css">
-=======
   
 </head>
 
 <body>
-  <aside class="menu-lateral">
-    <a class="marca" href="index.php">
-      solar<span>control</span>
-    </a>
+<?php include __DIR__ . '/menu.php'; ?>
 
-    <nav class="menu-links" aria-label="Navegação do painel">
-      <p class="titulo-menu">MENU</p>
-
-      <a href="index.php" <?= $paginaAtual == 'index.php' ? 'aria-current="page"' : '' ?>>Visão geral</a>
-      <a href="paineis.php" <?= $paginaAtual == 'paineis.php' ? 'aria-current="page"' : '' ?>>Painéis</a>
-      <a href="monitoramento.php" <?= $paginaAtual == 'monitoramento.php' ? 'aria-current="page"' : '' ?>>Monitoramento</a>
-      <a href="alerts.php" <?= $paginaAtual == 'alerts.php' ? 'aria-current="page"' : '' ?>>Alertas</a>
-      <a href="perguntas.php" <?= $paginaAtual == 'perguntas.php' ? 'aria-current="page"' : '' ?>>FAQ</a>
-    </nav>
-
-    <div class="menu-rodape">
-      <nav class="menu-links" aria-label="Navegação da conta">
-        <p class="titulo-menu">GESTÃO</p>
-
-
-        <a href="config.php" <?= $paginaAtual == 'config.php' ? 'aria-current="page"' : '' ?>>Configurações</a>
-      </nav>
-
-      <div class="usuario">
-        <span class="avatar"><?= $usuarioInicial ?></span>
-
-        <div class="dados-usuario">
-          <strong><?= $usuarioNome ?></strong>
-          <small><?= $usuarioTipo ?></small>
-        </div>
-
-        <a class="sair" href="login.php">Sair</a>
-      </div>
-    </div>
-  </aside>
 
   <main class="conteudo-principal">
     <br><br>
