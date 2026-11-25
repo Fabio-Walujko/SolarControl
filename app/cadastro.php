@@ -1,34 +1,29 @@
 <?php
+require_once __DIR__ . '/banco/database.php';
+require_once __DIR__ . '/banco/crud.php';
 
-require_once __DIR__ . '/banco/database.php';   
-require_once __DIR__ . '/banco/crud.php';   
+$mensagem_erro = '';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $email = $_POST['email'];
+    $senha = $_POST['senha'];
+    $nome = $_POST['nome'];
 
-$email = $_POST['email'];
-$senha = $_POST['senha'];
-$nome = $_POST['nome'];
-
-$pdo = database(); 
+    $pdo = database();
 
     if (!empty($email) && !empty($senha) && !empty($nome)) {
         try {
-       
             $sql = "INSERT INTO usuarios (nome, email, senha) VALUES (:nome, :email, :senha)";
             $stmt = $pdo->prepare($sql);
             $stmt->execute([':nome' => $nome, ':email' => $email, ':senha' => $senha]);
             header('Location: login.php');
             exit;
-
-            
         } catch (PDOException $e) {
             $mensagem_erro = "Erro no banco de dados: " . $e->getMessage();
         }
     }
 }
-
-?>  
-
+?>
 <!DOCTYPE html>
 <html lang="pt-br">
 
@@ -41,12 +36,8 @@ $pdo = database();
 
 <body>
     <main class="conteudo-principal">
-
         <section class="secao-inicial" id="login">
-
-
             <div class="texto-introducao">
-
                 <h1 class="titulo-secao">
                     Controle<br>
                     <span class="destaque-verde">
@@ -63,56 +54,42 @@ $pdo = database();
 
             <div class="painel-login">
                 <div class="logo">SolarControl</div>
-
                 <h2>Criar Conta</h2>
 
-                <h2>Cadastrar-se</h2>
-
                 <p class="texto-auxiliar">
-                    Boas-vindas ao melhor site de controle fotovoltaica! 
+                    Boas-vindas ao melhor site de controle fotovoltaico!
                 </p>
 
                 <form method="POST" class="formulario-login">
-                    
                     <label for="nome">Nome</label>
-
-                    <input class="campos" type="text" id="nome" name="nome" placeholder="nome" required>
+                    <input class="campos" type="text" id="nome" name="nome" placeholder="Seu nome" required>
 
                     <label for="email">E-mail</label>
-
                     <input class="campos" type="email" id="email" name="email" placeholder="nome@empresa.com" required>
 
                     <label for="senha">Senha</label>
-
-                    <input class="campos" type="password" id="senha" name="senha" placeholder="••••••••" minlength="6"
-                        required>
+                    <input class="campos" type="password" id="senha" name="senha" placeholder="••••••••" minlength="6" required>
 
                     <button class="entrar" type="submit">Criar</button>
-
                 </form>
 
                 <p class="texto-auxiliar texto-centralizado">
                     <a class="botao-navegacao" href="login.php">Voltar</a>
                 </p>
 
-                <p><?php echo $mensagem_erro; ?> </p>
-
+                <?php if ($mensagem_erro !== ''): ?>
+                    <p class="mensagem-erro"><?php echo htmlspecialchars($mensagem_erro); ?></p>
+                <?php endif; ?>
             </div>
-
         </section>
+    </main>
 
-        <footer class="rodape">
-
-
-                <form method="POST" class="formulario-login">
-
-            <div class="rodape-marca">
-                <span class="destaque-verde">SolarControl</span>
-                <span class="destaque-verde">© 2026 by Solar Control</span>
-
-            </div>
-
-        </footer>
-
+    <footer class="rodape">
+        <div class="rodape-marca">
+            <span class="destaque-verde">SolarControl</span>
+            <span class="destaque-verde">© 2026 by Solar Control</span>
+        </div>
+    </footer>
 </body>
+
 </html>
