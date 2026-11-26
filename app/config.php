@@ -126,15 +126,6 @@ $valorEmail = $_POST['novo_email'] ?? $usuarioLogado['email'];
 
           <label class="opcao">
             <span>
-              Notificações push
-              <small>No navegador e no celular</small>
-            </span>
-
-            <input type="checkbox" class="switch" name="push" checked>
-          </label>
-
-          <label class="opcao">
-            <span>
               Resumo semanal
               <small>Toda segunda, às 08:00</small>
             </span>
