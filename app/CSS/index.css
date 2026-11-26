@@ -75,17 +75,6 @@ body {
   outline-offset: 2px;
 }
 
-/* Número de alertas */
-.contador {
-  min-width: 20px;
-  padding: 3px 6px;
-  border-radius: 20px;
-  background: #a6d7b0;
-  color: #163620;
-  font-size: 11px;
-  text-align: center;
-}
-
 /* Rodapé */
 .menu-rodape {
   margin-top: auto;
@@ -141,8 +130,8 @@ body {
   margin-left: 309px;
   padding: 32px 32px 130px 32px;
 }
-/* divs blocos */
 
+/* divs blocos */
 .indicadores {
   margin-bottom: 20px;
   display: grid;
@@ -203,21 +192,23 @@ body {
   border-radius: 8px;
   background: #34794c;
 }
-.card {
-    background: #fff;
-    border: 1px solid #dce5df;
-    border-radius: 12px;
-}
-.letrasCard {   
-   font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial,sans-serif ;
-  span{
-  font-size: 20px;
 
+.card {
+  background: #fff;
+  border: 1px solid #dce5df;
+  border-radius: 12px;
+}
+
+.letrasCard {
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+
+  span {
+    font-size: 20px;
   }
 }
 
-.prescricao  {
-  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif ; 
+.prescricao {
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
   font-size: 108px;
 }
 
@@ -225,7 +216,6 @@ body {
   color: #fff;
   font-size: 12px;
 }
-
 
 .resumo-simples {
   display: grid;
@@ -241,7 +231,7 @@ body {
   position: fixed;
   bottom: 0;
   left: 309px;
-  right: 0; 
+  right: 0;
   background-color: #ffffff;
   border-top: 1px solid #e5e5e5;
   text-align: center;
@@ -362,6 +352,7 @@ body {
   color: #243329;
   font-weight: bold;
 }
+
 /* ===== Visão geral com dados do usuário ===== */
 .cabecalho-visao {
   margin-bottom: 20px;

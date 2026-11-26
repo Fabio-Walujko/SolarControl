@@ -88,19 +88,29 @@ function exigirLogin(PDO $pdo): array
         exit;
     }
 
+    // Não reutilizar páginas privadas em caches compartilhados ou de outra conta.
+    header('Cache-Control: private, no-store, max-age=0');
+    header('Pragma: no-cache');
+
     return $usuario;
 }
 
-/** Funcionários e administradores gerenciam os sistemas de todos os clientes. */
+/** Identifica a equipe para recebimento e resposta de alertas manuais. */
 function ehEquipe(array $usuario): bool
 {
     return in_array($usuario['TIPO'] ?? 'cliente', ['funcionario', 'adm'], true);
 }
 
-/** null = todos os clientes (equipe); número = apenas o próprio usuário. */
-function escopoUsuario(array $usuario): ?int
+/** Sistemas e indicadores são privados da conta, independentemente do cargo. */
+function escopoUsuario(array $usuario): int
 {
-    return ehEquipe($usuario) ? null : (int) $usuario['ID_USUARIO'];
+    $id = (int) ($usuario['ID_USUARIO'] ?? 0);
+
+    if ($id <= 0) {
+        throw new InvalidArgumentException('Usuário inválido para consultar sistemas.');
+    }
+
+    return $id;
 }
 
 function nomeTipoUsuario(?string $tipo): string

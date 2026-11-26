@@ -13,90 +13,129 @@ unset($_SESSION['flash_monitoramento']);
 /** Aceita apenas datas válidas no formato AAAA-MM-DD. */
 function dataValidaOuHoje(?string $data): string
 {
-    $d = DateTime::createFromFormat('Y-m-d', (string) $data);
+  $d = DateTime::createFromFormat('Y-m-d', (string) $data);
 
-    return ($d && $d->format('Y-m-d') === $data) ? $data : date('Y-m-d');
+  return ($d && $d->format('Y-m-d') === $data)
+    ? $data
+    : date('Y-m-d');
 }
 
 // Processamento dos formulários
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $acao = $_POST['acao'] ?? '';
+  $acao = $_POST['acao'] ?? '';
 
-    try {
-        if ($acao === 'cadastrar_painel') {
-            $quantidade = max(1, (int) ($_POST['quantidade'] ?? 1));
-            $caracteristicas = trim($_POST['modelo_painel'] ?? '');
-            $dataInstalacao = dataValidaOuHoje($_POST['data_intalacao'] ?? '');
-            $status = normalizarStatus($_POST['status_sistema'] ?? 'Ativo');
+  try {
+    if ($acao === 'cadastrar_painel') {
+      $quantidade = max(1, (int) ($_POST['quantidade'] ?? 1));
+      $caracteristicas = trim($_POST['modelo_painel'] ?? '');
 
-            if (!in_array($status, ['Ativo', 'Manutencao', 'Inativo'], true)) {
-                throw new Exception('Escolha um status da lista.');
-            }
+      $dataInstalacao = dataValidaOuHoje(
+        $_POST['data_intalacao'] ?? ''
+      );
 
-            if ($caracteristicas === '') {
-                throw new Exception('Informe o modelo e as características dos painéis.');
-            }
+      $status = normalizarStatus(
+        $_POST['status_sistema'] ?? 'Ativo'
+      );
 
-            // Usa substr() nativo (compatível sem extensão mbstring)
-            $descricaoCompleta = substr("{$quantidade}x {$caracteristicas}", 0, 100);
+      if (!in_array($status, ['Ativo', 'Manutencao', 'Inativo'], true)) {
+        throw new Exception('Escolha um status da lista.');
+      }
 
-            // O painel sempre pertence a quem está logado
-            create($pdo, 'fotovoltaicos', [
-                'ID_USUARIO'     => $idUsuario,
-                'modelo_painel'  => $descricaoCompleta,
-                'data_intalacao' => $dataInstalacao,
-                'status_sistema' => $status,
-            ]);
+      if ($caracteristicas === '') {
+        throw new Exception(
+          'Informe o modelo e as características dos painéis.'
+        );
+      }
 
-            $mensagem = 'Painéis registrados com sucesso!';
-            $tipoMensagem = 'sucesso';
-        }
+      // Usa substr() nativo (compatível sem extensão mbstring)
+      $descricaoCompleta = substr(
+        "{$quantidade}x {$caracteristicas}",
+        0,
+        100
+      );
 
-        if ($acao === 'lancar_energia') {
-            $idFotovoltaico = (int) ($_POST['ID_fotovoltaicos'] ?? 0);
-            $dataRegistro = dataValidaOuHoje($_POST['data_registro'] ?? '');
-            $gerada = (int) ($_POST['energia_gerada'] ?? 0);
-            $consumida = (int) ($_POST['energia_consumida'] ?? 0);
+      // O painel sempre pertence a quem está logado
+      create($pdo, 'fotovoltaicos', [
+        'ID_USUARIO' => $idUsuario,
+        'modelo_painel' => $descricaoCompleta,
+        'data_intalacao' => $dataInstalacao,
+        'status_sistema' => $status,
+      ]);
 
-            // Só aceita lançamentos em sistemas do próprio usuário
-            $sistema = read($pdo, 'fotovoltaicos', 'ID_fotovoltaicos = ? AND ID_USUARIO = ?', [$idFotovoltaico, $idUsuario]);
-            if (!$sistema) {
-                throw new Exception('Selecione um dos seus sistemas de painéis.');
-            }
-            if ($gerada < 0 || $consumida < 0) {
-                throw new Exception('Os valores de geração e consumo não podem ser negativos.');
-            }
-
-            create($pdo, 'registros', [
-                'ID_fotovoltaicos'  => $idFotovoltaico,
-                'data_registro'     => $dataRegistro,
-                'energia_gerada'    => $gerada,
-                'energia_consumida' => $consumida,
-            ]);
-
-            $mensagem = 'Lançamento de geração e consumo salvo com sucesso!';
-            $tipoMensagem = 'sucesso';
-        }
-
-        if ($tipoMensagem === 'sucesso') {
-            $_SESSION['flash_monitoramento'] = ['texto' => $mensagem, 'tipo' => $tipoMensagem];
-            header('Location: monitoramento.php');
-            exit;
-        }
-    } catch (PDOException $e) {
-        error_log('Erro no monitoramento: ' . $e->getMessage());
-        $mensagem = 'Erro ao salvar no banco de dados. Confira os valores e tente novamente.';
-        $tipoMensagem = 'erro';
-    } catch (Exception $e) {
-        // Mensagens de validação escritas acima
-        $mensagem = 'Erro: ' . $e->getMessage();
-        $tipoMensagem = 'erro';
+      $mensagem = 'Painéis registrados com sucesso!';
+      $tipoMensagem = 'sucesso';
     }
+
+    if ($acao === 'lancar_energia') {
+      $idFotovoltaico = (int) ($_POST['ID_fotovoltaicos'] ?? 0);
+
+      $dataRegistro = dataValidaOuHoje(
+        $_POST['data_registro'] ?? ''
+      );
+
+      $gerada = (int) ($_POST['energia_gerada'] ?? 0);
+      $consumida = (int) ($_POST['energia_consumida'] ?? 0);
+
+      // Só aceita lançamentos em sistemas do próprio usuário
+      $sistema = read(
+        $pdo,
+        'fotovoltaicos',
+        'ID_fotovoltaicos = ? AND ID_USUARIO = ?',
+        [$idFotovoltaico, $idUsuario]
+      );
+
+      if (!$sistema) {
+        throw new Exception(
+          'Selecione um dos seus sistemas de painéis.'
+        );
+      }
+
+      if ($gerada < 0 || $consumida < 0) {
+        throw new Exception(
+          'Os valores de geração e consumo não podem ser negativos.'
+        );
+      }
+
+      create($pdo, 'registros', [
+        'ID_fotovoltaicos' => $idFotovoltaico,
+        'data_registro' => $dataRegistro,
+        'energia_gerada' => $gerada,
+        'energia_consumida' => $consumida,
+      ]);
+
+      $mensagem = 'Lançamento de geração e consumo salvo com sucesso!';
+      $tipoMensagem = 'sucesso';
+    }
+
+    if ($tipoMensagem === 'sucesso') {
+      $_SESSION['flash_monitoramento'] = [
+        'texto' => $mensagem,
+        'tipo' => $tipoMensagem,
+      ];
+
+      header('Location: monitoramento.php');
+      exit;
+    }
+  } catch (PDOException $e) {
+    error_log('Erro no monitoramento: ' . $e->getMessage());
+
+    $mensagem = 'Erro ao salvar no banco de dados. Confira os valores e tente novamente.';
+    $tipoMensagem = 'erro';
+  } catch (Exception $e) {
+    // Mensagens de validação escritas acima
+    $mensagem = 'Erro: ' . $e->getMessage();
+    $tipoMensagem = 'erro';
+  }
 }
 
 // 1. Busca os painéis cadastrados
 // (sem "mostrar todos": se não houver ID, exigirLogin já mandou para o login)
-$paineis = readAll($pdo, 'fotovoltaicos', 'ID_USUARIO = ? ORDER BY ID_fotovoltaicos DESC', [$idUsuario]);
+$paineis = readAll(
+  $pdo,
+  'fotovoltaicos',
+  'ID_USUARIO = ? ORDER BY ID_fotovoltaicos DESC',
+  [$idUsuario]
+);
 
 // 2. Busca o histórico mensal agrupado (geração x consumo)
 $sqlMensal = "
@@ -109,8 +148,13 @@ $sqlMensal = "
     INNER JOIN fotovoltaicos f ON f.ID_fotovoltaicos = r.ID_fotovoltaicos
     WHERE f.ID_USUARIO = ?
 ";
+
 $paramsMensal = [$idUsuario];
-$sqlMensal .= " GROUP BY DATE_FORMAT(r.data_registro, '%Y-%m') ORDER BY mes DESC";
+
+$sqlMensal .= "
+    GROUP BY DATE_FORMAT(r.data_registro, '%Y-%m')
+    ORDER BY mes DESC
+";
 
 $stmtMensal = $pdo->prepare($sqlMensal);
 $stmtMensal->execute($paramsMensal);
@@ -122,26 +166,51 @@ $totalConsumido = 0;
 $maiorValorMes = 1;
 
 foreach ($historicoMensal as $linha) {
-    $g = (int) $linha['total_gerado'];
-    $c = (int) $linha['total_consumido'];
-    $totalGerado += $g;
-    $totalConsumido += $c;
-    if ($g > $maiorValorMes) $maiorValorMes = $g;
-    if ($c > $maiorValorMes) $maiorValorMes = $c;
+  $g = (int) $linha['total_gerado'];
+  $c = (int) $linha['total_consumido'];
+
+  $totalGerado += $g;
+  $totalConsumido += $c;
+
+  if ($g > $maiorValorMes) {
+    $maiorValorMes = $g;
+  }
+
+  if ($c > $maiorValorMes) {
+    $maiorValorMes = $c;
+  }
 }
 
 $saldoEnergia = $totalGerado - $totalConsumido;
-$percentualAtendido = $totalConsumido > 0 ? round(($totalGerado / $totalConsumido) * 100, 1) : 0;
 
-function formatarMes(string $anoMes): string {
-    $partes = explode('-', $anoMes);
-    if (count($partes) !== 2) return $anoMes;
-    $meses = [
-        '01' => 'Jan', '02' => 'Fev', '03' => 'Mar', '04' => 'Abr',
-        '05' => 'Mai', '06' => 'Jun', '07' => 'Jul', '08' => 'Ago',
-        '09' => 'Set', '10' => 'Out', '11' => 'Nov', '12' => 'Dez'
-    ];
-    return ($meses[$partes[1]] ?? $partes[1]) . '/' . $partes[0];
+$percentualAtendido = $totalConsumido > 0
+  ? round(($totalGerado / $totalConsumido) * 100, 1)
+  : 0;
+
+function formatarMes(string $anoMes): string
+{
+  $partes = explode('-', $anoMes);
+
+  if (count($partes) !== 2) {
+    return $anoMes;
+  }
+
+  $meses = [
+    '01' => 'Jan',
+    '02' => 'Fev',
+    '03' => 'Mar',
+    '04' => 'Abr',
+    '05' => 'Mai',
+    '06' => 'Jun',
+    '07' => 'Jul',
+    '08' => 'Ago',
+    '09' => 'Set',
+    '10' => 'Out',
+    '11' => 'Nov',
+    '12' => 'Dez',
+  ];
+
+  return ($meses[$partes[1]] ?? $partes[1]) . '/' . $partes[0];
 }
 
 // Dados em ordem cronológica para o gráfico
@@ -151,19 +220,24 @@ $geradaGrafico = [];
 $consumidaGrafico = [];
 
 foreach ($dadosGrafico as $item) {
-    $labelsGrafico[] = formatarMes($item['mes']);
-    $geradaGrafico[] = (int) $item['total_gerado'];
-    $consumidaGrafico[] = (int) $item['total_consumido'];
+  $labelsGrafico[] = formatarMes($item['mes']);
+  $geradaGrafico[] = (int) $item['total_gerado'];
+  $consumidaGrafico[] = (int) $item['total_consumido'];
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Monitoramento - SolarControl</title>
+
   <link rel="stylesheet" href="CSS/monitoramento.css">
+  <link rel="stylesheet" href="CSS/menu.css?v=<?= filemtime(__DIR__ . '/CSS/menu.css') ?>">
 </head>
+
 <body>
   <?php include __DIR__ . '/menu.php'; ?>
 
@@ -171,7 +245,12 @@ foreach ($dadosGrafico as $item) {
     <div class="container">
       <header class="cabecalho">
         <h1>Monitoramento</h1>
-        <p>Acompanhe seus painéis, lance geração/consumo e compare o histórico mensal · <strong><?php echo h($usuarioLogado['nome']); ?></strong></p>
+
+        <p>
+          Acompanhe seus painéis, lance geração/consumo
+          e compare o histórico mensal ·
+          <strong><?php echo h($usuarioLogado['nome']); ?></strong>
+        </p>
       </header>
 
       <?php if ($mensagem !== ''): ?>
@@ -184,23 +263,40 @@ foreach ($dadosGrafico as $item) {
       <section class="grade-resumo">
         <div class="card-resumo">
           <span>Energia Gerada</span>
-          <strong><?php echo number_format($totalGerado, 0, ',', '.'); ?> kWh</strong>
+
+          <strong>
+            <?php echo number_format($totalGerado, 0, ',', '.'); ?> kWh
+          </strong>
+
           <small>Total acumulado</small>
         </div>
 
         <div class="card-resumo">
           <span>Energia Consumida</span>
-          <strong><?php echo number_format($totalConsumido, 0, ',', '.'); ?> kWh</strong>
+
+          <strong>
+            <?php echo number_format($totalConsumido, 0, ',', '.'); ?> kWh
+          </strong>
+
           <small>Total acumulado</small>
         </div>
 
         <div class="card-resumo">
           <span>Saldo (Gerada - Consumida)</span>
+
           <strong class="<?php echo $saldoEnergia >= 0 ? 'positivo' : 'negativo'; ?>">
-            <?php echo ($saldoEnergia >= 0 ? '+' : '') . number_format($saldoEnergia, 0, ',', '.'); ?> kWh
+            <?php
+            echo ($saldoEnergia >= 0 ? '+' : '')
+              . number_format($saldoEnergia, 0, ',', '.');
+            ?> kWh
           </strong>
+
           <small>
-            <?php echo $saldoEnergia >= 0 ? 'Superávit energético' : 'Déficit energético'; ?>
+            <?php
+            echo $saldoEnergia >= 0
+              ? 'Superávit energético'
+              : 'Déficit energético';
+            ?>
             (<?php echo $percentualAtendido; ?>% do consumo)
           </small>
         </div>
@@ -216,27 +312,35 @@ foreach ($dadosGrafico as $item) {
       <section class="grade-formularios">
         <div class="painel-box">
           <h2>Registrar Painéis</h2>
+
           <form method="POST" class="formulario">
             <input type="hidden" name="acao" value="cadastrar_painel">
 
             <div class="campo-duplo">
               <div class="campo">
                 <label for="quantidade">Quantidade</label>
+
                 <input type="number" id="quantidade" name="quantidade" min="1" value="1" required>
               </div>
+
               <div class="campo">
                 <label for="data_intalacao">Data de Instalação</label>
-                <input type="date" id="data_intalacao" name="data_intalacao" value="<?php echo date('Y-m-d'); ?>" required>
+
+                <input type="date" id="data_intalacao" name="data_intalacao" value="<?php echo date('Y-m-d'); ?>"
+                  required>
               </div>
             </div>
 
             <div class="campo">
               <label for="modelo_painel">Modelo e Características</label>
-              <input type="text" id="modelo_painel" name="modelo_painel" placeholder="Ex: Canadian Solar 550W Monocristalino" maxlength="90" required>
+
+              <input type="text" id="modelo_painel" name="modelo_painel"
+                placeholder="Ex: Canadian Solar 550W Monocristalino" maxlength="90" required>
             </div>
 
             <div class="campo">
               <label for="status_sistema">Status do Sistema</label>
+
               <select id="status_sistema" name="status_sistema">
                 <option value="Ativo">Ativo</option>
                 <option value="Manutencao">Manutenção</option>
@@ -244,24 +348,29 @@ foreach ($dadosGrafico as $item) {
               </select>
             </div>
 
-            <button type="submit" class="btn-primario">Salvar Painéis</button>
+            <button type="submit" class="btn-primario">
+              Salvar Painéis
+            </button>
           </form>
         </div>
 
         <div class="painel-box">
           <h2>Lançar Geração e Consumo</h2>
+
           <form method="POST" class="formulario">
             <input type="hidden" name="acao" value="lancar_energia">
 
             <div class="campo">
               <label for="ID_fotovoltaicos">Sistema de Painéis</label>
+
               <select id="ID_fotovoltaicos" name="ID_fotovoltaicos" required>
                 <?php if (empty($paineis)): ?>
                   <option value="">Cadastre um painel primeiro</option>
                 <?php else: ?>
                   <?php foreach ($paineis as $p): ?>
                     <option value="<?php echo (int) $p['ID_fotovoltaicos']; ?>">
-                      #<?php echo (int) $p['ID_fotovoltaicos']; ?> - <?php echo htmlspecialchars($p['modelo_painel']); ?>
+                      #<?php echo (int) $p['ID_fotovoltaicos']; ?>
+                      - <?php echo htmlspecialchars($p['modelo_painel']); ?>
                     </option>
                   <?php endforeach; ?>
                 <?php endif; ?>
@@ -270,16 +379,20 @@ foreach ($dadosGrafico as $item) {
 
             <div class="campo">
               <label for="data_registro">Data do Registro</label>
+
               <input type="date" id="data_registro" name="data_registro" value="<?php echo date('Y-m-d'); ?>" required>
             </div>
 
             <div class="campo-duplo">
               <div class="campo">
                 <label for="energia_gerada">Energia Gerada (kWh)</label>
+
                 <input type="number" id="energia_gerada" name="energia_gerada" min="0" required>
               </div>
+
               <div class="campo">
                 <label for="energia_consumida">Energia Consumida (kWh)</label>
+
                 <input type="number" id="energia_consumida" name="energia_consumida" min="0" required>
               </div>
             </div>
@@ -296,7 +409,9 @@ foreach ($dadosGrafico as $item) {
         <h2>Histórico Mensal (Gerada vs. Consumida)</h2>
 
         <?php if (empty($historicoMensal)): ?>
-          <p class="vazio">Nenhum lançamento de geração e consumo registrado ainda.</p>
+          <p class="vazio">
+            Nenhum lançamento de geração e consumo registrado ainda.
+          </p>
         <?php else: ?>
           <div class="tabela-wrapper">
             <table class="tabela">
@@ -309,31 +424,55 @@ foreach ($dadosGrafico as $item) {
                   <th>Comparação Visual</th>
                 </tr>
               </thead>
+
               <tbody>
                 <?php foreach ($historicoMensal as $item): ?>
                   <?php
-                    $ger = (int) $item['total_gerado'];
-                    $con = (int) $item['total_consumido'];
-                    $sal = $ger - $con;
-                    $largGer = round(($ger / $maiorValorMes) * 100);
-                    $largCon = round(($con / $maiorValorMes) * 100);
+                  $ger = (int) $item['total_gerado'];
+                  $con = (int) $item['total_consumido'];
+                  $sal = $ger - $con;
+                  $largGer = round(($ger / $maiorValorMes) * 100);
+                  $largCon = round(($con / $maiorValorMes) * 100);
                   ?>
+
                   <tr>
-                    <td><strong><?php echo htmlspecialchars(formatarMes($item['mes'])); ?></strong></td>
-                    <td><?php echo number_format($ger, 0, ',', '.'); ?> kWh</td>
-                    <td><?php echo number_format($con, 0, ',', '.'); ?> kWh</td>
-                    <td class="<?php echo $sal >= 0 ? 'positivo' : 'negativo'; ?>">
-                      <?php echo ($sal >= 0 ? '+' : '') . number_format($sal, 0, ',', '.'); ?> kWh
+                    <td>
+                      <strong>
+                        <?php echo htmlspecialchars(formatarMes($item['mes'])); ?>
+                      </strong>
                     </td>
+
+                    <td>
+                      <?php echo number_format($ger, 0, ',', '.'); ?> kWh
+                    </td>
+
+                    <td>
+                      <?php echo number_format($con, 0, ',', '.'); ?> kWh
+                    </td>
+
+                    <td class="<?php echo $sal >= 0 ? 'positivo' : 'negativo'; ?>">
+                      <?php
+                      echo ($sal >= 0 ? '+' : '')
+                        . number_format($sal, 0, ',', '.');
+                      ?> kWh
+                    </td>
+
                     <td>
                       <div class="comparacao-barras">
                         <div class="barra-linha">
                           <span class="legenda">Ger.</span>
-                          <div class="trilha"><div class="barra barra-gerada" style="width: <?php echo $largGer; ?>%;"></div></div>
+
+                          <div class="trilha">
+                            <div class="barra barra-gerada" style="width: <?php echo $largGer; ?>%;"></div>
+                          </div>
                         </div>
+
                         <div class="barra-linha">
                           <span class="legenda">Con.</span>
-                          <div class="trilha"><div class="barra barra-consumida" style="width: <?php echo $largCon; ?>%;"></div></div>
+
+                          <div class="trilha">
+                            <div class="barra barra-consumida" style="width: <?php echo $largCon; ?>%;"></div>
+                          </div>
                         </div>
                       </div>
                     </td>
@@ -362,13 +501,37 @@ foreach ($dadosGrafico as $item) {
                   <th>Status</th>
                 </tr>
               </thead>
+
               <tbody>
                 <?php foreach ($paineis as $p): ?>
                   <tr>
-                    <td>#<?php echo (int) $p['ID_fotovoltaicos']; ?></td>
-                    <td><?php echo htmlspecialchars($p['modelo_painel']); ?></td>
-                    <td><?php echo $p['data_intalacao'] ? date('d/m/Y', strtotime($p['data_intalacao'])) : '-'; ?></td>
-                    <td><span class="badge"><?php echo h(normalizarStatus($p['status_sistema']) === 'Manutencao' ? 'Em manutenção' : $p['status_sistema']); ?></span></td>
+                    <td>
+                      #<?php echo (int) $p['ID_fotovoltaicos']; ?>
+                    </td>
+
+                    <td>
+                      <?php echo htmlspecialchars($p['modelo_painel']); ?>
+                    </td>
+
+                    <td>
+                      <?php
+                      echo $p['data_intalacao']
+                        ? date('d/m/Y', strtotime($p['data_intalacao']))
+                        : '-';
+                      ?>
+                    </td>
+
+                    <td>
+                      <span class="badge">
+                        <?php
+                        echo h(
+                          normalizarStatus($p['status_sistema']) === 'Manutencao'
+                          ? 'Em manutenção'
+                          : $p['status_sistema']
+                        );
+                        ?>
+                      </span>
+                    </td>
                   </tr>
                 <?php endforeach; ?>
               </tbody>
@@ -380,8 +543,11 @@ foreach ($dadosGrafico as $item) {
       <!-- Gráfico de Comparação Mensal -->
       <section class="painel-box">
         <h2>Gráfico: Energia Gerada vs. Consumida</h2>
+
         <?php if (empty($dadosGrafico)): ?>
-          <p class="vazio">Faça pelo menos um lançamento acima para visualizar o gráfico.</p>
+          <p class="vazio">
+            Faça pelo menos um lançamento acima para visualizar o gráfico.
+          </p>
         <?php else: ?>
           <div class="grafico-container">
             <canvas id="graficoEnergia"></canvas>
@@ -393,8 +559,10 @@ foreach ($dadosGrafico as $item) {
 
   <?php if (!empty($dadosGrafico)): ?>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <script>
       const ctx = document.getElementById('graficoEnergia');
+
       new Chart(ctx, {
         type: 'bar',
         data: {
@@ -431,4 +599,5 @@ foreach ($dadosGrafico as $item) {
     </script>
   <?php endif; ?>
 </body>
+
 </html>

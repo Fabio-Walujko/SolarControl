@@ -2,13 +2,9 @@
 
 require_once __DIR__ . '/init.php';
 
-// Usuário logado e permissão:
-// - cliente: vê e altera apenas os próprios sistemas;
-// - funcionário/adm: vê e altera os sistemas de todos os clientes.
+// Todos os cargos acessam apenas os sistemas da própria conta.
 $usuarioLogado = exigirLogin($pdo);
-$equipe = ehEquipe($usuarioLogado);
-$idUsuario = (int) $usuarioLogado['ID_USUARIO'];
-$escopo = escopoUsuario($usuarioLogado); // null = todos (equipe)
+$idUsuario = escopoUsuario($usuarioLogado);
 
 /* h() agora fica em sessao.php e é usada por todas as páginas */
 
@@ -24,13 +20,6 @@ $cores = [
     'Manutencao' => 'meio',
     'Em manutenção' => 'meio',
     'Inativo' => 'ruim',
-];
-
-/* Tipos de usuário para separar a lista */
-$tipos = [
-    'cliente' => 'Clientes',
-    'funcionario' => 'Funcionários',
-    'adm' => 'Administradores',
 ];
 
 /* Siglas para a coluna enderecos.estado */
@@ -52,9 +41,26 @@ if (isset($_POST['excluir'])) {
         try {
             $pdo->beginTransaction();
 
-            delete($pdo, 'registros', 'ID_fotovoltaicos = ?', [$idExcluir]);
-            delete($pdo, 'manutencao_e_instalacao', 'ID_SISTEMAS = ?', [$idExcluir]);
-            delete($pdo, 'fotovoltaicos', 'ID_fotovoltaicos = ?', [$idExcluir]);
+            delete(
+                $pdo,
+                'registros',
+                'ID_fotovoltaicos = ?',
+                [$idExcluir]
+            );
+
+            delete(
+                $pdo,
+                'manutencao_e_instalacao',
+                'ID_SISTEMAS = ?',
+                [$idExcluir]
+            );
+
+            delete(
+                $pdo,
+                'fotovoltaicos',
+                'ID_fotovoltaicos = ? AND ID_USUARIO = ?',
+                [$idExcluir, $idUsuario]
+            );
 
             $pdo->commit();
 
@@ -73,14 +79,11 @@ if (isset($_POST['excluir'])) {
 
 /* Salvar: atualiza se houver ID; caso contrário, cadastra */
 if (isset($_POST['modelo_painel'])) {
-    // Cliente não escolhe o dono: o sistema é sempre dele
-    if (!$equipe) {
-        $_POST['ID_USUARIO'] = (string) $idUsuario;
-        $_POST['cliente_antes'] = $_POST['id'] !== '' ? (string) $idUsuario : '';
-    }
+    // Ignora ID_USUARIO/cliente_antes enviados por formulário adulterado.
+    $idSalvar = (int) ($_POST['id'] ?? 0);
 
     $dados = [
-        'ID_USUARIO' => (int) $_POST['ID_USUARIO'],
+        'ID_USUARIO' => $idUsuario,
         'modelo_painel' => trim($_POST['modelo_painel']),
         'data_intalacao' => $_POST['data_intalacao'],
         'status_sistema' => $_POST['status_sistema'],
@@ -96,10 +99,11 @@ if (isset($_POST['modelo_painel'])) {
     ];
 
     $mexerNoLocal = implode('', $local) !== '';
-    $trocouCliente = $_POST['cliente_antes'] !== ''
-        && $_POST['cliente_antes'] != $_POST['ID_USUARIO'];
 
-    if ($_POST['id'] !== '' && !podeAcessarSistema($pdo, (int) $_POST['id'], $usuarioLogado)) {
+    if (
+        $idSalvar > 0
+        && !podeAcessarSistema($pdo, $idSalvar, $usuarioLogado)
+    ) {
         $erro = 'Você não tem permissão para alterar este sistema.';
     } elseif (!buscarUsuario($pdo, $dados['ID_USUARIO'])) {
         $erro = 'Escolha um cliente válido.';
@@ -108,20 +112,20 @@ if (isset($_POST['modelo_painel'])) {
     } elseif ($local['CEP'] !== '' && strlen($local['CEP']) !== 8) {
         $erro = 'O CEP precisa ter 8 números.';
     } else {
-        if ($_POST['id'] !== '') {
+        if ($idSalvar > 0) {
             update(
                 $pdo,
                 'fotovoltaicos',
                 $dados,
-                'ID_fotovoltaicos = ?',
-                [$_POST['id']]
+                'ID_fotovoltaicos = ? AND ID_USUARIO = ?',
+                [$idSalvar, $idUsuario]
             );
         } else {
             create($pdo, 'fotovoltaicos', $dados);
         }
 
-        /* Se o cliente mudou, não copia o endereço antigo para o novo */
-        if ($mexerNoLocal && !$trocouCliente) {
+        /* Atualiza somente o endereço da própria conta. */
+        if ($mexerNoLocal) {
             $cliente = read(
                 $pdo,
                 'usuarios',
@@ -158,16 +162,19 @@ if (isset($_POST['modelo_painel'])) {
 /* Buscar sistema para edição */
 $editar = [];
 
-if (isset($_GET['editar']) && podeAcessarSistema($pdo, (int) $_GET['editar'], $usuarioLogado)) {
+if (
+    isset($_GET['editar'])
+    && podeAcessarSistema($pdo, (int) $_GET['editar'], $usuarioLogado)
+) {
     $busca = $pdo->prepare('
         SELECT f.*, e.CEP, e.estado, e.cidade, e.logradouro, e.numero
         FROM fotovoltaicos f
         LEFT JOIN usuarios u ON u.ID_USUARIO = f.ID_USUARIO
         LEFT JOIN enderecos e ON e.ID_ENDERECO = u.id_endereco
-        WHERE f.ID_fotovoltaicos = ?
+        WHERE f.ID_fotovoltaicos = ? AND f.ID_USUARIO = ?
     ');
 
-    $busca->execute([(int) $_GET['editar']]);
+    $busca->execute([(int) $_GET['editar'], $idUsuario]);
     $editar = $busca->fetch() ?: [];
 }
 
@@ -176,12 +183,11 @@ if ($erro && isset($_POST['modelo_painel'])) {
     $editar = array_merge(
         $editar,
         $_POST,
-        ['ID_fotovoltaicos' => $_POST['id']]
+        ['ID_fotovoltaicos' => $idSalvar > 0 ? $idSalvar : '']
     );
 }
 
-/* Buscar sistemas, clientes, registros e próxima manutenção
-   (cliente: só os dele · equipe: todos) */
+/* Sistemas, registros e manutenções da conta autenticada. */
 $sqlSistemas = '
     SELECT
         f.*,
@@ -212,21 +218,14 @@ $sqlSistemas = '
     FROM fotovoltaicos f
     LEFT JOIN usuarios u ON u.ID_USUARIO = f.ID_USUARIO
     LEFT JOIN enderecos e ON e.ID_ENDERECO = u.id_endereco
-' . ($escopo !== null ? ' WHERE f.ID_USUARIO = ?' : '') . '
+    WHERE f.ID_USUARIO = ?
     ORDER BY u.nome
 ';
+
 $stmtSistemas = $pdo->prepare($sqlSistemas);
-$stmtSistemas->execute($escopo !== null ? [$escopo] : []);
+$stmtSistemas->execute([$idUsuario]);
 $sistemas = $stmtSistemas->fetchAll();
 
-/* Lista do seletor "Cliente": a equipe vê todos; o cliente vê só a si mesmo */
-$clientes = $equipe
-    ? listarUsuarios($pdo)
-    : [[
-        'ID_USUARIO' => $idUsuario,
-        'nome' => $usuarioLogado['nome'],
-        'TIPO' => $usuarioLogado['TIPO'],
-    ]];
 ?>
 
 <!DOCTYPE html>
@@ -235,18 +234,19 @@ $clientes = $equipe
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Painéis — SolarControl</title>
-    <link rel="stylesheet" href="CSS/paineis.css?v=<?= filemtime(__DIR__ . '/CSS/paineis.css') ?>">
-</head>
-<body>
 
+    <link rel="stylesheet" href="CSS/paineis.css?v=<?= filemtime(__DIR__ . '/CSS/paineis.css') ?>">
+    <link rel="stylesheet" href="CSS/menu.css?v=<?= filemtime(__DIR__ . '/CSS/menu.css') ?>">
+</head>
+
+<body>
     <?php include __DIR__ . '/menu.php'; ?>
 
     <main class="conteudo">
         <h1>Painéis</h1>
+
         <p class="dica">
-            <?= $equipe
-                ? 'Você está vendo os sistemas de todos os clientes (' . h(nomeTipoUsuario($usuarioLogado['TIPO'])) . ').'
-                : 'Você está vendo apenas os sistemas da sua conta.' ?>
+            Você está vendo apenas os sistemas da sua conta.
         </p>
 
         <?php if ($erro): ?>
@@ -266,35 +266,14 @@ $clientes = $equipe
                 value="<?= h($editar['ID_fotovoltaicos'] ?? '') ?>"
             >
 
-            <input
-                type="hidden"
-                name="cliente_antes"
-                value="<?= h($editar['cliente_antes'] ?? $editar['ID_USUARIO'] ?? '') ?>"
-            >
-
             <div class="grade grade-sistema">
                 <label>
-                    Cliente
-                    <select name="ID_USUARIO" required>
-                        <option value="">Escolha o cliente</option>
-
-                        <?php foreach ($tipos as $tipo => $grupo): ?>
-                            <optgroup label="<?= $grupo ?>">
-                                <?php foreach ($clientes as $c): ?>
-                                    <?php if (($c['TIPO'] ?: 'cliente') === $tipo): ?>
-                                        <option
-                                            value="<?= $c['ID_USUARIO'] ?>"
-                                            <?= ($editar['ID_USUARIO'] ?? '') == $c['ID_USUARIO']
-                                                ? 'selected'
-                                                : '' ?>
-                                        >
-                                            <?= h($c['nome']) ?>
-                                        </option>
-                                    <?php endif; ?>
-                                <?php endforeach; ?>
-                            </optgroup>
-                        <?php endforeach; ?>
-                    </select>
+                    Conta
+                    <input
+                        type="text"
+                        value="<?= h($usuarioLogado['nome']) ?>"
+                        readonly
+                    >
                 </label>
 
                 <label>
@@ -324,9 +303,8 @@ $clientes = $equipe
                         <?php foreach ($opcoes as $valor => $texto): ?>
                             <option
                                 value="<?= $valor ?>"
-                                <?= ($cores[$editar['status_sistema'] ?? ''] ?? '') === $cores[$valor]
-                                    ? 'selected'
-                                    : '' ?>
+                                <?= ($cores[$editar['status_sistema'] ?? ''] ?? '')
+                                    === $cores[$valor] ? 'selected' : '' ?>
                             >
                                 <?= $texto ?>
                             </option>
@@ -338,7 +316,8 @@ $clientes = $equipe
             <h3>Local do cliente</h3>
 
             <p class="dica">
-                O local é do cliente: se ele tiver mais de um sistema, a mudança vale para todos.
+                O local é do cliente: se ele tiver mais de um sistema,
+                a mudança vale para todos.
                 Deixe tudo em branco para não alterar.
             </p>
 
@@ -405,7 +384,9 @@ $clientes = $equipe
 
             <div class="botoes">
                 <?php if (!empty($editar['ID_fotovoltaicos'])): ?>
-                    <a class="botao-cancelar" href="paineis.php">Cancelar</a>
+                    <a class="botao-cancelar" href="paineis.php">
+                        Cancelar
+                    </a>
                 <?php endif; ?>
 
                 <button class="botao-salvar" type="submit">
@@ -440,14 +421,21 @@ $clientes = $equipe
 
                         <?php if ($s['CEP']): ?>
                             <small class="cep">
-                                CEP <?= h(substr($s['CEP'], 0, 5) . '-' . substr($s['CEP'], 5)) ?>
+                                CEP <?= h(
+                                    substr($s['CEP'], 0, 5)
+                                    . '-'
+                                    . substr($s['CEP'], 5)
+                                ) ?>
                             </small>
                         <?php endif; ?>
                     </td>
 
                     <td>
                         <?= $s['cidade']
-                            ? h($s['cidade'] . ($s['estado'] ? ' - ' . $s['estado'] : ''))
+                            ? h(
+                                $s['cidade']
+                                . ($s['estado'] ? ' - ' . $s['estado'] : '')
+                            )
                             : '—' ?>
                     </td>
 
@@ -469,7 +457,10 @@ $clientes = $equipe
 
                     <td>
                         <span class="status <?= $cores[$s['status_sistema'] ?? ''] ?? '' ?>">
-                            <?= h($opcoes[$s['status_sistema'] ?? ''] ?? $s['status_sistema']) ?>
+                            <?= h(
+                                $opcoes[$s['status_sistema'] ?? '']
+                                ?? $s['status_sistema']
+                            ) ?>
                         </span>
                     </td>
 
@@ -496,7 +487,9 @@ $clientes = $equipe
 
             <?php if (!$sistemas): ?>
                 <tr>
-                    <td colspan="9">Nenhum sistema cadastrado ainda.</td>
+                    <td colspan="9">
+                        Nenhum sistema cadastrado ainda.
+                    </td>
                 </tr>
             <?php endif; ?>
         </table>

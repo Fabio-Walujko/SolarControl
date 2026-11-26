@@ -1,0 +1,30 @@
+/* Layout compartilhado para o menu de todas as páginas. */
+.menu-lateral .menu-links a {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+/* Contador alinhado à direita em todas as páginas. */
+.menu-lateral .menu-links .contador {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+
+    flex: 0 0 auto;
+    margin-left: auto;
+    min-width: 20px;
+    padding: 3px 6px;
+
+    border-radius: 20px;
+    background: #a6d7b0;
+    color: #163620;
+
+    font-size: 11px;
+    font-weight: 600;
+    line-height: 1.2;
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+}

@@ -2,19 +2,12 @@
 
 declare(strict_types=1);
 
-/*
- * Alertas manuais: criados pelo cliente (ou pela equipe) e recebidos
- * pelos administradores/funcionários. Ficam salvos na tabela "alertas".
- *
- * Quem vê cada alerta:
- *   - adm ........... todos os alertas
- *   - funcionário ... os enviados para ele, para "toda a equipe" ou criados por ele
- *   - cliente ....... os que ele criou e os ligados aos sistemas dele
- */
+const PRIORIDADES_ALERTA = [
+    'alta' => 'Alta',
+    'media' => 'Média',
+    'baixa' => 'Baixa',
+];
 
-const PRIORIDADES_ALERTA = ['alta' => 'Alta', 'media' => 'Média', 'baixa' => 'Baixa'];
-
-/** Cria a tabela "alertas" se ainda não existir (bancos criados antes desta versão). */
 function garantirTabelaAlertas(PDO $pdo): void
 {
     static $pronta = false;
@@ -37,21 +30,149 @@ function garantirTabelaAlertas(PDO $pdo): void
             ID_RESPONDIDO_POR INT NULL,
             criado_em DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
             atualizado_em DATETIME NULL,
-            FOREIGN KEY (ID_AUTOR) REFERENCES usuarios (ID_USUARIO) ON DELETE CASCADE,
-            FOREIGN KEY (ID_DESTINATARIO) REFERENCES usuarios (ID_USUARIO) ON DELETE SET NULL,
-            FOREIGN KEY (ID_fotovoltaicos) REFERENCES fotovoltaicos (ID_fotovoltaicos) ON DELETE SET NULL,
-            FOREIGN KEY (ID_RESPONDIDO_POR) REFERENCES usuarios (ID_USUARIO) ON DELETE SET NULL
+            FOREIGN KEY (ID_AUTOR)
+                REFERENCES usuarios (ID_USUARIO) ON DELETE CASCADE,
+            FOREIGN KEY (ID_DESTINATARIO)
+                REFERENCES usuarios (ID_USUARIO) ON DELETE SET NULL,
+            FOREIGN KEY (ID_fotovoltaicos)
+                REFERENCES fotovoltaicos (ID_fotovoltaicos) ON DELETE SET NULL,
+            FOREIGN KEY (ID_RESPONDIDO_POR)
+                REFERENCES usuarios (ID_USUARIO) ON DELETE SET NULL
         )
     ");
 
     $pronta = true;
 }
 
-/* ------------------------------------------------------------------ */
-/* Proteção dos formulários (CSRF)                                    */
-/* ------------------------------------------------------------------ */
+function garantirTabelaResolucoesAutomaticas(PDO $pdo): void
+{
+    static $prontas = [];
 
-/** Código secreto da sessão enviado junto com os formulários. */
+    $conexao = spl_object_id($pdo);
+
+    if (isset($prontas[$conexao])) {
+        return;
+    }
+
+    $pdo->exec("
+        CREATE TABLE IF NOT EXISTS alertas_automaticos_resolvidos (
+            ID_USUARIO INT NOT NULL,
+            chave CHAR(64) NOT NULL,
+            resolvido_em DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            PRIMARY KEY (ID_USUARIO, chave),
+            FOREIGN KEY (ID_USUARIO)
+                REFERENCES usuarios (ID_USUARIO) ON DELETE CASCADE
+        )
+    ");
+
+    $prontas[$conexao] = true;
+}
+
+function chaveAlertaAutomatico(array $alerta): string
+{
+    return hash('sha256', serialize([
+        (string) $alerta['sistema'],
+        (string) $alerta['titulo'],
+        (string) $alerta['descricao'],
+        $alerta['data'] ?? null,
+    ]));
+}
+
+function listarAlertasAutomaticosUsuario(PDO $pdo, array $usuario): array
+{
+    garantirTabelaResolucoesAutomaticas($pdo);
+
+    $idUsuario = escopoUsuario($usuario);
+
+    $stmt = $pdo->prepare("
+        SELECT chave, resolvido_em
+        FROM alertas_automaticos_resolvidos
+        WHERE ID_USUARIO = ?
+    ");
+    $stmt->execute([$idUsuario]);
+
+    $resolucoes = [];
+
+    foreach ($stmt->fetchAll() as $resolucao) {
+        $resolucoes[$resolucao['chave']] = $resolucao['resolvido_em'];
+    }
+
+    $alertas = gerarAlertas($pdo, $idUsuario);
+
+    foreach ($alertas as &$alerta) {
+        // Manutenções realizadas são histórico, não notificações reabríveis.
+        $alerta['gerenciavel'] = $alerta['situacao'] === 'pendente';
+        $alerta['resolvido_em'] = null;
+
+        if (!$alerta['gerenciavel']) {
+            continue;
+        }
+
+        $chave = chaveAlertaAutomatico($alerta);
+        $alerta['chave_automatico'] = $chave;
+
+        if (isset($resolucoes[$chave])) {
+            $alerta['situacao'] = 'resolvido';
+            $alerta['resolvido_em'] = $resolucoes[$chave];
+        }
+    }
+
+    unset($alerta);
+
+    return $alertas;
+}
+
+function atualizarAlertaAutomatico(
+    PDO $pdo,
+    array $usuario,
+    string $chave,
+    string $acao
+): void {
+    if (
+        !in_array($acao, ['resolver_automatico', 'reabrir_automatico'], true)
+        || !preg_match('/^[a-f0-9]{64}$/D', $chave)
+    ) {
+        throw new InvalidArgumentException('Ação ou alerta inválido.');
+    }
+
+    $idUsuario = escopoUsuario($usuario);
+    $visivel = false;
+
+    // Valida o alerta usando somente os sistemas da conta autenticada.
+    foreach (gerarAlertas($pdo, $idUsuario) as $alerta) {
+        if (
+            $alerta['situacao'] === 'pendente'
+            && hash_equals(chaveAlertaAutomatico($alerta), $chave)
+        ) {
+            $visivel = true;
+            break;
+        }
+    }
+
+    if (!$visivel) {
+        throw new InvalidArgumentException(
+            'Este alerta mudou ou não está mais disponível para sua conta. Recarregue a página.'
+        );
+    }
+
+    garantirTabelaResolucoesAutomaticas($pdo);
+
+    if ($acao === 'resolver_automatico') {
+        $stmt = $pdo->prepare("
+            INSERT INTO alertas_automaticos_resolvidos (ID_USUARIO, chave)
+            VALUES (?, ?)
+            ON DUPLICATE KEY UPDATE resolvido_em = CURRENT_TIMESTAMP
+        ");
+    } else {
+        $stmt = $pdo->prepare("
+            DELETE FROM alertas_automaticos_resolvidos
+            WHERE ID_USUARIO = ? AND chave = ?
+        ");
+    }
+
+    $stmt->execute([$idUsuario, $chave]);
+}
+
 function tokenCsrf(): string
 {
     if (empty($_SESSION['csrf']) || !is_string($_SESSION['csrf'])) {
@@ -69,11 +190,6 @@ function validarCsrf(mixed $token): bool
         && hash_equals($_SESSION['csrf'], $token);
 }
 
-/* ------------------------------------------------------------------ */
-/* Consultas                                                          */
-/* ------------------------------------------------------------------ */
-
-/** Administradores e funcionários (quem pode receber alertas). */
 function listarEquipe(PDO $pdo): array
 {
     return $pdo->query("
@@ -84,41 +200,48 @@ function listarEquipe(PDO $pdo): array
     ")->fetchAll();
 }
 
-/** Parte do WHERE que limita os alertas que o usuário pode ver. */
 function filtroAlertasVisiveis(array $usuario): array
 {
-    $id = (int) $usuario['ID_USUARIO'];
-    $tipo = $usuario['TIPO'] ?: 'cliente';
+    $id = escopoUsuario($usuario);
 
-    if ($tipo === 'adm') {
-        return ['1 = 1', []];
+    if (ehEquipe($usuario)) {
+        return [
+            '(a.ID_AUTOR = ? OR f.ID_USUARIO = ? OR a.ID_DESTINATARIO = ? OR a.ID_DESTINATARIO IS NULL)',
+            [$id, $id, $id],
+        ];
     }
 
-    if ($tipo === 'funcionario') {
-        return ['(a.ID_DESTINATARIO IS NULL OR a.ID_DESTINATARIO = ? OR a.ID_AUTOR = ?)', [$id, $id]];
-    }
-
-    return ['(a.ID_AUTOR = ? OR f.ID_USUARIO = ?)', [$id, $id]];
+    return [
+        '(a.ID_AUTOR = ? OR f.ID_USUARIO = ?)',
+        [$id, $id],
+    ];
 }
 
-/** Alertas manuais visíveis para o usuário, no mesmo formato dos automáticos. */
 function listarAlertasManuais(PDO $pdo, array $usuario): array
 {
     garantirTabelaAlertas($pdo);
+
     [$filtro, $params] = filtroAlertasVisiveis($usuario);
 
     $stmt = $pdo->prepare("
         SELECT a.*,
-               autor.nome AS autor_nome, autor.TIPO AS autor_tipo,
+               autor.nome AS autor_nome,
+               autor.TIPO AS autor_tipo,
                dest.nome AS destinatario_nome,
                resp.nome AS respondido_por_nome,
-               f.modelo_painel, dono.nome AS dono_nome
+               f.modelo_painel,
+               dono.nome AS dono_nome
         FROM alertas a
-        INNER JOIN usuarios autor ON autor.ID_USUARIO = a.ID_AUTOR
-        LEFT JOIN usuarios dest ON dest.ID_USUARIO = a.ID_DESTINATARIO
-        LEFT JOIN usuarios resp ON resp.ID_USUARIO = a.ID_RESPONDIDO_POR
-        LEFT JOIN fotovoltaicos f ON f.ID_fotovoltaicos = a.ID_fotovoltaicos
-        LEFT JOIN usuarios dono ON dono.ID_USUARIO = f.ID_USUARIO
+        INNER JOIN usuarios autor
+            ON autor.ID_USUARIO = a.ID_AUTOR
+        LEFT JOIN usuarios dest
+            ON dest.ID_USUARIO = a.ID_DESTINATARIO
+        LEFT JOIN usuarios resp
+            ON resp.ID_USUARIO = a.ID_RESPONDIDO_POR
+        LEFT JOIN fotovoltaicos f
+            ON f.ID_fotovoltaicos = a.ID_fotovoltaicos
+        LEFT JOIN usuarios dono
+            ON dono.ID_USUARIO = f.ID_USUARIO
         WHERE {$filtro}
         ORDER BY a.criado_em DESC, a.ID_ALERTA DESC
     ");
@@ -137,7 +260,8 @@ function listarAlertasManuais(PDO $pdo, array $usuario): array
             'descricao' => (string) $a['descricao'],
             'prioridade' => (string) $a['prioridade'],
             'situacao' => (string) $a['situacao'],
-            'cliente' => $a['dono_nome'] ?? ($autorEhCliente ? $a['autor_nome'] : '—'),
+            'cliente' => $a['dono_nome']
+                ?? ($autorEhCliente ? $a['autor_nome'] : '—'),
             'sistema' => $a['ID_fotovoltaicos'] !== null
                 ? '#' . $a['ID_fotovoltaicos'] . ' ' . $a['modelo_painel']
                 : 'Sem sistema específico',
@@ -154,16 +278,20 @@ function listarAlertasManuais(PDO $pdo, array $usuario): array
     return $alertas;
 }
 
-/** Busca um alerta só se o usuário puder vê-lo. */
-function buscarAlertaVisivel(PDO $pdo, int $idAlerta, array $usuario): array|false
-{
+function buscarAlertaVisivel(
+    PDO $pdo,
+    int $idAlerta,
+    array $usuario
+): array|false {
     garantirTabelaAlertas($pdo);
+
     [$filtro, $params] = filtroAlertasVisiveis($usuario);
 
     $stmt = $pdo->prepare("
         SELECT a.*
         FROM alertas a
-        LEFT JOIN fotovoltaicos f ON f.ID_fotovoltaicos = a.ID_fotovoltaicos
+        LEFT JOIN fotovoltaicos f
+            ON f.ID_fotovoltaicos = a.ID_fotovoltaicos
         WHERE a.ID_ALERTA = ? AND {$filtro}
     ");
     $stmt->execute([$idAlerta, ...$params]);
@@ -171,23 +299,17 @@ function buscarAlertaVisivel(PDO $pdo, int $idAlerta, array $usuario): array|fal
     return $stmt->fetch();
 }
 
-/** A equipe responde/resolve; o cliente pode mexer apenas nos alertas que ele criou. */
 function podeAlterarAlerta(array $alerta, array $usuario): bool
 {
-    return ehEquipe($usuario) || (int) $alerta['ID_AUTOR'] === (int) $usuario['ID_USUARIO'];
+    return ehEquipe($usuario)
+        || (int) $alerta['ID_AUTOR'] === (int) $usuario['ID_USUARIO'];
 }
 
-/** Quantidade de caracteres (funciona com acentos, sem precisar de mbstring). */
 function contarCaracteres(string $texto): int
 {
     return (int) preg_match_all('/./us', $texto);
 }
 
-/* ------------------------------------------------------------------ */
-/* Ações                                                              */
-/* ------------------------------------------------------------------ */
-
-/** Salva um novo alerta. Lança InvalidArgumentException com a mensagem para o usuário. */
 function criarAlerta(PDO $pdo, array $usuario, array $dados): int
 {
     garantirTabelaAlertas($pdo);
@@ -199,24 +321,38 @@ function criarAlerta(PDO $pdo, array $usuario, array $dados): int
     $idDestinatario = (int) ($dados['ID_DESTINATARIO'] ?? 0);
 
     if ($titulo === '' || $descricao === '') {
-        throw new InvalidArgumentException('Preencha o título e a descrição do alerta.');
+        throw new InvalidArgumentException(
+            'Preencha o título e a descrição do alerta.'
+        );
     }
+
     if (contarCaracteres($titulo) > 100) {
-        throw new InvalidArgumentException('O título pode ter no máximo 100 caracteres.');
+        throw new InvalidArgumentException(
+            'O título pode ter no máximo 100 caracteres.'
+        );
     }
+
     if (contarCaracteres($descricao) > 1000) {
-        throw new InvalidArgumentException('A descrição pode ter no máximo 1000 caracteres.');
+        throw new InvalidArgumentException(
+            'A descrição pode ter no máximo 1000 caracteres.'
+        );
     }
+
     if (!isset(PRIORIDADES_ALERTA[$prioridade])) {
-        throw new InvalidArgumentException('Escolha uma prioridade da lista.');
+        throw new InvalidArgumentException(
+            'Escolha uma prioridade da lista.'
+        );
     }
 
-    // O cliente só pode escolher sistemas dele
-    if ($idSistema > 0 && !podeAcessarSistema($pdo, $idSistema, $usuario)) {
-        throw new InvalidArgumentException('Escolha um dos seus sistemas.');
+    if (
+        $idSistema > 0
+        && !podeAcessarSistema($pdo, $idSistema, $usuario)
+    ) {
+        throw new InvalidArgumentException(
+            'Escolha um dos seus sistemas.'
+        );
     }
 
-    // O destinatário precisa ser alguém da equipe
     if ($idDestinatario > 0) {
         $destinatario = read(
             $pdo,
@@ -226,36 +362,52 @@ function criarAlerta(PDO $pdo, array $usuario, array $dados): int
         );
 
         if (!$destinatario) {
-            throw new InvalidArgumentException('Escolha um destinatário da equipe.');
+            throw new InvalidArgumentException(
+                'Escolha um destinatário da equipe.'
+            );
         }
     }
 
     return (int) create($pdo, 'alertas', [
         'ID_AUTOR' => (int) $usuario['ID_USUARIO'],
-        'ID_DESTINATARIO' => $idDestinatario > 0 ? $idDestinatario : null,
-        'ID_fotovoltaicos' => $idSistema > 0 ? $idSistema : null,
+        'ID_DESTINATARIO' => $idDestinatario > 0
+            ? $idDestinatario
+            : null,
+        'ID_fotovoltaicos' => $idSistema > 0
+            ? $idSistema
+            : null,
         'titulo' => $titulo,
         'descricao' => $descricao,
         'prioridade' => $prioridade,
     ]);
 }
 
-/** $acao: "responder" (só salva o recado), "resolver" ou "reabrir". */
-function atualizarAlerta(PDO $pdo, array $usuario, int $idAlerta, string $acao, string $resposta): void
-{
+function atualizarAlerta(
+    PDO $pdo,
+    array $usuario,
+    int $idAlerta,
+    string $acao,
+    string $resposta
+): void {
     $alerta = buscarAlertaVisivel($pdo, $idAlerta, $usuario);
 
     if (!$alerta || !podeAlterarAlerta($alerta, $usuario)) {
-        throw new InvalidArgumentException('Você não pode alterar este alerta.');
+        throw new InvalidArgumentException(
+            'Você não pode alterar este alerta.'
+        );
     }
 
     $resposta = trim($resposta);
 
     if (contarCaracteres($resposta) > 1000) {
-        throw new InvalidArgumentException('O recado pode ter no máximo 1000 caracteres.');
+        throw new InvalidArgumentException(
+            'O recado pode ter no máximo 1000 caracteres.'
+        );
     }
 
-    $dados = ['atualizado_em' => date('Y-m-d H:i:s')];
+    $dados = [
+        'atualizado_em' => date('Y-m-d H:i:s'),
+    ];
 
     if ($resposta !== '') {
         $dados['resposta'] = $resposta;
@@ -268,29 +420,80 @@ function atualizarAlerta(PDO $pdo, array $usuario, int $idAlerta, string $acao, 
         $dados['situacao'] = 'pendente';
     } elseif ($acao === 'responder') {
         if ($resposta === '') {
-            throw new InvalidArgumentException('Escreva o recado antes de salvar.');
+            throw new InvalidArgumentException(
+                'Escreva o recado antes de salvar.'
+            );
         }
     } else {
         throw new InvalidArgumentException('Ação inválida.');
     }
 
-    update($pdo, 'alertas', $dados, 'ID_ALERTA = ?', [$idAlerta]);
+    update(
+        $pdo,
+        'alertas',
+        $dados,
+        'ID_ALERTA = ?',
+        [$idAlerta]
+    );
 }
 
-/** Número do menu: alertas automáticos + manuais pendentes. */
-function contarAlertasMenu(PDO $pdo, array $usuario): int
+// Fonte única para a tela de alertas e o contador do menu.
+function resumoAlertasUsuario(PDO $pdo, array $usuario): array
 {
-    $total = contarAlertasPendentes($pdo, escopoUsuario($usuario));
+    static $cache = [];
 
-    try {
-        foreach (listarAlertasManuais($pdo, $usuario) as $a) {
-            if ($a['situacao'] === 'pendente') {
-                $total++;
-            }
-        }
-    } catch (Throwable $e) {
-        error_log('Erro ao contar alertas manuais: ' . $e->getMessage());
+    $id = escopoUsuario($usuario);
+    $chave = spl_object_id($pdo)
+        . ':' . $id
+        . ':' . ($usuario['TIPO'] ?? 'cliente');
+
+    if (isset($cache[$chave])) {
+        return $cache[$chave];
     }
 
-    return $total;
+    $automaticos = listarAlertasAutomaticosUsuario($pdo, $usuario);
+    $manuais = listarAlertasManuais($pdo, $usuario);
+    $todos = array_merge($manuais, $automaticos);
+
+    $ordem = [
+        'alta' => 0,
+        'media' => 1,
+        'baixa' => 2,
+    ];
+
+    usort(
+        $todos,
+        static fn($a, $b) =>
+            [
+                $a['situacao'] === 'resolvido',
+                $ordem[$a['prioridade']] ?? 3,
+                empty($a['manual']),
+            ]
+            <=>
+            [
+                $b['situacao'] === 'resolvido',
+                $ordem[$b['prioridade']] ?? 3,
+                empty($b['manual']),
+            ]
+    );
+
+    return $cache[$chave] = [
+        'todos' => $todos,
+        'manuais' => $manuais,
+        'pendentes' => array_values(array_filter(
+            $todos,
+            static fn($a) => $a['situacao'] === 'pendente'
+        )),
+        'resolvidos' => array_values(array_filter(
+            $todos,
+            static fn($a) => $a['situacao'] === 'resolvido'
+        )),
+    ];
+}
+
+function contarAlertasMenu(PDO $pdo, array $usuario): int
+{
+    return count(
+        resumoAlertasUsuario($pdo, $usuario)['pendentes']
+    );
 }

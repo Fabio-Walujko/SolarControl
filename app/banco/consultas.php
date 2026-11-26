@@ -5,8 +5,8 @@ declare(strict_types=1);
 /*
  * Consultas usadas pelas páginas do painel.
  * Regra geral: o parâmetro $idUsuario filtra tudo pelo dono do sistema.
- * Quando ele é null (somente para funcionários/administradores), a consulta
- * considera todos os clientes.
+ * As páginas autenticadas sempre passam escopoUsuario(), inclusive para a equipe.
+ * null é reservado a rotinas internas globais; nunca vem de parâmetros da página.
  */
 
 /** Tarifa usada para calcular a economia (R$/kWh). Pode ser trocada pela variável TARIFA_KWH. */
@@ -31,6 +31,7 @@ function buscarUsuario(PDO $pdo, int $idUsuario): array|false
         LEFT JOIN enderecos e ON e.ID_ENDERECO = u.id_endereco
         WHERE u.ID_USUARIO = ?
     ';
+
     $stmt = $pdo->prepare($sql);
     $stmt->execute([$idUsuario]);
 
@@ -41,6 +42,7 @@ function buscarUsuarioPorEmail(PDO $pdo, string $email): array|false
 {
     $stmt = $pdo->prepare('SELECT ID_USUARIO FROM usuarios WHERE email = ?');
     $stmt->execute([$email]);
+
     $linha = $stmt->fetch();
 
     return $linha ? buscarUsuario($pdo, (int) $linha['ID_USUARIO']) : false;
@@ -49,7 +51,9 @@ function buscarUsuarioPorEmail(PDO $pdo, string $email): array|false
 /** Lista de usuários para os seletores da equipe. */
 function listarUsuarios(PDO $pdo): array
 {
-    return $pdo->query('SELECT ID_USUARIO, nome, TIPO FROM usuarios ORDER BY nome')->fetchAll();
+    return $pdo->query(
+        'SELECT ID_USUARIO, nome, TIPO FROM usuarios ORDER BY nome'
+    )->fetchAll();
 }
 
 /* ------------------------------------------------------------------ */
@@ -64,9 +68,11 @@ function normalizarStatus(?string $status): string
     if (stripos($status, 'manuten') !== false) {
         return 'Manutencao';
     }
+
     if (stripos($status, 'inativ') !== false) {
         return 'Inativo';
     }
+
     if (stripos($status, 'ativ') !== false) {
         return 'Ativo';
     }
@@ -76,7 +82,7 @@ function normalizarStatus(?string $status): string
 
 /**
  * Sistemas com resumo de registros e manutenções.
- * $idUsuario = null traz todos os sistemas (uso da equipe).
+ * $idUsuario = null é reservado a rotinas internas, não às páginas autenticadas.
  */
 function listarSistemas(PDO $pdo, ?int $idUsuario): array
 {
@@ -103,6 +109,7 @@ function listarSistemas(PDO $pdo, ?int $idUsuario): array
         FROM fotovoltaicos f
         LEFT JOIN usuarios u ON u.ID_USUARIO = f.ID_USUARIO
     ';
+
     $params = [$hoje, $hoje, $hoje];
 
     if ($idUsuario !== null) {
@@ -118,16 +125,21 @@ function listarSistemas(PDO $pdo, ?int $idUsuario): array
     return $stmt->fetchAll();
 }
 
-/** Confere se o usuário pode mexer no sistema (dono ou equipe). */
+/** Confere a propriedade no banco; ser funcionário/adm não libera outras contas. */
 function podeAcessarSistema(PDO $pdo, int $idSistema, array $usuario): bool
 {
-    $sistema = read($pdo, 'fotovoltaicos', 'ID_fotovoltaicos = ?', [$idSistema]);
+    $idUsuario = (int) ($usuario['ID_USUARIO'] ?? 0);
 
-    if (!$sistema) {
+    if ($idSistema <= 0 || $idUsuario <= 0) {
         return false;
     }
 
-    return ehEquipe($usuario) || (int) $sistema['ID_USUARIO'] === (int) $usuario['ID_USUARIO'];
+    return (bool) read(
+        $pdo,
+        'fotovoltaicos',
+        'ID_fotovoltaicos = ? AND ID_USUARIO = ?',
+        [$idSistema, $idUsuario]
+    );
 }
 
 /**
@@ -142,7 +154,10 @@ function estimarPotencia(array $sistemas): array
 
     foreach ($sistemas as $s) {
         $modelo = (string) $s['modelo_painel'];
-        $quantidade = preg_match('/^\s*(\d+)\s*x\b/i', $modelo, $q) ? (int) $q[1] : 1;
+        $quantidade = preg_match('/^\s*(\d+)\s*x\b/i', $modelo, $q)
+            ? (int) $q[1]
+            : 1;
+
         $modulos += $quantidade;
 
         if (preg_match('/(\d+(?:[.,]\d+)?)\s*Wp?\b/i', $modelo, $w)) {
@@ -152,7 +167,11 @@ function estimarPotencia(array $sistemas): array
         }
     }
 
-    return ['kwp' => $kwp, 'modulos' => $modulos, 'sem_potencia' => $semPotencia];
+    return [
+        'kwp' => $kwp,
+        'modulos' => $modulos,
+        'sem_potencia' => $semPotencia,
+    ];
 }
 
 /* ------------------------------------------------------------------ */
@@ -170,6 +189,7 @@ function totaisPeriodo(PDO $pdo, ?int $idUsuario, string $inicio, string $fim): 
         INNER JOIN fotovoltaicos f ON f.ID_fotovoltaicos = r.ID_fotovoltaicos
         WHERE r.data_registro BETWEEN ? AND ?
     ';
+
     $params = [$inicio, $fim];
 
     if ($idUsuario !== null) {
@@ -179,6 +199,7 @@ function totaisPeriodo(PDO $pdo, ?int $idUsuario, string $inicio, string $fim): 
 
     $stmt = $pdo->prepare($sql);
     $stmt->execute($params);
+
     $linha = $stmt->fetch();
 
     return [
@@ -199,6 +220,7 @@ function totaisPorMes(PDO $pdo, ?int $idUsuario, string $inicio, string $fim): a
         INNER JOIN fotovoltaicos f ON f.ID_fotovoltaicos = r.ID_fotovoltaicos
         WHERE r.data_registro BETWEEN ? AND ?
     ";
+
     $params = [$inicio, $fim];
 
     if ($idUsuario !== null) {
@@ -212,6 +234,7 @@ function totaisPorMes(PDO $pdo, ?int $idUsuario, string $inicio, string $fim): a
     $stmt->execute($params);
 
     $resultado = [];
+
     foreach ($stmt->fetchAll() as $linha) {
         $resultado[$linha['mes']] = [
             'gerada' => (int) $linha['gerada'],
@@ -236,6 +259,7 @@ function ultimoDiaComRegistro(PDO $pdo, int $idUsuario): array|false
         ORDER BY r.data_registro DESC
         LIMIT 1
     ');
+
     $stmt->execute([$idUsuario]);
 
     return $stmt->fetch();
@@ -255,13 +279,14 @@ function ultimosRegistros(PDO $pdo, int $idUsuario, int $limite = 10): array
         ORDER BY r.data_registro DESC, r.ID_REGISTRO DESC
         LIMIT {$limite}
     ");
+
     $stmt->execute([$idUsuario]);
 
     return $stmt->fetchAll();
 }
 
 /* ------------------------------------------------------------------ */
-/* Visão geral (index.php)                                            */
+/* Visão geral (index.php)                                             */
 /* ------------------------------------------------------------------ */
 
 /** Junta todos os números da página "Visão geral" de um usuário. */
@@ -271,12 +296,25 @@ function montarVisaoGeral(PDO $pdo, int $idUsuario): array
     $sistemas = listarSistemas($pdo, $idUsuario);
 
     // Geração de hoje + último dia com lançamento
-    $diaHoje = totaisPeriodo($pdo, $idUsuario, $hoje->format('Y-m-d'), $hoje->format('Y-m-d'));
+    $diaHoje = totaisPeriodo(
+        $pdo,
+        $idUsuario,
+        $hoje->format('Y-m-d'),
+        $hoje->format('Y-m-d')
+    );
+
     $ultimoDia = ultimoDiaComRegistro($pdo, $idUsuario);
 
     // Mês de referência: o mês atual; se ainda não tiver lançamentos, o último mês que tiver
     $inicioMesAtual = $hoje->modify('first day of this month');
-    $mesAtual = totaisPeriodo($pdo, $idUsuario, $inicioMesAtual->format('Y-m-d'), $hoje->format('Y-m-d'));
+
+    $mesAtual = totaisPeriodo(
+        $pdo,
+        $idUsuario,
+        $inicioMesAtual->format('Y-m-d'),
+        $hoje->format('Y-m-d')
+    );
+
     $mesEhAtual = $mesAtual['lancamentos'] > 0 || !$ultimoDia;
 
     if ($mesEhAtual) {
@@ -284,9 +322,17 @@ function montarVisaoGeral(PDO $pdo, int $idUsuario): array
         $fimRef = $hoje;
         $totaisRef = $mesAtual;
     } else {
-        $inicioRef = (new DateTimeImmutable($ultimoDia['data_registro']))->modify('first day of this month');
+        $inicioRef = (new DateTimeImmutable($ultimoDia['data_registro']))
+            ->modify('first day of this month');
+
         $fimRef = $inicioRef->modify('last day of this month');
-        $totaisRef = totaisPeriodo($pdo, $idUsuario, $inicioRef->format('Y-m-d'), $fimRef->format('Y-m-d'));
+
+        $totaisRef = totaisPeriodo(
+            $pdo,
+            $idUsuario,
+            $inicioRef->format('Y-m-d'),
+            $fimRef->format('Y-m-d')
+        );
     }
 
     // Comparação com o mês anterior (no mês atual, compara os mesmos dias: 1 até hoje)
@@ -296,6 +342,7 @@ function montarVisaoGeral(PDO $pdo, int $idUsuario): array
 
     if ($mesEhAtual) {
         $dia = min((int) $hoje->format('j'), (int) $fimAnteriorMes->format('j'));
+
         $fimAnterior = $inicioAnterior->setDate(
             (int) $inicioAnterior->format('Y'),
             (int) $inicioAnterior->format('n'),
@@ -303,7 +350,13 @@ function montarVisaoGeral(PDO $pdo, int $idUsuario): array
         );
     }
 
-    $totaisAnterior = totaisPeriodo($pdo, $idUsuario, $inicioAnterior->format('Y-m-d'), $fimAnterior->format('Y-m-d'));
+    $totaisAnterior = totaisPeriodo(
+        $pdo,
+        $idUsuario,
+        $inicioAnterior->format('Y-m-d'),
+        $fimAnterior->format('Y-m-d')
+    );
+
     $variacao = $totaisAnterior['gerada'] > 0
         ? ($totaisRef['gerada'] - $totaisAnterior['gerada']) / $totaisAnterior['gerada'] * 100
         : null;
@@ -315,12 +368,20 @@ function montarVisaoGeral(PDO $pdo, int $idUsuario): array
 
     // Gráfico: 4 meses terminando no mês de referência
     $inicioGrafico = $inicioRef->modify('-3 months');
-    $porMes = totaisPorMes($pdo, $idUsuario, $inicioGrafico->format('Y-m-d'), $fimRef->modify('last day of this month')->format('Y-m-d'));
+
+    $porMes = totaisPorMes(
+        $pdo,
+        $idUsuario,
+        $inicioGrafico->format('Y-m-d'),
+        $fimRef->modify('last day of this month')->format('Y-m-d')
+    );
+
     $grafico = [];
 
     for ($i = 0; $i < 4; $i++) {
         $mes = $inicioGrafico->modify("+{$i} months");
         $chave = $mes->format('Y-m');
+
         $grafico[] = [
             'rotulo' => NOMES_MESES[(int) $mes->format('n')],
             'gerada' => $porMes[$chave]['gerada'] ?? 0,
@@ -329,13 +390,16 @@ function montarVisaoGeral(PDO $pdo, int $idUsuario): array
     }
 
     $maiorBarra = max(1, ...array_column($grafico, 'gerada'));
+
     foreach ($grafico as &$barra) {
         $barra['altura'] = round($barra['gerada'] / $maiorBarra * 100);
     }
+
     unset($barra);
 
     // Status dos sistemas
     $contagemStatus = ['Ativo' => 0, 'Manutencao' => 0, 'Inativo' => 0];
+
     foreach ($sistemas as $s) {
         $status = normalizarStatus($s['status_sistema']);
         $contagemStatus[$status] = ($contagemStatus[$status] ?? 0) + 1;
@@ -347,12 +411,16 @@ function montarVisaoGeral(PDO $pdo, int $idUsuario): array
     $qualidade = null;
 
     foreach ($sistemas as $s) {
-        if ($s['ultima_manutencao'] && (!$ultimaManutencao || $s['ultima_manutencao'] > $ultimaManutencao)) {
+        if (
+            $s['ultima_manutencao']
+            && (!$ultimaManutencao || $s['ultima_manutencao'] > $ultimaManutencao)
+        ) {
             $ultimaManutencao = $s['ultima_manutencao'];
             $qualidade = $s['qualidade_sistema'];
         }
 
         $proxima = $s['proxima_agendada'] ?: $s['previsao_manutencao'];
+
         if ($proxima && (!$proximaManutencao || $proxima < $proximaManutencao)) {
             $proximaManutencao = $proxima;
         }
@@ -387,12 +455,13 @@ function montarVisaoGeral(PDO $pdo, int $idUsuario): array
 }
 
 /* ------------------------------------------------------------------ */
-/* Alertas automáticos (alerts.php e contador do menu)                */
+/* Alertas automáticos (alerts.php e contador do menu)                  */
 /* ------------------------------------------------------------------ */
 
 /**
  * Gera alertas a partir dos dados reais dos sistemas.
- * Cada alerta: titulo, descricao, prioridade (alta|media|baixa), situacao (pendente|resolvido), cliente, data.
+ * Cada alerta: titulo, descricao, prioridade (alta|media|baixa),
+ * situacao (pendente|resolvido), cliente, data.
  */
 function gerarAlertas(PDO $pdo, ?int $idUsuario): array
 {
@@ -403,29 +472,46 @@ function gerarAlertas(PDO $pdo, ?int $idUsuario): array
 
     foreach (listarSistemas($pdo, $idUsuario) as $s) {
         $nomeSistema = '#' . $s['ID_fotovoltaicos'] . ' ' . $s['modelo_painel'];
-        $base = ['cliente' => $s['cliente'] ?? '—', 'sistema' => $nomeSistema];
+
+        $base = [
+            'cliente' => $s['cliente'] ?? '—',
+            'sistema' => $nomeSistema,
+        ];
+
         $status = normalizarStatus($s['status_sistema']);
 
         if ($status === 'Inativo') {
             $alertas[] = $base + [
                 'titulo' => 'Sistema inativo',
                 'descricao' => "O sistema {$nomeSistema} está com status \"Inativo\" e não está gerando energia.",
-                'prioridade' => 'alta', 'situacao' => 'pendente', 'data' => null,
+                'prioridade' => 'alta',
+                'situacao' => 'pendente',
+                'data' => null,
             ];
         } elseif ($status === 'Manutencao') {
             $alertas[] = $base + [
                 'titulo' => 'Sistema em manutenção',
                 'descricao' => "O sistema {$nomeSistema} está em manutenção.",
-                'prioridade' => 'media', 'situacao' => 'pendente', 'data' => null,
+                'prioridade' => 'media',
+                'situacao' => 'pendente',
+                'data' => null,
             ];
         }
 
         // Manutenção prevista que já passou e nenhuma visita futura agendada
-        if (!$s['proxima_agendada'] && $s['previsao_manutencao'] && $s['previsao_manutencao'] < $hoje) {
+        if (
+            !$s['proxima_agendada']
+            && $s['previsao_manutencao']
+            && $s['previsao_manutencao'] < $hoje
+        ) {
             $alertas[] = $base + [
                 'titulo' => 'Manutenção atrasada',
-                'descricao' => 'A próxima manutenção estava prevista para ' . formatarData($s['previsao_manutencao']) . ' e nenhuma visita foi agendada.',
-                'prioridade' => 'alta', 'situacao' => 'pendente', 'data' => $s['previsao_manutencao'],
+                'descricao' => 'A próxima manutenção estava prevista para '
+                    . formatarData($s['previsao_manutencao'])
+                    . ' e nenhuma visita foi agendada.',
+                'prioridade' => 'alta',
+                'situacao' => 'pendente',
+                'data' => $s['previsao_manutencao'],
             ];
         }
 
@@ -433,8 +519,11 @@ function gerarAlertas(PDO $pdo, ?int $idUsuario): array
         if ($s['proxima_agendada'] && $s['proxima_agendada'] <= $limiteAgenda) {
             $alertas[] = $base + [
                 'titulo' => 'Manutenção agendada',
-                'descricao' => 'Há uma visita marcada para ' . formatarData($s['proxima_agendada']) . '.',
-                'prioridade' => 'baixa', 'situacao' => 'pendente', 'data' => $s['proxima_agendada'],
+                'descricao' => 'Há uma visita marcada para '
+                    . formatarData($s['proxima_agendada']) . '.',
+                'prioridade' => 'baixa',
+                'situacao' => 'pendente',
+                'data' => $s['proxima_agendada'],
             ];
         }
 
@@ -444,13 +533,19 @@ function gerarAlertas(PDO $pdo, ?int $idUsuario): array
                 $alertas[] = $base + [
                     'titulo' => 'Nenhum lançamento de energia',
                     'descricao' => 'Este sistema ainda não tem registros de geração e consumo. Lance os dados em Monitoramento.',
-                    'prioridade' => 'media', 'situacao' => 'pendente', 'data' => null,
+                    'prioridade' => 'media',
+                    'situacao' => 'pendente',
+                    'data' => null,
                 ];
             } elseif ($s['ultimo_registro'] < $limiteSemLancamento) {
                 $alertas[] = $base + [
                     'titulo' => 'Sem lançamentos recentes',
-                    'descricao' => 'O último registro de energia foi em ' . formatarData($s['ultimo_registro']) . ' (há mais de 30 dias).',
-                    'prioridade' => 'media', 'situacao' => 'pendente', 'data' => $s['ultimo_registro'],
+                    'descricao' => 'O último registro de energia foi em '
+                        . formatarData($s['ultimo_registro'])
+                        . ' (há mais de 30 dias).',
+                    'prioridade' => 'media',
+                    'situacao' => 'pendente',
+                    'data' => $s['ultimo_registro'],
                 ];
             }
         }
@@ -459,9 +554,12 @@ function gerarAlertas(PDO $pdo, ?int $idUsuario): array
         if (in_array($s['qualidade_sistema'], ['Ruim', 'Regular'], true)) {
             $alertas[] = $base + [
                 'titulo' => 'Qualidade do sistema: ' . $s['qualidade_sistema'],
-                'descricao' => 'A última manutenção (' . formatarData($s['ultima_manutencao']) . ') avaliou o sistema como "' . $s['qualidade_sistema'] . '".',
+                'descricao' => 'A última manutenção ('
+                    . formatarData($s['ultima_manutencao'])
+                    . ') avaliou o sistema como "' . $s['qualidade_sistema'] . '".',
                 'prioridade' => $s['qualidade_sistema'] === 'Ruim' ? 'alta' : 'media',
-                'situacao' => 'pendente', 'data' => $s['ultima_manutencao'],
+                'situacao' => 'pendente',
+                'data' => $s['ultima_manutencao'],
             ];
         }
     }
@@ -472,9 +570,12 @@ function gerarAlertas(PDO $pdo, ?int $idUsuario): array
             'cliente' => $d['cliente'] ?? '—',
             'sistema' => '#' . $d['ID_fotovoltaicos'] . ' ' . $d['modelo_painel'],
             'titulo' => 'Consumo maior que a geração',
-            'descricao' => 'Em ' . rotuloMes($d['mes']) . ' o consumo foi de ' . formatarKwh((int) $d['consumida'])
+            'descricao' => 'Em ' . rotuloMes($d['mes'])
+                . ' o consumo foi de ' . formatarKwh((int) $d['consumida'])
                 . ' e a geração de ' . formatarKwh((int) $d['gerada']) . '.',
-            'prioridade' => 'baixa', 'situacao' => 'pendente', 'data' => null,
+            'prioridade' => 'baixa',
+            'situacao' => 'pendente',
+            'data' => null,
         ];
     }
 
@@ -486,15 +587,23 @@ function gerarAlertas(PDO $pdo, ?int $idUsuario): array
             'titulo' => 'Manutenção realizada',
             'descricao' => 'Manutenção feita em ' . formatarData($m['data_agendada'])
                 . ($m['tempo_estimado'] ? " ({$m['tempo_estimado']})" : '')
-                . ($m['qualidade_sistema'] ? ' · qualidade avaliada: ' . $m['qualidade_sistema'] : '') . '.',
-            'prioridade' => 'baixa', 'situacao' => 'resolvido', 'data' => $m['data_agendada'],
+                . ($m['qualidade_sistema'] ? ' · qualidade avaliada: ' . $m['qualidade_sistema'] : '')
+                . '.',
+            'prioridade' => 'baixa',
+            'situacao' => 'resolvido',
+            'data' => $m['data_agendada'],
         ];
     }
 
     // Alta primeiro, depois média e baixa
     $ordem = ['alta' => 0, 'media' => 1, 'baixa' => 2];
-    usort($alertas, static fn ($a, $b) => [$a['situacao'] === 'resolvido', $ordem[$a['prioridade']]]
-        <=> [$b['situacao'] === 'resolvido', $ordem[$b['prioridade']]]);
+
+    usort(
+        $alertas,
+        static fn ($a, $b) =>
+            [$a['situacao'] === 'resolvido', $ordem[$a['prioridade']]]
+            <=> [$b['situacao'] === 'resolvido', $ordem[$b['prioridade']]]
+    );
 
     return $alertas;
 }
@@ -524,6 +633,7 @@ function deficitsDoUltimoMes(PDO $pdo, ?int $idUsuario): array
             WHERE r2.ID_fotovoltaicos = f.ID_fotovoltaicos
         )
     ";
+
     $params = [];
 
     if ($idUsuario !== null) {
@@ -531,8 +641,11 @@ function deficitsDoUltimoMes(PDO $pdo, ?int $idUsuario): array
         $params[] = $idUsuario;
     }
 
-    $sql .= " GROUP BY f.ID_fotovoltaicos, f.modelo_painel, u.nome, DATE_FORMAT(r.data_registro, '%Y-%m')
-              HAVING SUM(r.energia_consumida) > SUM(r.energia_gerada)";
+    $sql .= "
+        GROUP BY f.ID_fotovoltaicos, f.modelo_painel, u.nome,
+                 DATE_FORMAT(r.data_registro, '%Y-%m')
+        HAVING SUM(r.energia_consumida) > SUM(r.energia_gerada)
+    ";
 
     $stmt = $pdo->prepare($sql);
     $stmt->execute($params);
@@ -543,6 +656,7 @@ function deficitsDoUltimoMes(PDO $pdo, ?int $idUsuario): array
 function manutencoesRealizadas(PDO $pdo, ?int $idUsuario, int $limite = 10): array
 {
     $limite = max(1, min(100, $limite));
+
     $sql = '
         SELECT m.*, f.ID_fotovoltaicos, f.modelo_painel, u.nome AS cliente
         FROM manutencao_e_instalacao m
@@ -550,6 +664,7 @@ function manutencoesRealizadas(PDO $pdo, ?int $idUsuario, int $limite = 10): arr
         LEFT JOIN usuarios u ON u.ID_USUARIO = f.ID_USUARIO
         WHERE m.data_agendada <= ?
     ';
+
     $params = [date('Y-m-d')];
 
     if ($idUsuario !== null) {
